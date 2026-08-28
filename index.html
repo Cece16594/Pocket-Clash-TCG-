@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Pocket Clash - TCG Mobile</title>
+  <style>
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: #161b22;
+      --accent: #f59e0b;
+      --common-border: #30363d;
+      
+      --type-fire: #ef4444;
+      --type-water: #3b82f6;
+      --type-electric: #eab308;
+      --type-grass: #22c55e;
+      --type-psychic: #a855f7;
+      --type-rock: #d97706;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background-color: var(--bg-color); color: white; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+    /* Écran d'accueil */
+    #start-screen {
+      position: fixed; inset: 0; z-index: 300; background: radial-gradient(circle at center, #1e293b 0%, #0b0f19 100%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px;
+    }
+    .title-banner {
+      font-size: 2.8rem; font-weight: 900; color: #fff; text-transform: uppercase; letter-spacing: 2px;
+      text-shadow: 0 0 20px rgba(245, 158, 11, 0.8), 0 4px 0 #b45309; margin-bottom: 5px;
+    }
+    .title-sub { font-size: 0.9rem; color: #fef08a; letter-spacing: 3px; font-weight: 800; margin-bottom: 40px; text-transform: uppercase; }
+    
+    .start-btn {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: #000; font-size: 1.4rem; font-weight: 900; padding: 18px 36px; border-radius: 50px; border: 4px solid #fef08a;
+      box-shadow: 0 0 25px rgba(245, 158, 11, 0.6), inset 0 2px 4px rgba(255,255,255,0.5); cursor: pointer;
+      display: flex; align-items: center; gap: 12px; transition: transform 0.2s; animation: pulseGlow 2s infinite;
+    }
+    .start-btn:active { transform: scale(0.95); }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 25px rgba(245, 158, 11, 0.6); }
+      50% { box-shadow: 0 0 45px rgba(245, 158, 11, 1); }
+    }
+
+    /* Header */
+    header { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: rgba(11, 15, 25, 0.95); border-bottom: 1px solid #30363d; z-index: 10; }
+    .logo { font-size: 1.1rem; font-weight: 800; color: var(--accent); letter-spacing: 0.5px; cursor: pointer; }
+    .header-right { display: flex; align-items: center; gap: 12px; }
+    .currency { display: flex; gap: 8px; font-weight: bold; font-size: 0.85rem; }
+    .badge { background: #1e293b; padding: 5px 12px; border-radius: 20px; display: flex; align-items: center; gap: 6px; border: 1px solid #334155; }
+    .countdown-badge { background: #1e293b; color: #fef08a; font-weight: 800; font-size: 0.75rem; padding: 5px 10px; border-radius: 20px; border: 1px solid #f59e0b; }
+
+    /* Structure Principale */
+    main { flex: 1; overflow-y: auto; padding: 12px; padding-bottom: 80px; }
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* Recycle Banner */
+    .recycle-banner {
+      background: #1e293b; border: 1px solid #f59e0b; border-radius: 12px; padding: 12px 16px;
+      margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;
+    }
+
+    /* Grille de l'Album */
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
+
+    /* Carte TCG */
+    .card {
+      aspect-ratio: 2.5/3.7; background: #1e293b; border-radius: 10px; border: 3px solid #475569;
+      display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      position: relative; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer;
+    }
+    .card:active { transform: scale(0.96); }
+    .card.locked { opacity: 0.2; filter: grayscale(1); cursor: default; }
+
+    .card[data-type="Feu"] { border-color: var(--type-fire); }
+    .card[data-type="Eau"] { border-color: var(--type-water); }
+    .card[data-type="Électrique"] { border-color: var(--type-electric); }
+    .card[data-type="Plante"] { border-color: var(--type-grass); }
+    .card[data-type="Psy"] { border-color: var(--type-psychic); }
+    .card[data-type="Roche"] { border-color: var(--type-rock); }
+
+    .card-top-bar { display: flex; justify-content: space-between; align-items: center; padding: 4px 6px; background: rgba(0,0,0,0.4); z-index: 2; }
+    .card-name { font-size: 0.75rem; font-weight: 800; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 65%; }
+    .card-hp { font-size: 0.7rem; font-weight: 900; color: #ef4444; display: flex; align-items: center; gap: 2px; }
+    .card-element-icon { font-size: 0.75rem; }
+
+    .card-image-canvas { width: 100%; height: 42%; object-fit: cover; display: block; border-top: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1); }
+    
+    .card-body { flex: 1; display: flex; flex-direction: column; justify-content: space-between; padding: 4px 6px; background: rgba(15, 23, 42, 0.7); z-index: 2; }
+    .attack-row { display: flex; align-items: center; justify-content: space-between; font-size: 0.62rem; padding: 2px 0; border-bottom: 1px dashed rgba(255,255,255,0.1); }
+    .attack-row:last-child { border-bottom: none; }
+    .attack-cost { display: flex; gap: 2px; font-size: 0.6rem; }
+    .attack-name { font-weight: 700; color: #cbd5e1; flex: 1; margin-left: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .attack-damage { font-weight: 900; color: #fff; background: rgba(0,0,0,0.4); padding: 1px 4px; border-radius: 4px; }
+
+    .card-count { position: absolute; top: 4px; right: 4px; background: var(--accent); color: black; font-size: 0.65rem; font-weight: 900; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #000; z-index: 5; }
+
+    /* Full Art */
+    .card.full-art { border-color: #f59e0b; box-shadow: 0 0 15px rgba(245, 158, 11, 0.6); }
+    .card.full-art .card-image-canvas { height: 100%; position: absolute; inset: 0; border: none; z-index: 1; }
+    .card.full-art::after {
+      content: 'Full Art - Édition Collector'; position: absolute; bottom: 2px; width: 100%; text-align: center;
+      font-size: 0.5rem; font-weight: 900; color: #fef08a; text-shadow: 0 1px 3px #000; z-index: 3;
+    }
+
+    /* Booster Visual Layout Side-by-Side */
+    .booster-page-container {
+      display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 70vh; gap: 20px;
+    }
+    .boosters-flex-row {
+      display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 20px; width: 100%;
+    }
+    .booster-item {
+      display: flex; flex-direction: column; align-items: center; gap: 10px; max-width: 170px;
+    }
+    .booster-pack-visual {
+      width: 160px; height: 270px; border-radius: 10px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      box-shadow: 0 12px 35px rgba(245, 158, 11, 0.4); border: 2px solid #f59e0b; cursor: pointer;
+      overflow: hidden; position: relative; transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .booster-pack-visual:active { transform: scale(0.95); }
+    .booster-pack-visual.delta {
+      border-color: #06b6d4; box-shadow: 0 12px 35px rgba(6, 182, 212, 0.5); opacity: 0.95;
+    }
+    .booster-pack-visual.legendary {
+      border-color: #ec4899; box-shadow: 0 12px 35px rgba(236, 72, 153, 0.6); animation: legendaryGlow 2s infinite alternate;
+    }
+    @keyframes legendaryGlow {
+      0% { box-shadow: 0 0 15px rgba(236, 72, 153, 0.5); }
+      100% { box-shadow: 0 0 35px rgba(245, 158, 11, 0.9); }
+    }
+    .booster-pack-img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* Boutique */
+    .shop-card { background: #1e293b; border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; }
+    .shop-card.disabled { opacity: 0.4; filter: grayscale(1); pointer-events: none; }
+
+    /* Mode Combat */
+    .bot-selector { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
+    .bot-card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 16px; display: flex; justify-content: space-between; align-items: center; }
+    
+    #battle-arena { display: none; flex-direction: column; height: 100%; gap: 10px; justify-content: space-between; }
+    .round-score-bar { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 6px 12px; font-size: 0.85rem; font-weight: 800; text-align: center; color: #f59e0b; }
+    .arena-field { background: #161b22; border: 2px solid #334155; border-radius: 12px; padding: 10px; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    .battle-log { background: #000; height: 60px; border-radius: 8px; padding: 8px; font-size: 0.75rem; overflow-y: auto; color: #38bdf8; border: 1px solid #1e293b; }
+
+    /* Barres de PV Interactives */
+    .hp-bar-wrapper {
+      width: 140px; background: #0f172a; border: 2px solid #334155; border-radius: 10px; height: 18px;
+      position: relative; overflow: hidden; margin-top: 6px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.8);
+    }
+    .hp-bar-fill {
+      height: 100%; background: linear-gradient(90deg, #22c55e, #16a34a);
+      width: 100%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s;
+    }
+    .hp-bar-fill.low { background: linear-gradient(90deg, #ef4444, #dc2626); }
+    .hp-bar-text {
+      position: absolute; inset: 0; font-size: 0.65rem; font-weight: 900;
+      display: flex; align-items: center; justify-content: center; color: #fff; text-shadow: 0 1px 2px #000;
+    }
+
+    /* Animations de Combat */
+    .attack-hit-player { animation: attackPlayerAnim 0.4s ease-in-out; }
+    @keyframes attackPlayerAnim {
+      0% { transform: scale(0.85) translateY(0); }
+      50% { transform: scale(0.95) translateY(-35px); }
+      100% { transform: scale(0.85) translateY(0); }
+    }
+
+    .attack-hit-bot { animation: attackBotAnim 0.4s ease-in-out; }
+    @keyframes attackBotAnim {
+      0% { transform: scale(0.85) translateY(0); }
+      50% { transform: scale(0.95) translateY(35px); }
+      100% { transform: scale(0.85) translateY(0); }
+    }
+
+    .damage-taken { animation: damageTakenAnim 0.4s ease-in-out; filter: brightness(1.8) drop-shadow(0 0 8px #ef4444); }
+    @keyframes damageTakenAnim {
+      0%, 100% { transform: scale(0.85) translate(0, 0); }
+      25% { transform: scale(0.85) translate(-8px, 4px); }
+      50% { transform: scale(0.85) translate(8px, -4px); }
+      75% { transform: scale(0.85) translate(-4px, -4px); }
+    }
+
+    /* Modales & Animations */
+    #opening-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 400; display: none; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+    .reveal-card { width: 240px; transform: scale(1.1); animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    @keyframes popIn { 0% { transform: scale(0.2) rotate(-10deg); opacity: 0; } 100% { transform: scale(1.1) rotate(0deg); opacity: 1; } }
+
+    .reveal-card.full-art-anim { animation: popInFullArt 0.8s ease-out forwards; }
+    @keyframes popInFullArt {
+      0% { transform: scale(0.1) rotate(-720deg); filter: brightness(3); }
+      50% { transform: scale(1.35) rotate(10deg); filter: brightness(2); }
+      100% { transform: scale(1.1) rotate(0deg); filter: brightness(1); }
+    }
+
+    .shake { animation: shakeEffect 0.5s ease-in-out; }
+    @keyframes shakeEffect {
+      0%, 100% { transform: translate(0, 0); }
+      20% { transform: translate(-10px, 5px); }
+      40% { transform: translate(10px, -5px); }
+      60% { transform: translate(-8px, -5px); }
+      80% { transform: translate(8px, 5px); }
+    }
+
+    #particles-canvas { position: absolute; inset: 0; pointer-events: none; z-index: 401; }
+    #flash-overlay { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; z-index: 402; transition: opacity 0.1s ease-out; }
+
+    #modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 500; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+    .modal-card-container { width: 260px; }
+    .modal-card-container .card { cursor: default; transform: scale(1.15); }
+
+    /* Paramètres */
+    .settings-group { background: #1e293b; border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid #334155; }
+    .settings-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #334155; }
+    .settings-row:last-child { border-bottom: none; }
+
+    .code-input-group { display: flex; gap: 8px; margin-top: 10px; }
+    .code-input {
+      flex: 1; background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 10px;
+      color: #fff; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;
+    }
+    .code-input:focus { outline: none; border-color: var(--accent); }
+
+    /* Navigation */
+    nav { display: flex; background: #1e293b; border-top: 1px solid #334155; position: fixed; bottom: 0; width: 100%; height: 60px; z-index: 10; }
+    nav button { flex: 1; border: none; background: none; color: #94a3b8; font-weight: bold; font-size: 0.75rem; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
+    nav button.active { color: var(--accent); }
+    nav button.active::after { content: ''; width: 20px; height: 3px; background: var(--accent); border-radius: 2px; }
+
+    .btn { background: var(--accent); color: #0d1117; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.85rem; }
+    .btn-legendary { background: linear-gradient(135deg, #f59e0b, #ec4899); color: white; }
+    .btn-danger { background: #ef4444; color: white; }
+    .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  </style>
+</head>
+<body>
+
+  <!-- Menu d'accueil -->
+  <div id="start-screen">
+    <div class="title-banner">Pocket Clash</div>
+    <div class="title-sub">Jeu de cartes à collectionner mobile</div>
+    <button class="start-btn" onclick="startGame()">
+      CLIQUEZ POUR COMMENCER ➔
+    </button>
+  </div>
+
+  <header>
+    <div class="logo" onclick="openStartMenu()">🔥 POCKET CLASH</div>
+    <div class="header-right">
+      <div class="currency">
+        <div class="badge">💰 <span id="coins-display">0</span></div>
+        <div class="badge">📦 <span id="boosters-display">0</span></div>
+        <div class="badge" style="border-color: #ec4899;">🌟 <span id="special-boosters-display">0</span></div>
+      </div>
+      <div class="countdown-badge" id="header-countdown">⏳ --d --h</div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Page Collection -->
+    <div id="page-collection" class="page active">
+      <div class="recycle-banner">
+        <div>
+          <h4 style="font-size: 0.9rem;">♻️ Échanger les cartes en double</h4>
+          <p style="color: #94a3b8; font-size: 0.75rem;">Commune = 3 💰 | Full Art = 10 💰</p>
+        </div>
+        <button class="btn" id="recycle-btn" onclick="recycleDuplicates()">Vendre (<span id="duplicates-count">0</span>)</button>
+      </div>
+      <h3 style="margin-bottom: 12px; font-size: 1rem; font-weight: 800;">Set Pocket Clash (<span id="collected-count">0</span>/24)</h3>
+      <div class="card-grid" id="collection-grid"></div>
+    </div>
+
+    <!-- Page Booster -->
+    <div id="page-boosters" class="page">
+      <div class="booster-page-container">
+        <h3 style="font-weight: 800;">Ouvrir vos Boosters</h3>
+        
+        <div class="boosters-flex-row">
+          <!-- Booster Dimension Delta (À gauche du set de base) -->
+          <div class="booster-item">
+            <div class="booster-pack-visual delta">
+              <img id="delta-booster-cover-img" class="booster-pack-img" alt="Booster Dimension Delta">
+            </div>
+            <p style="color: #38bdf8; font-size: 0.75rem; font-weight: bold; text-align: center;">Dimension Delta</p>
+            <button class="btn" id="delta-booster-btn" disabled style="font-size: 0.7rem; padding: 10px 8px;">
+              🔒 <span id="delta-countdown-btn">--d --h --m</span>
+            </button>
+          </div>
+
+          <!-- Booster 1 Standard (Set de Base) -->
+          <div class="booster-item">
+            <div class="booster-pack-visual" id="pack-graphic" onclick="openBooster(false)">
+              <img id="booster-cover-img" class="booster-pack-img" alt="Booster Standard">
+            </div>
+            <p style="color: #94a3b8; font-size: 0.75rem; text-align: center;">Standard (30% Full Art)</p>
+            <button class="btn" id="open-booster-btn" onclick="openBooster(false)">Ouvrir (<span id="std-count-btn">0</span>)</button>
+          </div>
+
+          <!-- Booster Légendaire (Débloqué via code) -->
+          <div class="booster-item" id="legendary-booster-item" style="display: none;">
+            <div class="booster-pack-visual legendary" onclick="openBooster(true)">
+              <img id="special-booster-cover-img" class="booster-pack-img" alt="Booster Légendaire">
+            </div>
+            <p style="color: #f59e0b; font-size: 0.75rem; font-weight: bold; text-align: center;">👑 Légendaire (3 Full Arts !)</p>
+            <button class="btn btn-legendary" id="open-special-booster-btn" onclick="openBooster(true)">Ouvrir (<span id="special-count-btn">0</span>)</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Page Combat -->
+    <div id="page-battle" class="page">
+      <div id="bot-select-screen">
+        <h3>Choisis ton Adversaire Bot (Manches en 2/3)</h3>
+        <div class="bot-selector">
+          <div class="bot-card">
+            <div>
+              <h4>🤖 Bot Débutant</h4>
+              <p style="color: #94a3b8; font-size: 0.8rem;">Cartes standard - Récompense: 30 💰</p>
+            </div>
+            <button class="btn" onclick="startBattle('easy')">Combattre</button>
+          </div>
+          <div class="bot-card">
+            <div>
+              <h4>⚡ Bot Intermédiaire</h4>
+              <p style="color: #94a3b8; font-size: 0.8rem;">Cartes évoluées - Récompense: 70 💰</p>
+            </div>
+            <button class="btn" onclick="startBattle('medium')">Combattre</button>
+          </div>
+          <div class="bot-card">
+            <div>
+              <h4>🔥 Bot Expert</h4>
+              <p style="color: #94a3b8; font-size: 0.8rem;">Deck Full Art puissant - Récompense: 150 💰</p>
+            </div>
+            <button class="btn" onclick="startBattle('hard')">Combattre</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="battle-arena">
+        <div class="round-score-bar">
+          Manche <span id="current-round-num">1</span> — Score : Joueur <span id="player-wins-count">0</span> | <span id="bot-wins-count">0</span> <span id="bot-score-name">Bot</span>
+        </div>
+
+        <div class="arena-field">
+          <p style="font-weight: 800; color: #ef4444; margin-bottom: 4px;">Adversaire (<span id="bot-name">Bot</span>)</p>
+          <div id="bot-card-slot" style="transform: scale(0.85);"></div>
+          <div class="hp-bar-wrapper">
+            <div id="bot-hp-fill" class="hp-bar-fill"></div>
+            <div id="bot-hp-text" class="hp-bar-text">0 / 0</div>
+          </div>
+        </div>
+
+        <div class="battle-log" id="battle-log">Consolidation de l'arène... Prêt au combat !</div>
+
+        <div class="arena-field">
+          <div class="hp-bar-wrapper">
+            <div id="player-hp-fill" class="hp-bar-fill"></div>
+            <div id="player-hp-text" class="hp-bar-text">0 / 0</div>
+          </div>
+          <div id="player-card-slot" style="transform: scale(0.85);"></div>
+          <p style="font-weight: 800; color: #22c55e; margin-top: 4px;">Ton Combattant</p>
+          <div style="display: flex; gap: 8px; margin-top: 8px;">
+            <button class="btn" id="atk1-btn" onclick="playerAttack(1)">Attaque 1</button>
+            <button class="btn" id="atk2-btn" onclick="playerAttack(2)">Attaque 2</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page Boutique -->
+    <div id="page-shop" class="page">
+      <h3 style="margin-bottom: 16px;">Boutique</h3>
+      <div class="shop-card" id="daily-card-box">
+        <div>
+          <h4>Bonus Quotidien</h4>
+          <p style="color: #94a3b8; font-size: 0.8rem;" id="daily-status">Pièces et 2 Boosters gratuits chaque jour !</p>
+        </div>
+        <button class="btn" id="daily-btn" onclick="claimDaily()">+50 💰 & +2 📦</button>
+      </div>
+      <div class="shop-card">
+        <div>
+          <h4>Booster Single</h4>
+          <p style="color: #94a3b8; font-size: 0.8rem;">Contient 7 cartes</p>
+        </div>
+        <button class="btn" onclick="buyBooster(100, 1)">100 💰</button>
+      </div>
+      <div class="shop-card">
+        <div>
+          <h4>Pack 3 Boosters</h4>
+          <p style="color: #94a3b8; font-size: 0.8rem;">Économise 50 pièces !</p>
+        </div>
+        <button class="btn" onclick="buyBooster(250, 3)">250 💰</button>
+      </div>
+      <div class="shop-card" id="reward-500-box">
+        <div>
+          <h4>Sac de 500 Pièces</h4>
+          <p style="color: #94a3b8; font-size: 0.8rem;" id="reward-500-desc">Débloqué après victoire contre TOUS les combats !</p>
+        </div>
+        <button class="btn" id="reward-500-btn" onclick="claim500CoinsReward()" disabled>Verrouillé</button>
+      </div>
+    </div>
+
+    <!-- Page Paramètres -->
+    <div id="page-settings" class="page">
+      <h3 style="margin-bottom: 16px;">Paramètres</h3>
+      
+      <div class="settings-group">
+        <h4>🎁 Code Promotionnel</h4>
+        <p style="color: #94a3b8; font-size: 0.8rem; margin-top: 4px;">Entre un code secrètement obtenu pour débloquer des récompenses.</p>
+        <div class="code-input-group">
+          <input type="text" id="promo-code-input" class="code-input" placeholder="ENTRER LE CODE..." />
+          <button class="btn" onclick="redeemCode()">Valider</button>
+        </div>
+        <p id="code-message" style="font-size: 0.8rem; margin-top: 6px; font-weight: bold; display: none;"></p>
+      </div>
+
+      <div class="settings-group">
+        <div class="settings-row">
+          <span>Effets Sonores</span>
+          <button class="btn" id="sound-toggle-btn" onclick="toggleSound()">Actifs</button>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <h4 style="color: #ef4444; margin-bottom: 8px;">Zone de Danger</h4>
+        <p style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 12px;">Réinitialise l'ensemble de ta progression et de tes cartes.</p>
+        <button class="btn btn-danger" onclick="resetData()">Réinitialiser le jeu</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Overlay Pack -->
+  <div id="opening-overlay" onclick="showNextCardInPack()">
+    <div id="flash-overlay"></div>
+    <canvas id="particles-canvas"></canvas>
+    <div id="reveal-container"></div>
+    <p style="color: #94a3b8; margin-top: 35px; font-size: 0.9rem; font-weight: bold; z-index: 403;">Touche pour continuer (<span id="cards-left">7</span>)</p>
+  </div>
+
+  <!-- Modal Zoom -->
+  <div id="modal-overlay" onclick="closeModal()">
+    <div class="modal-card-container" id="modal-card-slot" onclick="event.stopPropagation()"></div>
+    <p style="color: #94a3b8; margin-top: 35px; font-size: 0.85rem; font-weight: bold;">Touche n'importe où pour fermer</p>
+  </div>
+
+  <nav>
+    <button class="active" onclick="showPage('collection', this)">📖 Album</button>
+    <button onclick="showPage('boosters', this)">📦 Packs</button>
+    <button onclick="showPage('battle', this)">⚔️ Combat</button>
+    <button onclick="showPage('shop', this)">🏪 Boutique</button>
+    <button onclick="showPage('settings', this)">⚙️ Réglage</button>
+  </nav>
+
+  <canvas id="generator-canvas" width="300" height="480" style="display:none;"></canvas>
+
+  <script>
+    let soundEnabled = true;
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+    
+    function playSound(freq, duration, type='sine') {
+      if(!soundEnabled) return;
+      try {
+        if (!audioCtx) audioCtx = new AudioContext();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type; osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.start(); osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function playFanfareSound() {
+      if(!soundEnabled) return;
+      [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+        setTimeout(() => playSound(freq, 0.4, 'triangle'), i * 100);
+      });
+    }
+
+    const ENERGY_ICONS = {
+      'Feu': '🔥', 'Eau': '💧', 'Électrique': '⚡',
+      'Plante': '🌿', 'Psy': '👁️', 'Roche': '🪨'
+    };
+
+    const CARDS_DB = [
+      { id: 1, name: "Flamering", hp: 90, element: "Feu", emoji: "🦅", atk1: { cost: ["Feu"], name: "Ailes de Feu", damage: 20 }, atk2: { cost: ["Feu", "Feu"], name: "Silen de Feu", damage: 40 }, type: "common" },
+      { id: 3, name: "Emberclaw", hp: 100, element: "Feu", emoji: "🦁", atk1: { cost: ["Feu"], name: "Emberclaw", damage: 20 }, atk2: { cost: ["Feu", "Roche"], name: "Morsure Éclair", damage: 40 }, type: "common" },
+      { id: 4, name: "Pyrartic", hp: 90, element: "Feu", emoji: "🦊", atk1: { cost: ["Feu"], name: "Pyractis", damage: 20 }, atk2: { cost: ["Feu", "Feu"], name: "Flor-Dé-Stus", damage: 40 }, type: "common" },
+      { id: 5, name: "Glintos", hp: 110, element: "Eau", emoji: "🐬", atk1: { cost: ["Eau"], name: "Rêves de Vague", damage: 20 }, atk2: { cost: ["Eau", "Eau"], name: "Tir de Vague", damage: 50 }, type: "common" },
+      { id: 6, name: "Tidsluve", hp: 110, element: "Eau", emoji: "🧜‍♂️", atk1: { cost: ["Eau"], name: "Tir de Vague", damage: 40 }, atk2: { cost: ["Eau", "Eau"], name: "Tir de Vague+", damage: 60 }, type: "common" },
+      { id: 7, name: "Tidalutk", hp: 118, element: "Eau", emoji: "🐊", atk1: { cost: ["Eau"], name: "Tir de Vague", damage: 40 }, atk2: { cost: ["Eau", "Roche"], name: "Tir de Vague+", damage: 60 }, type: "common" },
+      { id: 8, name: "Aquafin", hp: 110, element: "Eau", emoji: "🐳", atk1: { cost: ["Eau"], name: "Tir de Vague", damage: 40 }, atk2: { cost: ["Eau", "Eau"], name: "Tir de Vague+", damage: 60 }, type: "common" },
+      { id: 9, name: "Thundertrap", hp: 110, element: "Électrique", emoji: "⚡", atk1: { cost: ["Électrique"], name: "Thundertrap", damage: 30 }, atk2: { cost: ["Électrique", "Électrique"], name: "Thunderblast", damage: 70 }, type: "common" },
+      { id: 10, name: "Voltspark", hp: 110, element: "Électrique", emoji: "🐭", atk1: { cost: ["Électrique"], name: "Voltspark", damage: 30 }, atk2: { cost: ["Électrique", "Électrique"], name: "Électro-Choc", damage: 60 }, type: "common" },
+      { id: 11, name: "Veltrgark", hp: 110, element: "Électrique", emoji: "🐿️", atk1: { cost: ["Électrique"], name: "Voltspark", damage: 30 }, atk2: { cost: ["Électrique", "Électrique"], name: "Éclair Foudroyant", damage: 60 }, type: "common" },
+      { id: 13, name: "Gearyleaf", hp: 110, element: "Plante", emoji: "🍃", atk1: { cost: ["Plante"], name: "Greyleaf", damage: 30 }, atk2: { cost: ["Plante", "Plante"], name: "Blasco Étoile", damage: 60 }, type: "common" },
+      { id: 15, name: "Seikeles", hp: 110, element: "Plante", emoji: "🦔", atk1: { cost: ["Plante"], name: "Spikelet", damage: 20 }, atk2: { cost: ["Plante", "Plante"], name: "Thorn-Storm", damage: 50 }, type: "common" },
+      { id: 16, name: "Umbraseed", hp: 100, element: "Plante", emoji: "🌱", atk1: { cost: ["Plante"], name: "Umbraseed", damage: 10 }, atk2: { cost: ["Plante", "Plante"], name: "Umbracloud", damage: 20 }, type: "common" },
+      { id: 18, name: "Specterist", hp: 110, element: "Psy", emoji: "🔮", atk1: { cost: ["Psy"], name: "Nemure Solaire", damage: 20 }, atk2: { cost: ["Psy", "Psy"], name: "Nemure Solaire+", damage: 50 }, type: "common" },
+      { id: 19, name: "Ghostool", hp: 110, element: "Psy", emoji: "🦉", atk1: { cost: ["Psy"], name: "Ghostool", damage: 30 }, atk2: { cost: ["Psy", "Psy"], name: "Ghost-Strik", damage: 60 }, type: "common" },
+      { id: 20, name: "Craggnaw", hp: 150, element: "Roche", emoji: "🗿", atk1: { cost: ["Roche"], name: "Cragstem", damage: 30 }, atk2: { cost: ["Roche", "Roche"], name: "Dragon Fossil", damage: 60 }, type: "common" },
+      { id: 21, name: "Meltenhorn", hp: 120, element: "Roche", emoji: "🌋", atk1: { cost: ["Roche"], name: "Moltenhorn", damage: 20 }, atk2: { cost: ["Roche", "Feu"], name: "Nemure Solaire", damage: 40 }, type: "common" },
+
+      // Full Arts
+      { id: 2, name: "Molten Phoenix", hp: 180, element: "Feu", emoji: "🐦‍🔥", atk1: { cost: ["Feu"], name: "Éruption Divine", damage: 80 }, atk2: { cost: ["Feu", "Feu"], name: "Flamme Éternelle", damage: 140 }, type: "fullart" },
+      { id: 14, name: "Root Guardian", hp: 160, element: "Plante", emoji: "🪵", atk1: { cost: ["Plante"], name: "Bataille Forestière", damage: 60 }, atk2: { cost: ["Plante", "Plante"], name: "Enracinement", damage: 110 }, type: "fullart" },
+      { id: 25, name: "Glintos Master", hp: 150, element: "Eau", emoji: "🦊", atk1: { cost: ["Eau"], name: "Blizzard Éclair", damage: 50 }, atk2: { cost: ["Eau", "Eau"], name: "Vague Givrante", damage: 120 }, type: "fullart" },
+      { id: 26, name: "Great Tide Shark", hp: 170, element: "Eau", emoji: "🦈", atk1: { cost: ["Eau"], name: "Raz-de-Marée", damage: 70 }, atk2: { cost: ["Eau", "Roche"], name: "Morsure Abyssale", damage: 130 }, type: "fullart" },
+      { id: 27, name: "Iron Golem", hp: 190, element: "Roche", emoji: "🤖", atk1: { cost: ["Roche"], name: "Poing de Lave", damage: 60 }, atk2: { cost: ["Roche", "Roche"], name: "Impact Sismique", damage: 150 }, type: "fullart" },
+      { id: 28, name: "Sky Dragon", hp: 170, element: "Feu", emoji: "🐉", atk1: { cost: ["Feu"], name: "Vol Céleste", damage: 70 }, atk2: { cost: ["Feu", "Feu"], name: "Souffle Draconique", damage: 130 }, type: "fullart" },
+      { id: 17, name: "Cosmic Entity", hp: 200, element: "Psy", emoji: "🌌", atk1: { cost: ["Psy"], name: "Rayon Astral", damage: 90 }, atk2: { cost: ["Psy", "Psy"], name: "Singularité", damage: 160 }, type: "fullart" }
+    ];
+
+    let state = {
+      coins: 100,
+      boosters: 3,
+      specialBoosters: 0,
+      collection: {},
+      lastDaily: null,
+      redeemedCodes: [],
+      victories: { easy: false, medium: false, hard: false },
+      claimed500Reward: false
+    };
+
+    function startCountdown() {
+      function updateTimer() {
+        const now = new Date();
+        let targetYear = now.getFullYear();
+        let targetDate = new Date(targetYear, 8, 5, 0, 0, 0); // 5 septembre (mois indexé à 8)
+        
+        if (now > targetDate) {
+          targetDate = new Date(targetYear + 1, 8, 5, 0, 0, 0);
+        }
+
+        const diff = targetDate - now;
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+        const timeString = `${days}j ${hours}h ${mins}m`;
+        document.getElementById('header-countdown').innerText = `⏳ ${days}j ${hours}h`;
+        document.getElementById('delta-countdown-btn').innerText = timeString;
+      }
+      updateTimer();
+      setInterval(updateTimer, 60000);
+    }
+
+    function startGame() {
+      document.getElementById('start-screen').style.display = 'none';
+      playSound(600, 0.2);
+    }
+
+    function openStartMenu() {
+      document.getElementById('start-screen').style.display = 'flex';
+    }
+
+    function generateAnimalImageBase64(card) {
+      const canvas = document.getElementById('generator-canvas');
+      const ctx = canvas.getContext('2d');
+      const w = 240, h = card.type === 'fullart' ? 360 : 160;
+      canvas.width = w; canvas.height = h;
+
+      const grad = ctx.createLinearGradient(0, 0, w, h);
+      if (card.element === 'Feu') { grad.addColorStop(0, '#7c2d12'); grad.addColorStop(0.5, '#dc2626'); grad.addColorStop(1, '#991b1b'); }
+      else if (card.element === 'Eau') { grad.addColorStop(0, '#0c4a6e'); grad.addColorStop(0.5, '#0284c7'); grad.addColorStop(1, '#1e3a8a'); }
+      else if (card.element === 'Électrique') { grad.addColorStop(0, '#713f12'); grad.addColorStop(0.5, '#ca8a04'); grad.addColorStop(1, '#a16207'); }
+      else if (card.element === 'Plante') { grad.addColorStop(0, '#14532d'); grad.addColorStop(0.5, '#16a34a'); grad.addColorStop(1, '#15803d'); }
+      else if (card.element === 'Psy') { grad.addColorStop(0, '#581c87'); grad.addColorStop(0.5, '#9333ea'); grad.addColorStop(1, '#6b21a8'); }
+      else { grad.addColorStop(0, '#44403c'); grad.addColorStop(0.5, '#78350f'); grad.addColorStop(1, '#292524'); }
+
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, w, h);
+
+      if (card.type === 'fullart') {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+        for(let i = 0; i < 40; i++) {
+          const px = (Math.sin(card.id * 7 + i) * 0.5 + 0.5) * w;
+          const py = (Math.cos(card.id * 13 + i) * 0.5 + 0.5) * h;
+          ctx.beginPath(); ctx.arc(px, py, (i % 4) + 2, 0, Math.PI * 2); ctx.fill();
+        }
+        ctx.font = '110px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.shadowColor = '#f59e0b'; ctx.shadowBlur = 25;
+        ctx.fillText(card.emoji, w/2, h/2 - 10);
+      } else {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+        for(let i = 0; i < 15; i++) {
+          const px = (Math.sin(card.id * 5 + i) * 0.5 + 0.5) * w;
+          const py = (Math.cos(card.id * 11 + i) * 0.5 + 0.5) * h;
+          ctx.beginPath(); ctx.arc(px, py, (i % 3) + 2, 0, Math.PI * 2); ctx.fill();
+        }
+        ctx.font = '56px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.shadowColor = 'rgba(0,0,0,0.8)'; ctx.shadowBlur = 10;
+        ctx.fillText(card.emoji, w/2, h/2);
+      }
+
+      return canvas.toDataURL('image/png');
+    }
+
+    function generateBoosterBase64(type = 'standard') {
+      const canvas = document.getElementById('generator-canvas');
+      const ctx = canvas.getContext('2d');
+      const w = 300, h = 480;
+      canvas.width = w; canvas.height = h;
+
+      const bgGrad = ctx.createLinearGradient(0, 0, 0, h);
+      if (type === 'delta') {
+        bgGrad.addColorStop(0, '#0f172a'); bgGrad.addColorStop(0.5, '#082f49'); bgGrad.addColorStop(1, '#0284c7');
+      } else if (type === 'legendary') {
+        bgGrad.addColorStop(0, '#831843'); bgGrad.addColorStop(0.5, '#701a75'); bgGrad.addColorStop(1, '#312e81');
+      } else {
+        bgGrad.addColorStop(0, '#1e1b4b'); bgGrad.addColorStop(0.5, '#0f172a'); bgGrad.addColorStop(1, '#172554');
+      }
+      ctx.fillStyle = bgGrad; ctx.fillRect(0, 0, w, h);
+
+      ctx.fillStyle = type === 'delta' ? '#38bdf8' : (type === 'legendary' ? '#fef08a' : '#cbd5e1');
+      for(let i = 0; i < w; i += 12) {
+        ctx.fillRect(i, 0, 8, 14);
+        ctx.fillRect(i, h - 14, 8, 14);
+      }
+
+      ctx.strokeStyle = type === 'delta' ? '#38bdf8' : (type === 'legendary' ? '#ec4899' : '#f59e0b');
+      ctx.lineWidth = 6;
+      ctx.strokeRect(8, 16, w - 16, h - 32);
+
+      ctx.fillStyle = type === 'delta' ? '#0284c7' : (type === 'legendary' ? '#be185d' : '#b45309');
+      ctx.beginPath(); ctx.moveTo(30, 30); ctx.lineTo(270, 30); ctx.lineTo(250, 85); ctx.lineTo(50, 85);
+      ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 2; ctx.stroke();
+
+      ctx.fillStyle = '#ffffff'; ctx.shadowColor = 'rgba(0,0,0,0.8)'; ctx.shadowBlur = 10;
+      ctx.font = '900 24px system-ui'; ctx.textAlign = 'center';
+      ctx.fillText('POCKET', w/2, 55);
+      ctx.fillStyle = type === 'delta' ? '#38bdf8' : (type === 'legendary' ? '#fef08a' : '#f59e0b');
+      ctx.font = '900 26px system-ui';
+      ctx.fillText(type === 'delta' ? 'DIMENSION' : (type === 'legendary' ? 'LÉGENDAIRE' : 'CLASH'), w/2, 80);
+
+      ctx.shadowBlur = 0; ctx.fillStyle = '#ffffff'; ctx.font = '700 9px system-ui';
+      ctx.fillText(type === 'delta' ? 'BOOSTER DELTA' : (type === 'legendary' ? '3 FULL ARTS GARANTIES' : 'JEU DE CARTES À COLLECTIONNER'), w/2, 98);
+
+      ctx.font = '75px sans-serif';
+      ctx.shadowColor = type === 'delta' ? '#0284c7' : (type === 'legendary' ? '#ec4899' : '#ef4444');
+      ctx.shadowBlur = 20;
+      ctx.fillText(type === 'delta' ? '🔺' : (type === 'legendary' ? '👑' : '🐦‍🔥'), w/2, 185);
+
+      const botGrad = ctx.createLinearGradient(0, 360, 0, 440);
+      botGrad.addColorStop(0, type === 'delta' ? 'rgba(2, 132, 199, 0.9)' : (type === 'legendary' ? 'rgba(190, 24, 93, 0.9)' : 'rgba(180, 83, 9, 0.9)'));
+      botGrad.addColorStop(1, type === 'delta' ? 'rgba(12, 74, 110, 0.95)' : (type === 'legendary' ? 'rgba(131, 24, 67, 0.95)' : 'rgba(120, 53, 15, 0.95)'));
+      ctx.fillStyle = botGrad; ctx.fillRect(14, 375, w - 28, 75);
+
+      ctx.fillStyle = '#ffffff'; ctx.font = '900 18px system-ui';
+      ctx.fillText(type === 'delta' ? 'DELTA EDITION' : (type === 'legendary' ? 'SPECIAL PACK' : 'CONTIENT'), w/2, 405);
+      ctx.fillStyle = '#ffffff'; ctx.font = '800 12px system-ui';
+      ctx.fillText('7 CARTES SUPPLÉMENTAIRES', w/2, 432);
+
+      return canvas.toDataURL('image/png');
+    }
+
+    function loadData() {
+      const saved = localStorage.getItem('pocketclash_v8_data');
+      if (saved) state = {...state, ...JSON.parse(saved)};
+      
+      if (!state.victories) state.victories = { easy: false, medium: false, hard: false };
+
+      CARDS_DB.forEach(card => {
+        if(!card.imageBase64) card.imageBase64 = generateAnimalImageBase64(card);
+      });
+
+      document.getElementById('delta-booster-cover-img').src = generateBoosterBase64('delta');
+      document.getElementById('booster-cover-img').src = generateBoosterBase64('standard');
+      document.getElementById('special-booster-cover-img').src = generateBoosterBase64('legendary');
+      startCountdown();
+      updateUI();
+      renderCollection();
+    }
+
+    function saveData() {
+      localStorage.setItem('pocketclash_v8_data', JSON.stringify(state));
+      updateUI();
+    }
+
+    function getDuplicateStats() {
+      let totalDupes = 0;
+      let totalCoinsValue = 0;
+      CARDS_DB.forEach(card => {
+        const qty = state.collection[card.id] || 0;
+        if (qty > 1) {
+          const dupes = qty - 1;
+          totalDupes += dupes;
+          totalCoinsValue += dupes * (card.type === 'fullart' ? 10 : 3);
+        }
+      });
+      return { totalDupes, totalCoinsValue };
+    }
+
+    function recycleDuplicates() {
+      const stats = getDuplicateStats();
+      if (stats.totalDupes <= 0) return;
+
+      CARDS_DB.forEach(card => {
+        const qty = state.collection[card.id] || 0;
+        if (qty > 1) {
+          state.collection[card.id] = 1;
+        }
+      });
+
+      state.coins += stats.totalCoinsValue;
+      playSound(600, 0.2);
+      playFanfareSound();
+      saveData();
+      renderCollection();
+    }
+
+    function updateUI() {
+      document.getElementById('coins-display').innerText = state.coins;
+      document.getElementById('boosters-display').innerText = state.boosters;
+      document.getElementById('special-boosters-display').innerText = state.specialBoosters || 0;
+      
+      document.getElementById('std-count-btn').innerText = state.boosters;
+      document.getElementById('open-booster-btn').disabled = state.boosters <= 0;
+      document.getElementById('collected-count').innerText = Object.keys(state.collection).length;
+
+      // Stats Doublons
+      const dupStats = getDuplicateStats();
+      document.getElementById('duplicates-count').innerText = `${dupStats.totalDupes} (+${dupStats.totalCoinsValue}💰)`;
+      document.getElementById('recycle-btn').disabled = dupStats.totalDupes <= 0;
+
+      const legendaryItem = document.getElementById('legendary-booster-item');
+      if ((state.specialBoosters || 0) > 0) {
+        legendaryItem.style.display = 'flex';
+        document.getElementById('special-count-btn').innerText = state.specialBoosters;
+        document.getElementById('open-special-booster-btn').disabled = false;
+      } else {
+        legendaryItem.style.display = 'none';
+      }
+
+      // Gestion bonus quotidien (50 pièces + 2 boosters)
+      const today = new Date().toDateString();
+      const dailyBtn = document.getElementById('daily-btn');
+      const dailyBox = document.getElementById('daily-card-box');
+      const dailyStatus = document.getElementById('daily-status');
+
+      if (state.lastDaily === today) {
+        dailyBtn.disabled = true;
+        dailyBtn.innerText = "Reçu";
+        dailyBox.classList.add('disabled');
+        dailyStatus.innerText = "Reviens demain pour tes 2 boosters !";
+      } else {
+        dailyBtn.disabled = false;
+        dailyBtn.innerText = "+50 💰 & +2 📦";
+        dailyBox.classList.remove('disabled');
+        dailyStatus.innerText = "Pièces et 2 Boosters gratuits chaque jour !";
+      }
+
+      // Gestion Récompense 500 pièces
+      const rewardBtn = document.getElementById('reward-500-btn');
+      const rewardDesc = document.getElementById('reward-500-desc');
+      const allDefeated = state.victories.easy && state.victories.medium && state.victories.hard;
+
+      if (state.claimed500Reward) {
+        rewardBtn.disabled = true;
+        rewardBtn.innerText = "Réclamé";
+        rewardDesc.innerText = "Offre déjà obtenue !";
+      } else if (allDefeated) {
+        rewardBtn.disabled = false;
+        rewardBtn.innerText = "Réclamer 500 💰";
+        rewardDesc.innerText = "Bravo ! Tu as vaincu tous les bots !";
+      } else {
+        rewardBtn.disabled = true;
+        rewardBtn.innerText = "Verrouillé";
+        let count = [state.victories.easy, state.victories.medium, state.victories.hard].filter(Boolean).length;
+        rewardDesc.innerText = `Gagne les 3 combats ! (${count}/3 faits)`;
+      }
+    }
+
+    function claim500CoinsReward() {
+      const allDefeated = state.victories.easy && state.victories.medium && state.victories.hard;
+      if (allDefeated && !state.claimed500Reward) {
+        state.coins += 500;
+        state.claimed500Reward = true;
+        playFanfareSound();
+        saveData();
+      }
+    }
+
+    function showPage(pageId, btnEl) {
+      playSound(400, 0.1);
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById(`page-${pageId}`).classList.add('active');
+      if(btnEl) btnEl.classList.add('active');
+    }
+
+    function createCardHTML(card, count = 1, isClickable = true) {
+      const isLocked = count === 0;
+      const clickAttr = (isClickable && !isLocked) ? `onclick="zoomCard(${card.id})"` : '';
+      const renderCost = (costArr) => costArr.map(c => ENERGY_ICONS[c] || '⚪').join('');
+
+      return `
+        <div class="card ${card.type === 'fullart' ? 'full-art' : ''} ${isLocked ? 'locked' : ''}" data-type="${card.element}" ${clickAttr}>
+          ${count > 1 ? `<div class="card-count">x${count}</div>` : ''}
+          <div class="card-top-bar">
+            <span class="card-name">${card.name}</span>
+            <span class="card-hp"><small>HP</small>${card.hp} <span class="card-element-icon">${ENERGY_ICONS[card.element]}</span></span>
+          </div>
+          <img src="${card.imageBase64}" class="card-image-canvas" alt="${card.name}">
+          <div class="card-body">
+            <div class="attack-row">
+              <span class="attack-cost">${renderCost(card.atk1.cost)}</span>
+              <span class="attack-name">${card.atk1.name}</span>
+              <span class="attack-damage">${card.atk1.damage}</span>
+            </div>
+            <div class="attack-row">
+              <span class="attack-cost">${renderCost(card.atk2.cost)}</span>
+              <span class="attack-name">${card.atk2.name}</span>
+              <span class="attack-damage">${card.atk2.damage}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCollection() {
+      const grid = document.getElementById('collection-grid');
+      grid.innerHTML = CARDS_DB.map(card => createCardHTML(card, state.collection[card.id] || 0, true)).join('');
+    }
+
+    function zoomCard(cardId) {
+      const card = CARDS_DB.find(c => c.id === cardId);
+      if (!card) return;
+      playSound(500, 0.1);
+      document.getElementById('modal-card-slot').innerHTML = createCardHTML(card, state.collection[card.id] || 0, false);
+      document.getElementById('modal-overlay').style.display = 'flex';
+    }
+
+    function closeModal() {
+      playSound(300, 0.05);
+      document.getElementById('modal-overlay').style.display = 'none';
+    }
+
+    let currentPackCards = [], packIdx = 0;
+
+    function openBooster(isSpecial = false) {
+      if (!isSpecial && state.boosters <= 0) return;
+      if (isSpecial && (state.specialBoosters || 0) <= 0) return;
+
+      playSound(200, 0.4, 'sawtooth');
+      
+      if (isSpecial) {
+        state.specialBoosters--;
+      } else {
+        state.boosters--;
+      }
+      saveData();
+
+      currentPackCards = [];
+      const commons = CARDS_DB.filter(c => c.type === 'common');
+      const fullarts = CARDS_DB.filter(c => c.type === 'fullart');
+
+      if (isSpecial) {
+        for (let i = 0; i < 4; i++) {
+          currentPackCards.push(commons[Math.floor(Math.random() * commons.length)]);
+        }
+        for (let i = 0; i < 3; i++) {
+          currentPackCards.push(fullarts[Math.floor(Math.random() * fullarts.length)]);
+        }
+      } else {
+        for (let i = 0; i < 6; i++) {
+          currentPackCards.push(commons[Math.floor(Math.random() * commons.length)]);
+        }
+        const isFullArtDrop = Math.random() < 0.30;
+        if (isFullArtDrop) {
+          currentPackCards.push(fullarts[Math.floor(Math.random() * fullarts.length)]);
+        } else {
+          currentPackCards.push(commons[Math.floor(Math.random() * commons.length)]);
+        }
+      }
+
+      packIdx = 0;
+      document.getElementById('opening-overlay').style.display = 'flex';
+      showNextCardInPack();
+    }
+
+    function triggerParticles() {
+      const pCanvas = document.getElementById('particles-canvas');
+      const pCtx = pCanvas.getContext('2d');
+      pCanvas.width = window.innerWidth;
+      pCanvas.height = window.innerHeight;
+
+      let particles = [];
+      for(let i = 0; i < 80; i++) {
+        particles.push({
+          x: pCanvas.width / 2, y: pCanvas.height / 2,
+          vx: (Math.random() - 0.5) * 16, vy: (Math.random() - 0.5) * 16,
+          radius: Math.random() * 6 + 2,
+          color: `hsl(${Math.random() * 50 + 35}, 100%, 60%)`, alpha: 1
+        });
+      }
+
+      function animate() {
+        pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+        let active = false;
+        particles.forEach(p => {
+          if(p.alpha > 0) {
+            p.x += p.vx; p.y += p.vy; p.alpha -= 0.02;
+            pCtx.beginPath(); pCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            pCtx.fillStyle = p.color; pCtx.globalAlpha = Math.max(0, p.alpha); pCtx.fill();
+            active = true;
+          }
+        });
+        if(active) requestAnimationFrame(animate);
+      }
+      animate();
+    }
+
+    function showNextCardInPack() {
+      if (packIdx >= currentPackCards.length) {
+        document.getElementById('opening-overlay').style.display = 'none';
+        renderCollection();
+        return;
+      }
+
+      const card = currentPackCards[packIdx];
+      state.collection[card.id] = (state.collection[card.id] || 0) + 1;
+      saveData();
+
+      const container = document.getElementById('reveal-container');
+      container.innerHTML = createCardHTML(card, 1, false);
+      const cardEl = container.querySelector('.card');
+
+      if (card.type === 'fullart') {
+        playFanfareSound();
+        triggerParticles();
+
+        const flash = document.getElementById('flash-overlay');
+        const overlay = document.getElementById('opening-overlay');
+        flash.style.opacity = '1';
+        overlay.classList.add('shake');
+        setTimeout(() => { flash.style.opacity = '0'; }, 150);
+        setTimeout(() => { overlay.classList.remove('shake'); }, 500);
+
+        cardEl.classList.add('reveal-card', 'full-art-anim');
+      } else {
+        playSound(440, 0.1);
+        cardEl.classList.add('reveal-card');
+      }
+
+      document.getElementById('cards-left').innerText = currentPackCards.length - packIdx - 1;
+      packIdx++;
+    }
+
+    /* Activation du Code */
+    function redeemCode() {
+      const input = document.getElementById('promo-code-input');
+      const code = input.value.trim().toUpperCase();
+      const msg = document.getElementById('code-message');
+
+      if (!code) return;
+
+      if (!state.redeemedCodes) state.redeemedCodes = [];
+
+      if (state.redeemedCodes.includes(code)) {
+        msg.style.color = '#ef4444';
+        msg.innerText = "❌ Code déjà utilisé !";
+        msg.style.display = 'block';
+        return;
+      }
+
+      if (code === "TEAM CHARENTE") {
+        state.specialBoosters = (state.specialBoosters || 0) + 5;
+        state.redeemedCodes.push(code);
+        saveData();
+        
+        playSound(600, 0.3);
+        playFanfareSound();
+        msg.style.color = '#22c55e';
+        msg.innerText = "🎉 Code activé ! 5 Boosters Légendaires Full Art sont apparus !";
+        msg.style.display = 'block';
+        input.value = '';
+      } else {
+        msg.style.color = '#ef4444';
+        msg.innerText = "❌ Code invalide.";
+        msg.style.display = 'block';
+      }
+    }
+
+    /* Moteur de Combat */
+    let battleState = null;
+
+    function startBattle(difficulty) {
+      let botName = "Bot Débutant";
+      let reward = 30;
+
+      if (difficulty === 'medium') {
+        botName = "Bot Intermédiaire";
+        reward = 70;
+      } else if (difficulty === 'hard') {
+        botName = "Bot Expert";
+        reward = 150;
+      }
+
+      battleState = {
+        difficulty: difficulty,
+        botName: botName,
+        reward: reward,
+        playerWins: 0,
+        botWins: 0,
+        currentRound: 1,
+        turn: 'player',
+        playerCard: null,
+        botCard: null
+      };
+
+      document.getElementById('bot-select-screen').style.display = 'none';
+      document.getElementById('battle-arena').style.display = 'flex';
+      document.getElementById('bot-name').innerText = botName;
+      document.getElementById('bot-score-name').innerText = botName;
+
+      setupRound();
+    }
+
+    function setupRound() {
+      const myCards = CARDS_DB.filter(c => state.collection[c.id] > 0);
+      const playerBaseCard = myCards.length > 0 ? myCards[Math.floor(Math.random() * myCards.length)] : CARDS_DB[0];
+
+      let botBaseCard;
+      if (battleState.difficulty === 'easy') {
+        botBaseCard = CARDS_DB.find(c => c.id === 1);
+      } else if (battleState.difficulty === 'medium') {
+        botBaseCard = CARDS_DB.find(c => c.id === 20);
+      } else {
+        botBaseCard = CARDS_DB.find(c => c.id === 2);
+      }
+
+      battleState.playerCard = { ...playerBaseCard, maxHp: playerBaseCard.hp, currentHp: playerBaseCard.hp };
+      battleState.botCard = { ...botBaseCard, maxHp: botBaseCard.hp, currentHp: botBaseCard.hp };
+      battleState.turn = 'player';
+
+      document.getElementById('current-round-num').innerText = battleState.currentRound;
+      document.getElementById('player-wins-count').innerText = battleState.playerWins;
+      document.getElementById('bot-wins-count').innerText = battleState.botWins;
+
+      renderBattleCards();
+      updateHpBars();
+      logBattle(`--- Début Manche ${battleState.currentRound} ---`);
+      setButtonsDisabled(false);
+    }
+
+    function renderBattleCards() {
+      document.getElementById('player-card-slot').innerHTML = createCardHTML(battleState.playerCard, 1, false);
+      document.getElementById('bot-card-slot').innerHTML = createCardHTML(battleState.botCard, 1, false);
+      
+      document.getElementById('atk1-btn').innerText = `${battleState.playerCard.atk1.name} (${battleState.playerCard.atk1.damage})`;
+      document.getElementById('atk2-btn').innerText = `${battleState.playerCard.atk2.name} (${battleState.playerCard.atk2.damage})`;
+    }
+
+    function updateHpBars() {
+      if (!battleState) return;
+
+      const playerRatio = Math.max(0, battleState.playerCard.currentHp) / battleState.playerCard.maxHp;
+      const playerFill = document.getElementById('player-hp-fill');
+      playerFill.style.width = `${playerRatio * 100}%`;
+      document.getElementById('player-hp-text').innerText = `${Math.max(0, battleState.playerCard.currentHp)} / ${battleState.playerCard.maxHp}`;
+      if (playerRatio <= 0.3) playerFill.classList.add('low');
+      else playerFill.classList.remove('low');
+
+      const botRatio = Math.max(0, battleState.botCard.currentHp) / battleState.botCard.maxHp;
+      const botFill = document.getElementById('bot-hp-fill');
+      botFill.style.width = `${botRatio * 100}%`;
+      document.getElementById('bot-hp-text').innerText = `${Math.max(0, battleState.botCard.currentHp)} / ${battleState.botCard.maxHp}`;
+      if (botRatio <= 0.3) botFill.classList.add('low');
+      else botFill.classList.remove('low');
+    }
+
+    function logBattle(msg) {
+      const log = document.getElementById('battle-log');
+      log.innerHTML += `<div>> ${msg}</div>`;
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function setButtonsDisabled(disabled) {
+      document.getElementById('atk1-btn').disabled = disabled;
+      document.getElementById('atk2-btn').disabled = disabled;
+    }
+
+    function playerAttack(atkNum) {
+      if (!battleState || battleState.turn !== 'player') return;
+      setButtonsDisabled(true);
+
+      const atk = atkNum === 1 ? battleState.playerCard.atk1 : battleState.playerCard.atk2;
+      playSound(300, 0.15, 'sawtooth');
+
+      const playerCardEl = document.getElementById('player-card-slot');
+      const botCardEl = document.getElementById('bot-card-slot');
+
+      playerCardEl.classList.add('attack-hit-player');
+      
+      setTimeout(() => {
+        playerCardEl.classList.remove('attack-hit-player');
+        botCardEl.classList.add('damage-taken');
+        playSound(150, 0.2, 'square');
+        
+        battleState.botCard.currentHp -= atk.damage;
+        updateHpBars();
+        logBattle(`Tu utilises ${atk.name} ! ${atk.damage} dégâts infligés.`);
+
+        setTimeout(() => {
+          botCardEl.classList.remove('damage-taken');
+          if (battleState.botCard.currentHp <= 0) {
+            battleState.playerWins++;
+            logBattle(`🌟 Tu remportes la manche ${battleState.currentRound} !`);
+            checkMatchEnd();
+            return;
+          }
+
+          battleState.turn = 'bot';
+          setTimeout(botTurn, 1000);
+        }, 400);
+      }, 200);
+    }
+
+    function botTurn() {
+      if (!battleState || battleState.turn !== 'bot') return;
+
+      const atk = Math.random() > 0.4 ? battleState.botCard.atk2 : battleState.botCard.atk1;
+      playSound(200, 0.15, 'square');
+
+      const playerCardEl = document.getElementById('player-card-slot');
+      const botCardEl = document.getElementById('bot-card-slot');
+
+      botCardEl.classList.add('attack-hit-bot');
+
+      setTimeout(() => {
+        botCardEl.classList.remove('attack-hit-bot');
+        playerCardEl.classList.add('damage-taken');
+        playSound(120, 0.25, 'sawtooth');
+
+        battleState.playerCard.currentHp -= atk.damage;
+        updateHpBars();
+        logBattle(`${battleState.botName} utilise ${atk.name} ! ${atk.damage} dégâts reçus.`);
+
+        setTimeout(() => {
+          playerCardEl.classList.remove('damage-taken');
+          if (battleState.playerCard.currentHp <= 0) {
+            battleState.botWins++;
+            logBattle(`❌ ${battleState.botName} remporte la manche ${battleState.currentRound}.`);
+            checkMatchEnd();
+            return;
+          }
+
+          battleState.turn = 'player';
+          setButtonsDisabled(false);
+        }, 400);
+      }, 200);
+    }
+
+    function checkMatchEnd() {
+      if (battleState.playerWins === 2) {
+        logBattle(`🏆 VICTOIRE DU MATCH ! Tu gagnes ${battleState.reward} 💰 !`);
+        state.coins += battleState.reward;
+        
+        if (battleState.difficulty === 'easy') state.victories.easy = true;
+        if (battleState.difficulty === 'medium') state.victories.medium = true;
+        if (battleState.difficulty === 'hard') state.victories.hard = true;
+
+        saveData();
+        setTimeout(endBattle, 3000);
+      } else if (battleState.botWins === 2) {
+        logBattle(`💥 DÉFAITE DU MATCH ! ${battleState.botName} a gagné la rencontre.`);
+        setTimeout(endBattle, 3000);
+      } else {
+        battleState.currentRound++;
+        setTimeout(setupRound, 1500);
+      }
+    }
+
+    function endBattle() {
+      setButtonsDisabled(false);
+      document.getElementById('battle-arena').style.display = 'none';
+      document.getElementById('bot-select-screen').style.display = 'block';
+      document.getElementById('battle-log').innerHTML = '';
+    }
+
+    /* Boutique & Paramètres */
+    function buyBooster(cost, qty) {
+      if (state.coins >= cost) {
+        playSound(600, 0.1);
+        state.coins -= cost;
+        state.boosters += qty;
+        saveData();
+      }
+    }
+
+    function claimDaily() {
+      const today = new Date().toDateString();
+      if (state.lastDaily === today) return;
+      playSound(600, 0.1);
+      playFanfareSound();
+      state.coins += 50;
+      state.boosters += 2; // Ajoute 2 boosters quotidiens
+      state.lastDaily = today;
+      saveData();
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('sound-toggle-btn').innerText = soundEnabled ? "Actifs" : "Coupés";
+    }
+
+    function resetData() {
+      if (confirm("Voulez-vous vraiment tout réinitialiser ?")) {
+        localStorage.removeItem('pocketclash_v8_data');
+        state = {
+          coins: 100, boosters: 3, specialBoosters: 0, collection: {},
+          lastDaily: null, redeemedCodes: [],
+          victories: { easy: false, medium: false, hard: false },
+          claimed500Reward: false
+        };
+        saveData();
+        location.reload();
+      }
+    }
+
+    window.onload = loadData;
+  </script>
+</body>
+</html>
