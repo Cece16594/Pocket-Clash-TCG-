@@ -57,6 +57,7 @@
     .card { aspect-ratio: 2.5/3.7; background: #1e293b; border-radius: 10px; border: 3px solid #475569; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.5); position: relative; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
     .card:active { transform: scale(0.96); }
     .card.locked { opacity: 0.2; filter: grayscale(1); cursor: default; }
+    .card.selected-for-deck { border-color: #38bdf8; box-shadow: 0 0 15px #38bdf8; transform: scale(1.03); }
 
     .card[data-type="Feu"] { border-color: var(--type-fire); }
     .card[data-type="Eau"] { border-color: var(--type-water); }
@@ -106,6 +107,26 @@
     /* Boutique & Quêtes */
     .shop-card { background: #1e293b; border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; }
     .quest-card { background: #1e293b; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; border: 1px solid #06b6d4; display: flex; justify-content: space-between; align-items: center; }
+
+    /* Section Combat UI */
+    .battle-deck-builder { background: #1e293b; border-radius: 12px; padding: 14px; margin-bottom: 20px; border: 1px solid #3b82f6; }
+    .battle-deck-slots { display: flex; gap: 10px; margin-top: 10px; justify-content: center; }
+    .deck-slot { width: 80px; height: 110px; border: 2px dashed #475569; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: #94a3b8; text-align: center; }
+    .bot-select-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .bot-card { background: #1e293b; border-radius: 12px; padding: 14px; border: 2px solid #334155; text-align: center; cursor: pointer; transition: transform 0.2s; }
+    .bot-card:active { transform: scale(0.97); }
+    .bot-card.easy { border-color: #22c55e; }
+    .bot-card.medium { border-color: #eab308; }
+    .bot-card.hard { border-color: #ef4444; }
+
+    /* Arena de Combat */
+    #battle-arena { display: none; flex-direction: column; gap: 15px; background: #0f172a; border-radius: 12px; padding: 16px; border: 2px solid #f59e0b; }
+    .battle-score-board { display: flex; justify-content: space-between; align-items: center; background: #1e293b; padding: 10px 16px; border-radius: 8px; font-weight: bold; font-size: 1.1rem; }
+    .battle-field { display: flex; justify-content: space-around; align-items: center; margin: 10px 0; }
+    .fighter-zone { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .hp-bar-container { width: 100px; height: 12px; background: #334155; border-radius: 6px; overflow: hidden; border: 1px solid #000; }
+    .hp-bar-fill { height: 100%; background: #22c55e; transition: width 0.3s; }
+    .battle-log { background: #000; border-radius: 8px; padding: 10px; font-size: 0.75rem; height: 80px; overflow-y: auto; color: #38bdf8; font-family: monospace; }
 
     /* Modales & Animations */
     #opening-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 400; display: none; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
@@ -187,6 +208,75 @@
         <summary class="album-set-summary" style="color: #c084fc;">Fantômes Chromatiques (Set 2 - Classé par Type & Rareté) (<span id="fantomes-count">0</span>/78)</summary>
         <div id="collection-container-fantomes"></div>
       </details>
+    </div>
+
+    <!-- PAGE COMBAT MIS À JOUR -->
+    <div id="page-battle" class="page">
+      <h3>⚔️ Arène de Combat (Best of 3)</h3>
+      <p style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 15px;">Compose ton équipe de 3 cartes ci-dessous et affronte les bots !</p>
+
+      <div class="battle-deck-builder">
+        <h4>Ton Équipe (<span id="deck-count">0</span>/3 cartes)</h4>
+        <div class="battle-deck-slots" id="deck-slots-container"></div>
+      </div>
+
+      <!-- SÉLECTEUR DE CARTES COMBAT -->
+      <details open style="margin-bottom: 20px;">
+        <summary class="album-set-summary" style="color: #38bdf8; border-color: #38bdf8;">🎴 Sélectionner mes cartes de combat</summary>
+        <div class="card-grid" id="battle-card-picker" style="max-height: 250px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 8px;"></div>
+      </details>
+
+      <h4>Choisir un Adversaire</h4>
+      <div class="bot-select-grid">
+        <div class="bot-card easy" onclick="startBO3Match('easy')">
+          <h4 style="color: #22c55e;">🤖 Bot Novice</h4>
+          <p style="font-size: 0.75rem; color:#94a3b8; margin: 6px 0;">Cartes Basiques</p>
+          <button class="btn" style="background:#22c55e;">Défier (1📦 Std + 1👻 Fant.)</button>
+        </div>
+        <div class="bot-card medium" onclick="startBO3Match('medium')">
+          <h4 style="color: #eab308;">⚔️ Bot Dresseur</h4>
+          <p style="font-size: 0.75rem; color:#94a3b8; margin: 6px 0;">Cartes Holographiques</p>
+          <button class="btn" style="background:#eab308;">Défier (2📦 Std + 2👻 Fant.)</button>
+        </div>
+        <div class="bot-card hard" onclick="startBO3Match('hard')">
+          <h4 style="color: #ef4444;">👑 Bot Champion</h4>
+          <p style="font-size: 0.75rem; color:#94a3b8; margin: 6px 0;">Cartes Full Art / Chromatiques</p>
+          <button class="btn" style="background:#ef4444; color:white;">Défier (3📦 Std + 3👻 Fant. + 1500💰)</button>
+        </div>
+      </div>
+
+      <!-- ARENA DYNAMIQUE -->
+      <div id="battle-arena">
+        <div class="battle-score-board">
+          <span style="color: #38bdf8;">Joueur: <span id="score-player">0</span></span>
+          <span style="font-size: 0.8rem; color:#f59e0b;" id="round-indicator">Manche 1</span>
+          <span style="color: #ef4444;">Adversaire: <span id="score-bot">0</span></span>
+        </div>
+
+        <div class="battle-field">
+          <div class="fighter-zone">
+            <span style="font-size: 0.75rem; color:#38bdf8; font-weight:bold;">JOUEUR</span>
+            <div class="hp-bar-container"><div id="hp-player-fill" class="hp-bar-fill"></div></div>
+            <span id="hp-player-text" style="font-size: 0.7rem;">PV: 0/0</span>
+            <div id="slot-player-card"></div>
+          </div>
+
+          <div style="font-weight: 900; font-size: 1.5rem; color: #f59e0b;">VS</div>
+
+          <div class="fighter-zone">
+            <span style="font-size: 0.75rem; color:#ef4444; font-weight:bold;">BOT</span>
+            <div class="hp-bar-container"><div id="hp-bot-fill" class="hp-bar-fill"></div></div>
+            <span id="hp-bot-text" style="font-size: 0.7rem;">PV: 0/0</span>
+            <div id="slot-bot-card"></div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 8px;">
+          <button class="btn" id="btn-attack" onclick="executeTurn()" style="flex:1;">⚔️ Attaquer !</button>
+        </div>
+
+        <div class="battle-log" id="battle-log-box">=== DÉBUT DU MATCH BO3 ===</div>
+      </div>
     </div>
 
     <div id="page-boosters" class="page">
@@ -313,6 +403,7 @@
 
   <nav>
     <button class="active" onclick="showPage('collection', this)">📖 Album</button>
+    <button onclick="showPage('battle', this)">⚔️ Combat</button>
     <button onclick="showPage('boosters', this)">📦 Packs</button>
     <button onclick="showPage('shop', this)">🏪 Boutique</button>
     <button onclick="showPage('settings', this)">⚙️ Réglage</button>
@@ -427,9 +518,8 @@
       "Titan Ectoplasmique", "Monarques des Ombrages", "Avatar de l'Abysse"
     ];
 
-    const UNIQUE_EMOJIS = ["👻", "🎃", "💀", "👁️", "🕸️", "🔮", "🦇", "🌌", "🕯️", "⚡", "🧿", "👺", "👤", "🕯️", "🥀", "🦉", "🦂", "🕷️", "🖤", "🧪"];
+    const UNIQUE_EMOJIS = ["👻", "🎃", "💀", "👁️", "🕸️", "🔮", "🦇", "🌌", "🕯️", "⚡", "🧿", "👺", "👤", "🕯️", "🥀", "🦉", "🔮", "🕷️", "🖤", "🧪"];
 
-    // 50 Communes
     for (let i = 1; i <= 50; i++) {
       const elem = MULTI_TYPES[(i - 1) % MULTI_TYPES.length];
       const name = COMMON_NAMES[i - 1];
@@ -448,7 +538,6 @@
       });
     }
 
-    // 20 Holographiques
     for (let i = 1; i <= 20; i++) {
       const elem = MULTI_TYPES[(i + 1) % MULTI_TYPES.length];
       const name = HOLO_NAMES[i - 1];
@@ -467,7 +556,6 @@
       });
     }
 
-    // 6 Full Arts
     for (let i = 1; i <= 6; i++) {
       const elem = MULTI_TYPES[(i + 3) % MULTI_TYPES.length];
       const name = FULL_ART_NAMES[i - 1];
@@ -484,7 +572,6 @@
       });
     }
 
-    // 1 Chromatique FULL ART
     FANTOMES_SET.push({
       id: 400,
       name: "Spectre Chromatique Alpha",
@@ -497,7 +584,6 @@
       set: "fantomes"
     });
 
-    // Mème
     FANTOMES_SET.push({
       id: 401,
       name: "Tuile Mème",
@@ -512,7 +598,6 @@
 
     const CARDS_DB = [...BASE_SET, ...FANTOMES_SET];
 
-    // --- LISTE EXTENSIBLE DES QUÊTES AVEC RÉCOMPENSES DE BOOSTERS ---
     const QUESTS_LIST = [
       { id: 'q1', title: 'Déballeur Débutant', target: 3, rewardType: 'coins', rewardAmount: 150, rewardText: '+150 💰' },
       { id: 'q2', title: 'Collectionneur Averti', target: 10, rewardType: 'booster', rewardPack: 'standard', rewardAmount: 2, rewardText: '+2 📦 Standard' },
@@ -523,14 +608,13 @@
 
     let state = {
       coins: 150, boosters: 3, fantomesBoosters: 2, specialBoosters: 1,
-      totalOpened: 0, collection: {}, lastDaily: null, redeemedCodes: [],
+      totalOpened: 0, collection: {}, deck: [], lastDaily: null, redeemedCodes: [],
       claimedQuests: [], adminUnlocked: false, soundEnabled: true, starterPackBought: false
     };
 
     function startGame() { playSound('click'); document.getElementById('start-screen').style.display = 'none'; }
     function openStartMenu() { playSound('click'); document.getElementById('start-screen').style.display = 'flex'; }
 
-    // GÉNERATEUR D'ART ALGORITHMIQUE IA
     function generateDynamicArtCanvas(card) {
       const canvas = document.getElementById('generator-canvas'); const ctx = canvas.getContext('2d');
       const isFullArt = card.type === 'fullart' || card.type === 'chromatic-fullart';
@@ -623,6 +707,7 @@
     function loadData() {
       const saved = localStorage.getItem('pocketclash_v12_data');
       if (saved) state = {...state, ...JSON.parse(saved)};
+      if(!state.deck) state.deck = [];
       
       document.getElementById('sound-toggle').checked = state.soundEnabled;
 
@@ -632,12 +717,11 @@
       document.getElementById('fantomes-booster-cover-img').src = generateBoosterBase64('fantomes');
       document.getElementById('special-booster-cover-img').src = generateBoosterBase64('legendary');
       
-      updateUI(); renderCollection();
+      updateUI(); renderCollection(); updateDeckDisplay(); renderBattleCardPicker();
     }
 
     function saveData() { localStorage.setItem('pocketclash_v12_data', JSON.stringify(state)); updateUI(); }
 
-    // --- MISE À JOUR DU CALCUL D'ÉCHANGE SELON LES NOUVEAUX BARÈMES DE RARETÉ ---
     function getDuplicateStats() {
       let totalDupes = 0, totalCoinsValue = 0;
       CARDS_DB.forEach(card => {
@@ -645,12 +729,10 @@
         if (qty > 1) {
           const dupes = qty - 1;
           totalDupes += dupes;
-          
-          let cardValue = 3; // Commune par défaut
+          let cardValue = 3;
           if (card.type === 'holographic') cardValue = 5;
           else if (card.type === 'fullart') cardValue = 10;
           else if (card.type === 'chromatic-fullart') cardValue = 30;
-
           totalCoinsValue += dupes * cardValue;
         }
       });
@@ -661,7 +743,50 @@
       playSound('click');
       const stats = getDuplicateStats(); if (stats.totalDupes <= 0) return;
       CARDS_DB.forEach(card => { if ((state.collection[card.id] || 0) > 1) state.collection[card.id] = 1; });
-      state.coins += stats.totalCoinsValue; saveData(); renderCollection();
+      state.coins += stats.totalCoinsValue; saveData(); renderCollection(); renderBattleCardPicker();
+    }
+
+    function toggleDeckCard(cardId) {
+      playSound('click');
+      const idx = state.deck.indexOf(cardId);
+      if (idx !== -1) {
+        state.deck.splice(idx, 1);
+      } else {
+        if (state.deck.length >= 3) {
+          alert("Ton équipe contient déjà 3 cartes !");
+          return;
+        }
+        state.deck.push(cardId);
+      }
+      saveData();
+      renderCollection();
+      updateDeckDisplay();
+      renderBattleCardPicker();
+    }
+
+    function updateDeckDisplay() {
+      document.getElementById('deck-count').innerText = state.deck.length;
+      const container = document.getElementById('deck-slots-container');
+      container.innerHTML = '';
+      
+      for(let i = 0; i < 3; i++) {
+        if(state.deck[i]) {
+          const card = CARDS_DB.find(c => c.id === state.deck[i]);
+          container.innerHTML += `<div style="width:80px;" onclick="toggleDeckCard(${card.id})">${createCardHTML(card, 1, false)}</div>`;
+        } else {
+          container.innerHTML += `<div class="deck-slot">Emplacement ${i+1}</div>`;
+        }
+      }
+    }
+
+    function renderBattleCardPicker() {
+      const container = document.getElementById('battle-card-picker');
+      const ownedCards = CARDS_DB.filter(c => (state.collection[c.id] || 0) > 0 && typeof c.hp === 'number');
+      if (ownedCards.length === 0) {
+        container.innerHTML = `<p style="color:#94a3b8; font-size:0.8rem; text-align:center; grid-column:1/-1;">Tu ne possèdes aucune carte utilisable en combat. Ouvre des boosters !</p>`;
+        return;
+      }
+      container.innerHTML = ownedCards.map(c => createCardHTML(c, state.collection[c.id], true, 'deck')).join('');
     }
 
     function updateUI() {
@@ -695,7 +820,6 @@
         dailyBtn.innerText = "Réclamer";
       }
 
-      // MISE À JOUR DE L'AFFICHAGE DES QUÊTES AVEC SUPPORT DES RECOMPENSES EN BOOSTERS
       document.getElementById('quests-container').innerHTML = QUESTS_LIST.map(q => {
         const isDone = state.totalOpened >= q.target; const isClaimed = state.claimedQuests.includes(q.id);
         return `<div class="quest-card"><div><h4>${q.title}</h4><p style="font-size:0.8rem;">Ouvrir ${q.target} boosters (${Math.min(state.totalOpened, q.target)}/${q.target})</p></div>
@@ -708,31 +832,36 @@
       const q = QUESTS_LIST.find(x => x.id === qId);
       if (q && !state.claimedQuests.includes(qId)) { 
         state.claimedQuests.push(qId); 
-        
-        if (q.rewardType === 'coins') {
-          state.coins += q.rewardAmount;
-        } else if (q.rewardType === 'booster') {
+        if (q.rewardType === 'coins') state.coins += q.rewardAmount;
+        else if (q.rewardType === 'booster') {
           if (q.rewardPack === 'standard') state.boosters += q.rewardAmount;
           else if (q.rewardPack === 'fantomes') state.fantomesBoosters = (state.fantomesBoosters || 0) + q.rewardAmount;
           else if (q.rewardPack === 'legendary') state.specialBoosters = (state.specialBoosters || 0) + q.rewardAmount;
         }
-        
         saveData(); 
       } 
     }
     
     function showPage(pageId, btnEl) { playSound('click'); document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.querySelectorAll('nav button').forEach(b => b.classList.remove('active')); document.getElementById(`page-${pageId}`).classList.add('active'); if(btnEl) btnEl.classList.add('active'); }
 
-    function createCardHTML(card, count = 1, isClickable = true) {
+    function createCardHTML(card, count = 1, isClickable = true, actionType = 'zoom') {
       const isLocked = count === 0;
+      const inDeck = state.deck.includes(card.id);
       const renderCost = (costArr) => costArr.map(c => ENERGY_ICONS[c] || '⚪').join('');
       let extraClasses = '';
       if(card.type === 'fullart') extraClasses += ' full-art';
       if(card.type === 'holographic') extraClasses += ' holographic';
       if(card.type === 'chromatic-fullart') extraClasses += ' chromatic-fullart';
+      if(inDeck) extraClasses += ' selected-for-deck';
       
+      let clickAttr = '';
+      if (isClickable && !isLocked) {
+        if (actionType === 'zoom') clickAttr = `onclick="zoomCard(${card.id})"`;
+        else if (actionType === 'deck') clickAttr = `onclick="toggleDeckCard(${card.id})"`;
+      }
+
       return `
-        <div class="card ${extraClasses} ${isLocked ? 'locked' : ''}" data-type="${card.element}" ${(isClickable && !isLocked) ? `onclick="zoomCard(${card.id})"` : ''}>
+        <div class="card ${extraClasses} ${isLocked ? 'locked' : ''}" data-type="${card.element}" ${clickAttr}>
           ${count > 1 ? `<div class="card-count">x${count}</div>` : ''}
           <div class="card-top-bar"><span class="card-name">${card.name}</span><span class="card-hp"><small>HP</small>${card.hp} <span>${ENERGY_ICONS[card.element]}</span></span></div>
           <img src="${card.imageBase64}" class="card-image-canvas">
@@ -744,14 +873,11 @@
       `;
     }
 
-    // --- RENDU DE L'ALBUM ---
     function renderCollection() {
-      // Set Base
-      const baseCards = CARDS_DB.filter(c => c.set === 'base').map(c => createCardHTML(c, state.collection[c.id]||0, true)).join('');
+      const baseCards = CARDS_DB.filter(c => c.set === 'base').map(c => createCardHTML(c, state.collection[c.id]||0, true, 'zoom')).join('');
       document.getElementById('collection-grid-base').innerHTML = baseCards;
       document.getElementById('base-count').innerText = Object.keys(state.collection).filter(id => CARDS_DB.find(c => c.id == id)?.set === 'base').length;
 
-      // Set 2 : Fantômes Chromatiques
       const fantomesSet = CARDS_DB.filter(c => c.set === 'fantomes');
       document.getElementById('fantomes-count').innerText = Object.keys(state.collection).filter(id => CARDS_DB.find(c => c.id == id)?.set === 'fantomes').length;
 
@@ -759,12 +885,10 @@
       const rarityRank = { 'common': 1, 'holographic': 2, 'fullart': 3, 'chromatic-fullart': 4 };
 
       let fantomesHTML = "";
-
       MULTI_TYPES.forEach(type => {
         const cardsOfType = fantomesSet.filter(c => c.element === type);
         if (cardsOfType.length > 0) {
           fantomesHTML += `<div class="type-group-title">${ENERGY_ICONS[type] || ''} Type ${type}</div>`;
-
           const groupedByRarity = {};
           cardsOfType.forEach(card => {
             if (!groupedByRarity[card.type]) groupedByRarity[card.type] = [];
@@ -772,11 +896,10 @@
           });
 
           const sortedRarities = Object.keys(groupedByRarity).sort((a, b) => rarityRank[a] - rarityRank[b]);
-
           sortedRarities.forEach(rarityKey => {
             fantomesHTML += `<div class="rarity-subgroup-title">❖ ${rarityOrder[rarityKey] || rarityKey}</div>`;
             fantomesHTML += `<div class="card-grid">`;
-            fantomesHTML += groupedByRarity[rarityKey].map(c => createCardHTML(c, state.collection[c.id] || 0, true)).join('');
+            fantomesHTML += groupedByRarity[rarityKey].map(c => createCardHTML(c, state.collection[c.id] || 0, true, 'zoom')).join('');
             fantomesHTML += `</div>`;
           });
         }
@@ -793,6 +916,162 @@
     }
     function closeModal() { playSound('click'); document.getElementById('modal-overlay').style.display = 'none'; }
 
+    // --- MOTEUR DE COMBAT BO3 ---
+    let battleState = {
+      active: false,
+      difficulty: 'easy',
+      round: 1,
+      playerWins: 0,
+      botWins: 0,
+      playerDeck: [],
+      botDeck: [],
+      playerCard: null,
+      botCard: null,
+      playerHp: 0,
+      botHp: 0
+    };
+
+    function startBO3Match(diff) {
+      if (state.deck.length < 3) {
+        alert("Tu dois sélectionner 3 cartes dans ton équipe pour combattre !");
+        return;
+      }
+
+      playSound('click');
+      battleState.active = true;
+      battleState.difficulty = diff;
+      battleState.round = 1;
+      battleState.playerWins = 0;
+      battleState.botWins = 0;
+      battleState.playerDeck = [...state.deck];
+
+      let availableBotCards = [];
+      if (diff === 'easy') availableBotCards = CARDS_DB.filter(c => c.type === 'common' && typeof c.hp === 'number');
+      else if (diff === 'medium') availableBotCards = CARDS_DB.filter(c => (c.type === 'common' || c.type === 'holographic') && typeof c.hp === 'number');
+      else availableBotCards = CARDS_DB.filter(c => (c.type === 'fullart' || c.type === 'chromatic-fullart') && typeof c.hp === 'number');
+
+      battleState.botDeck = [];
+      for(let i = 0; i < 3; i++) {
+        const randCard = availableBotCards[Math.floor(Math.random() * availableBotCards.length)];
+        battleState.botDeck.push(randCard.id);
+      }
+
+      document.getElementById('battle-arena').style.display = 'flex';
+      document.getElementById('battle-log-box').innerHTML = `=== NOUVEAU MATCH BO3 (${diff.toUpperCase()}) ===`;
+      
+      setupRound();
+    }
+
+    function logBattle(msg) {
+      const box = document.getElementById('battle-log-box');
+      box.innerHTML += `<br>> ${msg}`;
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function setupRound() {
+      document.getElementById('score-player').innerText = battleState.playerWins;
+      document.getElementById('score-bot').innerText = battleState.botWins;
+      document.getElementById('round-indicator').innerText = `Manche ${battleState.round}`;
+
+      const playerCardId = battleState.playerDeck[battleState.round - 1];
+      const botCardId = battleState.botDeck[battleState.round - 1];
+
+      battleState.playerCard = CARDS_DB.find(c => c.id === playerCardId);
+      battleState.botCard = CARDS_DB.find(c => c.id === botCardId);
+
+      battleState.playerHp = battleState.playerCard.hp;
+      battleState.botHp = battleState.botCard.hp;
+
+      document.getElementById('slot-player-card').innerHTML = `<div style="width:110px;">${createCardHTML(battleState.playerCard, 1, false)}</div>`;
+      document.getElementById('slot-bot-card').innerHTML = `<div style="width:110px;">${createCardHTML(battleState.botCard, 1, false)}</div>`;
+
+      updateBattleHp();
+      document.getElementById('btn-attack').disabled = false;
+      logBattle(`--- Début de la Manche ${battleState.round} ---`);
+      logBattle(`${battleState.playerCard.name} (${battleState.playerHp} PV) VS ${battleState.botCard.name} (${battleState.botHp} PV)`);
+    }
+
+    function updateBattleHp() {
+      const pPercent = Math.max(0, (battleState.playerHp / battleState.playerCard.hp) * 100);
+      const bPercent = Math.max(0, (battleState.botHp / battleState.botCard.hp) * 100);
+
+      document.getElementById('hp-player-fill').style.width = `${pPercent}%`;
+      document.getElementById('hp-bot-fill').style.width = `${bPercent}%`;
+
+      document.getElementById('hp-player-text').innerText = `PV: ${Math.max(0, battleState.playerHp)}/${battleState.playerCard.hp}`;
+      document.getElementById('hp-bot-text').innerText = `PV: ${Math.max(0, battleState.botHp)}/${battleState.botCard.hp}`;
+    }
+
+    function executeTurn() {
+      playSound('click');
+      const pDmg = typeof battleState.playerCard.atk1.damage === 'number' ? battleState.playerCard.atk1.damage : 20;
+      battleState.botHp -= pDmg;
+      logBattle(`${battleState.playerCard.name} lance ${battleState.playerCard.atk1.name} et inflige ${pDmg} dégâts !`);
+
+      if (battleState.botHp <= 0) {
+        updateBattleHp();
+        logBattle(`🏆 ${battleState.playerCard.name} remporte la manche ${battleState.round} !`);
+        battleState.playerWins++;
+        endRound();
+        return;
+      }
+
+      const bDmg = typeof battleState.botCard.atk1.damage === 'number' ? battleState.botCard.atk1.damage : 20;
+      battleState.playerHp -= bDmg;
+      logBattle(`💥 ${battleState.botCard.name} contre-attaque avec ${battleState.botCard.atk1.name} (-${bDmg} PV) !`);
+
+      if (battleState.playerHp <= 0) {
+        updateBattleHp();
+        logBattle(`☠️ ${battleState.playerCard.name} est KO ! Le Bot gagne la manche.`);
+        battleState.botWins++;
+        endRound();
+        return;
+      }
+
+      updateBattleHp();
+    }
+
+    function endRound() {
+      document.getElementById('btn-attack').disabled = true;
+
+      if (battleState.playerWins === 2 || battleState.botWins === 2) {
+        setTimeout(finishMatch, 1500);
+      } else {
+        battleState.round++;
+        setTimeout(setupRound, 1500);
+      }
+    }
+
+    function finishMatch() {
+      if (battleState.playerWins > battleState.botWins) {
+        playSound('reveal-rare');
+        logBattle(`🎉 VICTOIRE FINALE DU MATCH ! (${battleState.playerWins}-${battleState.botWins})`);
+        
+        let rewardText = "";
+        if (battleState.difficulty === 'easy') {
+          state.boosters += 1;
+          state.fantomesBoosters = (state.fantomesBoosters || 0) + 1;
+          rewardText = "1 Booster Standard + 1 Booster Fantômes";
+        } else if (battleState.difficulty === 'medium') {
+          state.boosters += 2;
+          state.fantomesBoosters = (state.fantomesBoosters || 0) + 2;
+          rewardText = "2 Boosters Standard + 2 Boosters Fantômes";
+        } else if (battleState.difficulty === 'hard') {
+          state.boosters += 3;
+          state.fantomesBoosters = (state.fantomesBoosters || 0) + 3;
+          state.coins += 1500;
+          rewardText = "3 Boosters Standard + 3 Boosters Fantômes + 1 500 💰";
+        }
+
+        saveData();
+        alert(`Victoire ! Tu gagnais : ${rewardText} !`);
+      } else {
+        logBattle(`❌ DÉFAITE DU MATCH BO3...`);
+        alert("Défaite ! Réessaie avec une autre équipe.");
+      }
+      document.getElementById('battle-arena').style.display = 'none';
+    }
+
     let currentPackCards = [], packIdx = 0;
 
     function openBooster(type) {
@@ -801,13 +1080,11 @@
       if (type === 'legendary' && (state.specialBoosters || 0) <= 0) return;
 
       playSound('open');
-
       if (type === 'legendary') state.specialBoosters--;
       else if (type === 'fantomes') state.fantomesBoosters--;
       else state.boosters--;
 
       state.totalOpened++; saveData(); currentPackCards = [];
-      
       const targetSet = (type === 'fantomes') ? 'fantomes' : 'base';
 
       if (type === 'legendary') {
@@ -815,34 +1092,26 @@
         const fas = CARDS_DB.filter(c => c.set === 'base' && c.type === 'fullart');
         for (let i = 0; i < 4; i++) currentPackCards.push(coms[Math.floor(Math.random() * coms.length)]);
         for (let i = 0; i < 3; i++) currentPackCards.push(fas[Math.floor(Math.random() * fas.length)]);
-      } 
-      else {
+      } else {
         const coms = CARDS_DB.filter(c => c.set === targetSet && c.type === 'common');
         const holos = CARDS_DB.filter(c => c.set === targetSet && c.type === 'holographic');
         const fas = CARDS_DB.filter(c => c.set === targetSet && c.type === 'fullart');
         const chroms = CARDS_DB.filter(c => c.set === targetSet && c.type === 'chromatic-fullart');
 
-        for (let i = 0; i < 6; i++) {
-          currentPackCards.push(coms[Math.floor(Math.random() * coms.length)]);
-        }
+        for (let i = 0; i < 6; i++) currentPackCards.push(coms[Math.floor(Math.random() * coms.length)]);
 
         const roll = Math.random();
-        if (roll < 0.01 && chroms.length > 0) {
-          currentPackCards.push(chroms[Math.floor(Math.random() * chroms.length)]);
-        } else if (roll < 0.03 && fas.length > 0) {
-          currentPackCards.push(fas[Math.floor(Math.random() * fas.length)]);
-        } else if (roll < 0.23 && holos.length > 0) {
-          currentPackCards.push(holos[Math.floor(Math.random() * holos.length)]);
-        } else {
-          currentPackCards.push(coms[Math.floor(Math.random() * coms.length)]);
-        }
+        if (roll < 0.01 && chroms.length > 0) currentPackCards.push(chroms[Math.floor(Math.random() * chroms.length)]);
+        else if (roll < 0.03 && fas.length > 0) currentPackCards.push(fas[Math.floor(Math.random() * fas.length)]);
+        else if (roll < 0.23 && holos.length > 0) currentPackCards.push(holos[Math.floor(Math.random() * holos.length)]);
+        else currentPackCards.push(coms[Math.floor(Math.random() * coms.length)]);
       }
 
       packIdx = 0; document.getElementById('opening-overlay').style.display = 'flex'; showNextCardInPack();
     }
 
     function showNextCardInPack() {
-      if (packIdx >= currentPackCards.length) { document.getElementById('opening-overlay').style.display = 'none'; renderCollection(); return; }
+      if (packIdx >= currentPackCards.length) { document.getElementById('opening-overlay').style.display = 'none'; renderCollection(); renderBattleCardPicker(); return; }
       const card = currentPackCards[packIdx];
       state.collection[card.id] = (state.collection[card.id] || 0) + 1; saveData();
       
@@ -870,14 +1139,13 @@
       if (state.redeemedCodes.includes(code)) { msg.style.color = '#ef4444'; msg.innerText = "Code déjà utilisé !"; msg.style.display = 'block'; return; }
       
       if (code === "TUILE") {
-        state.collection[401] = (state.collection[401] || 0) + 1; state.redeemedCodes.push(code); saveData(); renderCollection();
+        state.collection[401] = (state.collection[401] || 0) + 1; state.redeemedCodes.push(code); saveData(); renderCollection(); renderBattleCardPicker();
         msg.style.color = '#22c55e'; msg.innerText = "🧱 Carte 'Tuile Mème' débloquée !"; msg.style.display = 'block';
       } else {
         msg.style.color = '#ef4444'; msg.innerText = "❌ Code invalide."; msg.style.display = 'block';
       }
     }
 
-    // --- FONCTIONS ADMIN ÉTENDUES ---
     function adminAddCoins(a) { playSound('click'); state.coins += a; saveData(); }
     function adminAddPacks(type, count) {
       playSound('click');
@@ -886,30 +1154,14 @@
       if (type === 'legendary') state.specialBoosters = (state.specialBoosters || 0) + count;
       saveData();
     }
-    function adminUnlockAll() { playSound('click'); CARDS_DB.forEach(c => state.collection[c.id] = 1); saveData(); renderCollection(); }
-    function adminResetCollection() { playSound('click'); if(confirm("Vider entièrement la collection ?")) { state.collection = {}; saveData(); renderCollection(); } }
+    function adminUnlockAll() { playSound('click'); CARDS_DB.forEach(c => state.collection[c.id] = 1); saveData(); renderCollection(); renderBattleCardPicker(); }
+    function adminResetCollection() { playSound('click'); if(confirm("Vider entièrement la collection ?")) { state.collection = {}; state.deck = []; saveData(); renderCollection(); updateDeckDisplay(); renderBattleCardPicker(); } }
 
-    // --- ACHATS EN BOUTIQUE ---
-    function buyStarterPack() {
-      playSound('click');
-      if (state.coins >= 450 && !state.starterPackBought) {
-        state.coins -= 450; state.boosters += 5; state.fantomesBoosters = (state.fantomesBoosters || 0) + 2;
-        state.starterPackBought = true; saveData();
-      }
-    }
+    function buyStarterPack() { playSound('click'); if (state.coins >= 450 && !state.starterPackBought) { state.coins -= 450; state.boosters += 5; state.fantomesBoosters = (state.fantomesBoosters || 0) + 2; state.starterPackBought = true; saveData(); } }
     function buyBooster(c, q) { playSound('click'); if (state.coins >= c) { state.coins -= c; state.boosters += q; saveData(); } }
     function buyFantomesBooster(c, q) { playSound('click'); if (state.coins >= c) { state.coins -= c; state.fantomesBoosters = (state.fantomesBoosters||0) + q; saveData(); } }
     function buySpecialBooster(c, q) { playSound('click'); if (state.coins >= c) { state.coins -= c; state.specialBoosters = (state.specialBoosters||0) + q; saveData(); } }
-    function claimDaily() { 
-      playSound('click'); 
-      const t = new Date().toDateString(); 
-      if (state.lastDaily === t) return; 
-      state.coins += 50; 
-      state.boosters += 2; 
-      state.fantomesBoosters = (state.fantomesBoosters || 0) + 2;
-      state.lastDaily = t; 
-      saveData(); 
-    }
+    function claimDaily() { playSound('click'); const t = new Date().toDateString(); if (state.lastDaily === t) return; state.coins += 50; state.boosters += 2; state.fantomesBoosters = (state.fantomesBoosters || 0) + 2; state.lastDaily = t; saveData(); }
     function resetData() { playSound('click'); if (confirm("Tout réinitialiser ?")) { localStorage.removeItem('pocketclash_v12_data'); location.reload(); } }
 
     window.onload = loadData;
