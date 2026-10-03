@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Pocket Clash - TCG Mobile</title>
+  <title>Pocket Clash - TCG Mobile (Halloween Edition)</title>
   <style>
     :root {
-      --bg-color: #0b0f19;
+      --bg-color: #0d0714;
       --card-bg: #161b22;
-      --accent: #f59e0b;
+      --accent: #f97316;
+      --accent-halloween: #a855f7;
       --common-border: #30363d;
       
       --type-fire: #ef4444;
@@ -23,41 +24,79 @@
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background-color: var(--bg-color); color: white; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
 
-    /* Écran d'accueil */
+    /* Écran d'accueil - Thème Halloween */
     #start-screen {
-      position: fixed; inset: 0; z-index: 300; background: radial-gradient(circle at center, #1e293b 0%, #0b0f19 100%);
+      position: fixed; inset: 0; z-index: 300; 
+      background: radial-gradient(circle at center, #2e1065 0%, #0d0714 80%, #000000 100%);
       display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px;
+      box-shadow: inset 0 0 100px rgba(249, 115, 22, 0.2);
     }
-    .title-banner { font-size: 2.8rem; font-weight: 900; color: #fff; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 20px rgba(245, 158, 11, 0.8), 0 4px 0 #b45309; margin-bottom: 5px; }
-    .title-sub { font-size: 0.9rem; color: #fef08a; letter-spacing: 3px; font-weight: 800; margin-bottom: 40px; text-transform: uppercase; }
-    .start-btn { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #000; font-size: 1.4rem; font-weight: 900; padding: 18px 36px; border-radius: 50px; border: 4px solid #fef08a; box-shadow: 0 0 25px rgba(245, 158, 11, 0.6), inset 0 2px 4px rgba(255,255,255,0.5); cursor: pointer; display: flex; align-items: center; gap: 12px; transition: transform 0.2s; animation: pulseGlow 2s infinite; }
+    #start-screen::before {
+      content: "🎃 👻 🦇 🎃 👻";
+      font-size: 2rem;
+      letter-spacing: 15px;
+      margin-bottom: 15px;
+      opacity: 0.8;
+      animation: floatGhosts 3s ease-in-out infinite alternate;
+    }
+    @keyframes floatGhosts {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-10px); }
+    }
+    .title-banner { 
+      font-size: 2.8rem; font-weight: 900; color: #f97316; text-transform: uppercase; letter-spacing: 2px; 
+      text-shadow: 0 0 25px rgba(249, 115, 22, 0.9), 0 4px 0 #7c2d12, 0 0 10px #a855f7; margin-bottom: 5px; 
+    }
+    .title-sub { font-size: 0.96rem; color: #e9d5ff; letter-spacing: 3px; font-weight: 800; margin-bottom: 40px; text-transform: uppercase; text-shadow: 0 0 8px rgba(168, 85, 247, 0.8); }
+    .start-btn { 
+      background: linear-gradient(135deg, #f97316 0%, #c084fc 100%); color: #000; font-size: 1.3rem; font-weight: 900; padding: 18px 36px; border-radius: 50px; border: 4px solid #fef08a; box-shadow: 0 0 30px rgba(249, 115, 22, 0.8), inset 0 2px 4px rgba(255,255,255,0.5); cursor: pointer; display: flex; align-items: center; gap: 12px; transition: transform 0.2s; animation: pulseGlow 2s infinite; 
+    }
     .start-btn:active { transform: scale(0.95); }
-    @keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 25px rgba(245, 158, 11, 0.6); } 50% { box-shadow: 0 0 45px rgba(245, 158, 11, 1); } }
+    @keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 25px rgba(249, 115, 22, 0.6), 0 0 15px rgba(168, 85, 247, 0.4); } 50% { box-shadow: 0 0 45px rgba(249, 115, 22, 1), 0 0 25px rgba(168, 85, 247, 0.8); } }
 
     /* Header */
-    header { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: rgba(11, 15, 25, 0.95); border-bottom: 1px solid #30363d; z-index: 10; }
-    .logo { font-size: 1.1rem; font-weight: 800; color: var(--accent); letter-spacing: 0.5px; cursor: pointer; }
+    header { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: rgba(13, 7, 20, 0.95); border-bottom: 1px solid #3b0764; z-index: 10; }
+    .logo { font-size: 1.1rem; font-weight: 800; color: var(--accent); letter-spacing: 0.5px; cursor: pointer; text-shadow: 0 0 10px rgba(249, 115, 22, 0.5); }
     .header-right { display: flex; align-items: center; gap: 12px; }
     .currency { display: flex; gap: 8px; font-weight: bold; font-size: 0.85rem; }
-    .badge { background: #1e293b; padding: 5px 12px; border-radius: 20px; display: flex; align-items: center; gap: 6px; border: 1px solid #334155; }
+    .badge { background: #1e102d; padding: 5px 12px; border-radius: 20px; display: flex; align-items: center; gap: 6px; border: 1px solid #581c87; }
 
     /* Structure Principale */
     main { flex: 1; overflow-y: auto; padding: 12px; padding-bottom: 80px; }
     .page { display: none; }
     .page.active { display: block; }
-    .recycle-banner { background: #1e293b; border: 1px solid #f59e0b; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+    .recycle-banner { background: #1e102d; border: 1px solid #f97316; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
 
     /* Classification UI */
-    .album-set-summary { font-weight: 800; cursor: pointer; padding: 12px; background: #1e293b; border-radius: 8px; border: 1px solid #334155; margin-bottom: 10px; display: block; outline: none; }
-    .type-group-title { font-size: 1.1rem; font-weight: 800; margin: 16px 0 8px 0; color: #38bdf8; border-bottom: 2px solid #334155; padding-bottom: 4px; display: flex; align-items: center; gap: 8px; }
-    .rarity-subgroup-title { font-size: 0.85rem; font-weight: 700; margin: 10px 0 6px 0; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; }
+    .album-set-summary { font-weight: 800; cursor: pointer; padding: 12px; background: #1e102d; border-radius: 8px; border: 1px solid #581c87; margin-bottom: 10px; display: block; outline: none; }
+    .rarity-subgroup-title { font-size: 1rem; font-weight: 800; margin: 16px 0 8px 0; text-transform: uppercase; letter-spacing: 1px; color: #a7f3d0; border-bottom: 2px solid #581c87; padding-bottom: 4px; display: flex; align-items: center; gap: 8px; }
     .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-bottom: 15px; padding: 5px; }
 
+    /* CAROUSEL MOBILE / SÉLECTION SANS CHEVAUCHEMENT EN COMBAT */
+    .mobile-card-picker-carousel {
+      display: flex !important;
+      flex-wrap: nowrap !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      gap: 14px !important;
+      padding: 12px 8px !important;
+      background: rgba(0, 0, 0, 0.4) !important;
+      border-radius: 12px !important;
+      border: 1px solid #581c87 !important;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .mobile-card-picker-carousel .card-picker-item-wrapper {
+      flex: 0 0 135px !important;
+      scroll-snap-align: center;
+      position: relative;
+    }
+
     /* Carte TCG */
-    .card { aspect-ratio: 2.5/3.7; background: #1e293b; border-radius: 10px; border: 3px solid #475569; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.5); position: relative; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
+    .card { aspect-ratio: 2.5/3.7; background: #1e102d; border-radius: 10px; border: 3px solid #4c1d95; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.6); position: relative; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
     .card:active { transform: scale(0.96); }
     .card.locked { opacity: 0.2; filter: grayscale(1); cursor: default; }
-    .card.selected-for-deck { border-color: #38bdf8; box-shadow: 0 0 15px #38bdf8; transform: scale(1.03); }
+    .card.selected-for-deck { border-color: #f97316; box-shadow: 0 0 18px #f97316; transform: scale(1.03); }
 
     .card[data-type="Feu"] { border-color: var(--type-fire); }
     .card[data-type="Eau"] { border-color: var(--type-water); }
@@ -67,7 +106,7 @@
     .card[data-type="Roche"] { border-color: var(--type-rock); }
     .card[data-type="Poison"] { border-color: var(--type-poison); }
 
-    .card-top-bar { display: flex; justify-content: space-between; align-items: center; padding: 4px 6px; background: rgba(0,0,0,0.4); z-index: 2; }
+    .card-top-bar { display: flex; justify-content: space-between; align-items: center; padding: 4px 6px; background: rgba(0,0,0,0.5); z-index: 2; }
     .card-name { font-size: 0.75rem; font-weight: 800; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 65%; }
     .card-hp { font-size: 0.7rem; font-weight: 900; color: #ef4444; display: flex; align-items: center; gap: 2px; }
     .card-image-canvas { width: 100%; height: 42%; object-fit: cover; display: block; border-top: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1); }
@@ -88,10 +127,10 @@
     .card.full-art .card-image-canvas { height: 100%; position: absolute; inset: 0; border: none; z-index: 1; }
     .card.full-art::after { content: 'Full Art - Édition Collector'; position: absolute; bottom: 2px; width: 100%; text-align: center; font-size: 0.5rem; font-weight: 900; color: #fef08a; text-shadow: 0 1px 3px #000; z-index: 3; }
 
-    .card.chromatic-fullart { border-color: #38bdf8; box-shadow: 0 0 20px rgba(56, 189, 248, 0.9), 0 0 10px rgba(217, 70, 239, 0.8); animation: chromaGlow 2.5s infinite alternate; }
-    .card.chromatic-fullart .card-image-canvas { height: 100%; position: absolute; inset: 0; border: none; z-index: 1; filter: invert(0.9) hue-rotate(200deg) contrast(1.2); }
-    .card.chromatic-fullart::after { content: '✨ CHROMATIQUE FULL ART ✨'; position: absolute; bottom: 2px; width: 100%; text-align: center; font-size: 0.52rem; font-weight: 900; color: #00f2fe; text-shadow: 0 0 4px #000, 0 0 8px #d946ef; z-index: 3; }
-    @keyframes chromaGlow { 0% { filter: drop-shadow(0 0 2px #38bdf8); } 100% { filter: drop-shadow(0 0 10px #d946ef); } }
+    .card.chromatic-fullart { border-color: #ea580c; box-shadow: 0 0 20px rgba(234, 88, 12, 0.9), 0 0 10px rgba(245, 158, 11, 0.8); animation: chromaGlow 2.5s infinite alternate; }
+    .card.chromatic-fullart .card-image-canvas { height: 100%; position: absolute; inset: 0; border: none; z-index: 1; filter: invert(0.2) sepia(1) saturate(5) hue-rotate(330deg); }
+    .card.chromatic-fullart::after { content: '🎃 CHROMATIQUE PUMPKRUNCH 🎃'; position: absolute; bottom: 2px; width: 100%; text-align: center; font-size: 0.52rem; font-weight: 900; color: #ffedd5; text-shadow: 0 0 4px #000, 0 0 8px #ea580c; z-index: 3; }
+    @keyframes chromaGlow { 0% { filter: drop-shadow(0 0 2px #f97316); } 100% { filter: drop-shadow(0 0 12px #ea580c); } }
 
     /* Booster Visual Layout */
     .booster-page-container { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 70vh; gap: 20px; }
@@ -100,33 +139,35 @@
     .booster-pack-visual { width: 160px; height: 270px; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 12px 35px rgba(0,0,0,0.5); border: 2px solid #f59e0b; cursor: pointer; overflow: hidden; position: relative; transition: transform 0.2s, box-shadow 0.2s; }
     .booster-pack-visual:active { transform: scale(0.95); }
     .booster-pack-visual.fantomes { border-color: #a855f7; box-shadow: 0 12px 35px rgba(168, 85, 247, 0.4); }
+    .booster-pack-visual.pumpkrunch { border-color: #ea580c; box-shadow: 0 12px 35px rgba(234, 88, 12, 0.6); animation: pumpkinGlow 2s infinite alternate; }
     .booster-pack-visual.legendary { border-color: #ec4899; box-shadow: 0 12px 35px rgba(236, 72, 153, 0.6); animation: legendaryGlow 2s infinite alternate; }
+    @keyframes pumpkinGlow { 0% { box-shadow: 0 0 15px rgba(234, 88, 12, 0.5); } 100% { box-shadow: 0 0 35px rgba(249, 115, 22, 0.9); } }
     @keyframes legendaryGlow { 0% { box-shadow: 0 0 15px rgba(236, 72, 153, 0.5); } 100% { box-shadow: 0 0 35px rgba(245, 158, 11, 0.9); } }
     .booster-pack-img { width: 100%; height: 100%; object-fit: cover; }
 
     /* Boutique & Quêtes */
-    .shop-card { background: #1e293b; border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; }
-    .quest-card { background: #1e293b; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; border: 1px solid #06b6d4; display: flex; justify-content: space-between; align-items: center; }
+    .shop-card { background: #1e102d; border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid #581c87; display: flex; justify-content: space-between; align-items: center; }
+    .quest-card { background: #1e102d; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; border: 1px solid #a855f7; display: flex; justify-content: space-between; align-items: center; }
 
     /* Section Combat UI */
-    .battle-deck-builder { background: #1e293b; border-radius: 12px; padding: 14px; margin-bottom: 20px; border: 1px solid #3b82f6; }
+    .battle-deck-builder { background: #1e102d; border-radius: 12px; padding: 14px; margin-bottom: 20px; border: 1px solid #a855f7; }
     .battle-deck-slots { display: flex; gap: 10px; margin-top: 10px; justify-content: center; }
-    .deck-slot { width: 80px; height: 110px; border: 2px dashed #475569; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: #94a3b8; text-align: center; }
+    .deck-slot { width: 80px; height: 110px; border: 2px dashed #6b21a8; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: #c084fc; text-align: center; }
     .bot-select-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 20px; }
-    .bot-card { background: #1e293b; border-radius: 12px; padding: 14px; border: 2px solid #334155; text-align: center; cursor: pointer; transition: transform 0.2s; }
+    .bot-card { background: #1e102d; border-radius: 12px; padding: 14px; border: 2px solid #581c87; text-align: center; cursor: pointer; transition: transform 0.2s; }
     .bot-card:active { transform: scale(0.97); }
     .bot-card.easy { border-color: #22c55e; }
     .bot-card.medium { border-color: #eab308; }
     .bot-card.hard { border-color: #ef4444; }
 
     /* Arena de Combat */
-    #battle-arena { display: none; flex-direction: column; gap: 15px; background: #0f172a; border-radius: 12px; padding: 16px; border: 2px solid #f59e0b; }
-    .battle-score-board { display: flex; justify-content: space-between; align-items: center; background: #1e293b; padding: 10px 16px; border-radius: 8px; font-weight: bold; font-size: 1.1rem; }
+    #battle-arena { display: none; flex-direction: column; gap: 15px; background: #0f172a; border-radius: 12px; padding: 16px; border: 2px solid #f97316; }
+    .battle-score-board { display: flex; justify-content: space-between; align-items: center; background: #1e102d; padding: 10px 16px; border-radius: 8px; font-weight: bold; font-size: 1.1rem; border: 1px solid #581c87; }
     .battle-field { display: flex; justify-content: space-around; align-items: center; margin: 10px 0; }
     .fighter-zone { display: flex; flex-direction: column; align-items: center; gap: 8px; }
     .hp-bar-container { width: 100px; height: 12px; background: #334155; border-radius: 6px; overflow: hidden; border: 1px solid #000; }
     .hp-bar-fill { height: 100%; background: #22c55e; transition: width 0.3s; }
-    .battle-log { background: #000; border-radius: 8px; padding: 10px; font-size: 0.75rem; height: 80px; overflow-y: auto; color: #38bdf8; font-family: monospace; }
+    .battle-log { background: #000; border-radius: 8px; padding: 10px; font-size: 0.75rem; height: 80px; overflow-y: auto; color: #38bdf8; font-family: monospace; border: 1px solid #334155; }
 
     /* Modales & Animations */
     #opening-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 400; display: none; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
@@ -135,13 +176,27 @@
     .reveal-card.full-art-anim { animation: popInFullArt 0.8s ease-out forwards; }
     @keyframes popInFullArt { 0% { transform: scale(0.1) rotate(-720deg); filter: brightness(3); } 50% { transform: scale(1.35) rotate(10deg); filter: brightness(2); } 100% { transform: scale(1.1) rotate(0deg); filter: brightness(1); } }
 
+    /* Animation Effet Jumpscare à l'ouverture de booster */
+    .jumpscare-anim { animation: jumpscareEffect 0.5s ease-in-out forwards !important; }
+    @keyframes jumpscareEffect {
+      0% { transform: scale(0.1) rotate(0deg); filter: contrast(2) brightness(2) hue-rotate(0deg); opacity: 0; }
+      20% { transform: scale(1.6) rotate(-15deg); filter: contrast(5) brightness(0.5) hue-rotate(90deg); opacity: 1; }
+      40% { transform: scale(1.3) rotate(15deg); filter: contrast(10) brightness(3) hue-rotate(180deg); }
+      60% { transform: scale(1.5) rotate(-10deg); filter: contrast(5) brightness(0.2) hue-rotate(270deg); }
+      100% { transform: scale(1.1) rotate(0deg); filter: contrast(1) brightness(1) hue-rotate(0deg); opacity: 1; }
+    }
+
     #modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 500; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
     .modal-card-container { width: 260px; }
     .modal-card-container .card { cursor: default; transform: scale(1.15); }
 
     /* Paramètres & Switcher */
-    .settings-group { background: #1e293b; border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid #334155; }
+    .settings-group { background: #1e102d; border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid #581c87; }
     .settings-row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+    .patch-notes-list { list-style-type: none; margin-top: 10px; padding-left: 0; font-size: 0.8rem; color: #e9d5ff; }
+    .patch-notes-list li { margin-bottom: 8px; position: relative; padding-left: 20px; line-height: 1.4; }
+    .patch-notes-list li::before { content: '🎃'; position: absolute; left: 0; top: 0; font-size: 0.75rem; }
+    
     .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
     .switch input { opacity: 0; width: 0; height: 0; }
     .slider { position: absolute; cursor: pointer; inset: 0; background-color: #334155; transition: .3s; border-radius: 34px; }
@@ -156,12 +211,13 @@
     .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
 
     /* Navigation */
-    nav { display: flex; background: #1e293b; border-top: 1px solid #334155; position: fixed; bottom: 0; width: 100%; height: 60px; z-index: 10; }
-    nav button { flex: 1; border: none; background: none; color: #94a3b8; font-weight: bold; font-size: 0.75rem; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
+    nav { display: flex; background: #1e102d; border-top: 1px solid #581c87; position: fixed; bottom: 0; width: 100%; height: 60px; z-index: 10; }
+    nav button { flex: 1; border: none; background: none; color: #c084fc; font-weight: bold; font-size: 0.75rem; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
     nav button.active { color: var(--accent); }
     nav button.active::after { content: ''; width: 20px; height: 3px; background: var(--accent); border-radius: 2px; }
 
     .btn { background: var(--accent); color: #0d1117; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.85rem; }
+    .btn-pumpkrunch { background: linear-gradient(135deg, #f97316, #ea580c); color: white; }
     .btn-legendary { background: linear-gradient(135deg, #f59e0b, #ec4899); color: white; }
     .btn-fantomes { background: #9333ea; color: white; }
     .btn-danger { background: #ef4444; color: white; }
@@ -173,16 +229,16 @@
 
   <div id="start-screen">
     <div class="title-banner">Pocket Clash</div>
-    <div class="title-sub">Jeu de cartes à collectionner mobile</div>
+    <div class="title-sub">🎃 Halloween Edition TCG Mobile 👻</div>
     <button class="start-btn" onclick="startGame()">CLIQUEZ POUR COMMENCER ➔</button>
   </div>
 
   <header>
-    <div class="logo" onclick="openStartMenu()">🔥 POCKET CLASH</div>
+    <div class="logo" onclick="openStartMenu()">🎃 POCKET CLASH</div>
     <div class="header-right">
       <div class="currency">
         <div class="badge">💰 <span id="coins-display">0</span></div>
-        <div class="badge">📦 <span id="boosters-display">0</span></div>
+        <div class="badge" style="border-color: #f97316;">🎃 <span id="pumpkrunch-boosters-display">0</span></div>
         <div class="badge" style="border-color: #a855f7;">👻 <span id="fantomes-boosters-display">0</span></div>
         <div class="badge" style="border-color: #ec4899;" id="badge-legendary">👑 <span id="special-boosters-display">0</span></div>
       </div>
@@ -194,36 +250,35 @@
       <div class="recycle-banner">
         <div>
           <h4 style="font-size: 0.9rem;">♻️ Échanger les cartes en double</h4>
-          <p style="color: #94a3b8; font-size: 0.75rem;">Commune: 3💰 | Holo: 5💰 | Full ART: 10💰 | Chromatique: 30💰</p>
+          <p style="color: #c084fc; font-size: 0.75rem;">Commune: 3💰 | Holo: 5💰 | Full ART: 10💰 | Chromatique: 30💰</p>
         </div>
         <button class="btn" id="recycle-btn" onclick="recycleDuplicates()">Vendre (<span id="duplicates-count">0</span>)</button>
       </div>
       
       <details open>
-        <summary class="album-set-summary">Set Pocket Clash (Base) (<span id="base-count">0</span>/26)</summary>
-        <div class="card-grid" id="collection-grid-base"></div>
+        <summary class="album-set-summary" style="color: #f97316;">Set 3 : La vengeance de Pumpkrunch (<span id="pumpkrunch-count">0</span>/41)</summary>
+        <div id="collection-container-pumpkrunch"></div>
       </details>
 
       <details open>
-        <summary class="album-set-summary" style="color: #c084fc;">Fantômes Chromatiques (Set 2 - Classé par Type & Rareté) (<span id="fantomes-count">0</span>/78)</summary>
+        <summary class="album-set-summary" style="color: #c084fc;">Fantômes Chromatiques (Set 2 - Classé par Rareté) (<span id="fantomes-count">0</span>/78)</summary>
         <div id="collection-container-fantomes"></div>
       </details>
     </div>
 
-    <!-- PAGE COMBAT MIS À JOUR -->
     <div id="page-battle" class="page">
       <h3>⚔️ Arène de Combat (Best of 3)</h3>
-      <p style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 15px;">Compose ton équipe de 3 cartes ci-dessous et affronte les bots !</p>
+      <p style="color: #c084fc; font-size: 0.8rem; margin-bottom: 15px;">Compose ton équipe de 3 cartes ci-dessous et affronte les bots !</p>
 
       <div class="battle-deck-builder">
         <h4>Ton Équipe (<span id="deck-count">0</span>/3 cartes)</h4>
         <div class="battle-deck-slots" id="deck-slots-container"></div>
       </div>
 
-      <!-- SÉLECTEUR DE CARTES COMBAT -->
       <details open style="margin-bottom: 20px;">
-        <summary class="album-set-summary" style="color: #38bdf8; border-color: #38bdf8;">🎴 Sélectionner mes cartes de combat</summary>
-        <div class="card-grid" id="battle-card-picker" style="max-height: 250px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 8px;"></div>
+        <summary class="album-set-summary" style="color: #38bdf8; border-color: #38bdf8;">🎴 Sélectionner mes cartes de combat (Glisser horizontalement)</summary>
+        <!-- Rail de cartes à défilement horizontal sans chevauchement -->
+        <div class="mobile-card-picker-carousel" id="battle-card-picker"></div>
       </details>
 
       <h4>Choisir un Adversaire</h4>
@@ -231,25 +286,24 @@
         <div class="bot-card easy" onclick="startBO3Match('easy')">
           <h4 style="color: #22c55e;">🤖 Bot Novice</h4>
           <p style="font-size: 0.75rem; color:#94a3b8; margin: 6px 0;">Cartes Basiques</p>
-          <button class="btn" style="background:#22c55e;">Défier (1📦 Std + 1👻 Fant.)</button>
+          <button class="btn" style="background:#22c55e;">Défier (1🎃 Pump. + 1👻 Fant.)</button>
         </div>
         <div class="bot-card medium" onclick="startBO3Match('medium')">
           <h4 style="color: #eab308;">⚔️ Bot Dresseur</h4>
           <p style="font-size: 0.75rem; color:#94a3b8; margin: 6px 0;">Cartes Holographiques</p>
-          <button class="btn" style="background:#eab308;">Défier (2📦 Std + 2👻 Fant.)</button>
+          <button class="btn" style="background:#eab308;">Défier (2🎃 Pump. + 2👻 Fant.)</button>
         </div>
         <div class="bot-card hard" onclick="startBO3Match('hard')">
           <h4 style="color: #ef4444;">👑 Bot Champion</h4>
           <p style="font-size: 0.75rem; color:#94a3b8; margin: 6px 0;">Cartes Full Art / Chromatiques</p>
-          <button class="btn" style="background:#ef4444; color:white;">Défier (3📦 Std + 3👻 Fant. + 1500💰)</button>
+          <button class="btn" style="background:#ef4444; color:white;">Défier (3🎃 Pump. + 3👻 Fant. + 1500💰)</button>
         </div>
       </div>
 
-      <!-- ARENA DYNAMIQUE -->
       <div id="battle-arena">
         <div class="battle-score-board">
           <span style="color: #38bdf8;">Joueur: <span id="score-player">0</span></span>
-          <span style="font-size: 0.8rem; color:#f59e0b;" id="round-indicator">Manche 1</span>
+          <span style="font-size: 0.8rem; color:#f97316;" id="round-indicator">Manche 1</span>
           <span style="color: #ef4444;">Adversaire: <span id="score-bot">0</span></span>
         </div>
 
@@ -261,7 +315,7 @@
             <div id="slot-player-card"></div>
           </div>
 
-          <div style="font-weight: 900; font-size: 1.5rem; color: #f59e0b;">VS</div>
+          <div style="font-weight: 900; font-size: 1.5rem; color: #f97316;">VS</div>
 
           <div class="fighter-zone">
             <span style="font-size: 0.75rem; color:#ef4444; font-weight:bold;">BOT</span>
@@ -272,7 +326,7 @@
         </div>
 
         <div style="display: flex; gap: 8px;">
-          <button class="btn" id="btn-attack" onclick="executeTurn()" style="flex:1;">⚔️ Attaquer !</button>
+          <button class="btn" id="btn-attack" onclick="executeTurn()" style="flex:1;">⚔️️ Attaquer !</button>
         </div>
 
         <div class="battle-log" id="battle-log-box">=== DÉBUT DU MATCH BO3 ===</div>
@@ -283,7 +337,17 @@
       <div class="booster-page-container">
         <h3 style="font-weight: 800;">Ouvrir vos Boosters</h3>
         <div class="boosters-flex-row">
-          
+
+          <div class="booster-item">
+            <div class="booster-pack-visual pumpkrunch" onclick="openBooster('pumpkrunch')">
+              <img id="pumpkrunch-booster-cover-img" class="booster-pack-img" alt="Set 3 : Pumpkrunch">
+            </div>
+            <p style="color: #f97316; font-size: 0.75rem; font-weight: bold; text-align: center;">Set 3 : Pumpkrunch</p>
+            <button class="btn btn-pumpkrunch" id="pumpkrunch-booster-btn" onclick="openBooster('pumpkrunch')">
+              Ouvrir (<span id="pumpkrunch-count-btn">0</span>)
+            </button>
+          </div>
+
           <div class="booster-item">
             <div class="booster-pack-visual fantomes" onclick="openBooster('fantomes')">
               <img id="fantomes-booster-cover-img" class="booster-pack-img" alt="Fantômes Chromatiques">
@@ -292,14 +356,6 @@
             <button class="btn btn-fantomes" id="fantomes-booster-btn" onclick="openBooster('fantomes')">
               Ouvrir (<span id="fantomes-count-btn">0</span>)
             </button>
-          </div>
-
-          <div class="booster-item">
-            <div class="booster-pack-visual" id="pack-graphic" onclick="openBooster('standard')">
-              <img id="booster-cover-img" class="booster-pack-img" alt="Booster Standard">
-            </div>
-            <p style="color: #94a3b8; font-size: 0.75rem; text-align: center;">Standard (Taux Ajusté)</p>
-            <button class="btn" id="open-booster-btn" onclick="openBooster('standard')">Ouvrir (<span id="std-count-btn">0</span>)</button>
           </div>
 
           <div class="booster-item" id="legendary-booster-item">
@@ -321,26 +377,28 @@
       <div class="shop-card" id="daily-card-box">
         <div>
           <h4>Bonus Quotidien</h4>
-          <p style="color: #94a3b8; font-size: 0.8rem;" id="daily-status">+50 💰, +2 📦 Standard & +2 👻 Fantômes !</p>
+          <p style="color: #c084fc; font-size: 0.8rem;" id="daily-status">+50 💰, +2 🎃 Pumpkrunch & +2 👻 Fantômes !</p>
         </div>
         <button class="btn" id="daily-btn" onclick="claimDaily()">Réclamer</button>
       </div>
 
-      <div class="shop-card" style="border: 1px solid #f59e0b; background: rgba(245, 158, 11, 0.05);">
-        <div><h4 style="color: #f59e0b;">🔥 Pack Découverte (Offre Unique)</h4><p style="color: #94a3b8; font-size: 0.8rem;">5 Boosters Standard + 2 Boosters Fantômes</p></div>
-        <button class="btn" id="starter-pack-btn" onclick="buyStarterPack()">450 💰</button>
+      <div class="shop-card" style="border: 1px solid #f97316; background: rgba(249, 115, 22, 0.08);">
+        <div><h4 style="color: #f97316;">🔥 Pack Découverte (Offre Unique)</h4><p style="color: #c084fc; font-size: 0.8rem;">5 Boosters Pumpkrunch + 2 Boosters Fantômes</p></div>
+        <button class="btn btn-pumpkrunch" id="starter-pack-btn" onclick="buyStarterPack()">450 💰</button>
       </div>
-      <div class="shop-card" style="border: 1px solid #a855f7; background: rgba(168, 85, 247, 0.05);">
-        <div><h4 style="color: #c084fc;">👻 Lot de 5 Boosters Fantômes</h4><p style="color: #94a3b8; font-size: 0.8rem;">Remise de 100 💰 sur le lot</p></div>
+
+      <div class="shop-card">
+        <div><h4 style="color: #f97316;">Booster Pumpkrunch (Set 3)</h4><p style="color: #c084fc; font-size: 0.8rem;">Contient 5 cartes avec un effet Jumpscare à l'ouverture !</p></div>
+        <button class="btn btn-pumpkrunch" onclick="buyPumpkrunchBooster(100, 1)">100 💰</button>
+      </div>
+
+      <div class="shop-card" style="border: 1px solid #a855f7; background: rgba(168, 85, 247, 0.08);">
+        <div><h4 style="color: #c084fc;">👻 Lot de 5 Boosters Fantômes</h4><p style="color: #e9d5ff; font-size: 0.8rem;">Remise de 100 💰 sur le lot</p></div>
         <button class="btn btn-fantomes" onclick="buyFantomesBooster(650, 5)">650 💰</button>
       </div>
 
       <div class="shop-card">
-        <div><h4>Booster Standard</h4><p style="color: #94a3b8; font-size: 0.8rem;">Contient 7 cartes</p></div>
-        <button class="btn" onclick="buyBooster(100, 1)">100 💰</button>
-      </div>
-      <div class="shop-card">
-        <div><h4 style="color: #c084fc;">Booster Fantômes (Set 2)</h4><p style="color: #94a3b8; font-size: 0.8rem;">Multitypes (Poison, Psy, Feu...)</p></div>
+        <div><h4 style="color: #c084fc;">Booster Fantômes (Set 2)</h4><p style="color: #e9d5ff; font-size: 0.8rem;">Multitypes (Poison, Psy, Feu...)</p></div>
         <button class="btn btn-fantomes" onclick="buyFantomesBooster(150, 1)">150 💰</button>
       </div>
       <div class="shop-card">
@@ -351,6 +409,17 @@
 
     <div id="page-settings" class="page">
       <h3 style="margin-bottom: 16px;">Paramètres</h3>
+
+      <div class="settings-group" style="border-color: #f97316;">
+        <h4 style="color: #f97316;">📝 Note de Mise à Jour 3 (Halloween Update)</h4>
+        <ul class="patch-notes-list">
+          <li><strong>Tri de collection simplifié :</strong> Suppression du classement par types d'énergie ! Vos cartes sont désormais triées directement et uniquement par niveau de rareté (Communes, Holographiques, Full Arts, Chromatiques).</li>
+          <li><strong>Set 3 - La Vengeance de Pumpkrunch :</strong> 41 nouvelles cartes inédites d'Halloween à collectionner !</li>
+          <li><strong>Effets Jumpscare :</strong> Animation terrifiante aléatoire lors de l'ouverture des boosters Pumpkrunch.</li>
+          <li><strong>Mode Combat BO3 :</strong> Testez votre deck de 3 cartes contre des bots intelligents avec rewards à la clé.</li>
+          <li><strong>Carousel Mobile :</strong> Sélection facile et fluide de vos cartes d'équipe sans chevauchement d'écran.</li>
+        </ul>
+      </div>
       
       <div class="settings-group">
         <h4>🔊 Audio</h4>
@@ -377,7 +446,7 @@
         <div class="admin-grid">
           <button class="btn btn-admin" onclick="adminAddCoins(1000)">+1000 💰</button>
           <button class="btn btn-admin" onclick="adminAddCoins(10000)">+10 000 💰</button>
-          <button class="btn btn-admin" onclick="adminAddPacks('standard', 10)">+10 Packs Standard</button>
+          <button class="btn btn-admin" onclick="adminAddPacks('pumpkrunch', 10)">+10 Packs Pumpkrunch</button>
           <button class="btn btn-admin" onclick="adminAddPacks('fantomes', 10)">+10 Packs Fantômes</button>
           <button class="btn btn-admin" onclick="adminAddPacks('legendary', 5)">+5 Packs Légendaires</button>
           <button class="btn btn-admin" onclick="adminUnlockAll()">Toutes les cartes</button>
@@ -394,7 +463,7 @@
 
   <div id="opening-overlay" onclick="showNextCardInPack()">
     <div id="reveal-container"></div>
-    <p style="color: #94a3b8; margin-top: 35px; font-size: 0.9rem; font-weight: bold; z-index: 403;">Touche pour continuer (<span id="cards-left">7</span>)</p>
+    <p style="color: #c084fc; margin-top: 35px; font-size: 0.9rem; font-weight: bold; z-index: 403;">Touche pour continuer (<span id="cards-left">5</span>)</p>
   </div>
 
   <div id="modal-overlay" onclick="closeModal()">
@@ -446,6 +515,14 @@
         gain.gain.setValueAtTime(0.3, now);
         gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
         osc.start(now); osc.stop(now + 0.5);
+      } else if (type === 'jumpscare') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(80, now);
+        osc.frequency.linearRampToValueAtTime(800, now + 0.1);
+        osc.frequency.linearRampToValueAtTime(120, now + 0.4);
+        gain.gain.setValueAtTime(0.6, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+        osc.start(now); osc.stop(now + 0.4);
       }
     }
 
@@ -457,37 +534,79 @@
 
     const ENERGY_ICONS = { 'Feu': '🔥', 'Eau': '💧', 'Électrique': '⚡', 'Plante': '🌿', 'Psy': '👁️', 'Roche': '🪨', 'Poison': '☠️' };
 
-    // --- BASE SET ---
-    const BASE_SET = [
-      { id: 1, name: "Flamering", hp: 90, element: "Feu", emoji: "🦅", atk1: { cost: ["Feu"], name: "Ailes de Feu", damage: 20 }, atk2: { cost: ["Feu", "Feu"], name: "Serres Flamboyantes", damage: 40 }, type: "common", set: "base" },
-      { id: 3, name: "Emberclaw", hp: 100, element: "Feu", emoji: "🦁", atk1: { cost: ["Feu"], name: "Griffe Ardente", damage: 20 }, atk2: { cost: ["Feu", "Roche"], name: "Morsure Éclair", damage: 40 }, type: "common", set: "base" },
-      { id: 4, name: "Pyrartic", hp: 90, element: "Feu", emoji: "🦊", atk1: { cost: ["Feu"], name: "Canine de Feu", damage: 20 }, atk2: { cost: ["Feu", "Feu"], name: "Tornade Magmatique", damage: 40 }, type: "common", set: "base" },
-      { id: 5, name: "Glintos", hp: 110, element: "Eau", emoji: "🐬", atk1: { cost: ["Eau"], name: "Rêves de Vague", damage: 20 }, atk2: { cost: ["Eau", "Eau"], name: "Tir de Vague", damage: 50 }, type: "common", set: "base" },
-      { id: 7, name: "Shellion", hp: 120, element: "Eau", emoji: "🐢", atk1: { cost: ["Eau"], name: "Bulle Choc", damage: 30 }, atk2: { cost: ["Eau", "Eau"], name: "Carcasse d'Acier", damage: 60 }, type: "common", set: "base" },
-      { id: 8, name: "Tidalfang", hp: 100, element: "Eau", emoji: "🦈", atk1: { cost: ["Eau"], name: "Morsure Marine", damage: 30 }, atk2: { cost: ["Eau", "Eau"], name: "Tourbillon", damage: 50 }, type: "common", set: "base" },
-      { id: 9, name: "Thundertrap", hp: 110, element: "Électrique", emoji: "⚡", atk1: { cost: ["Électrique"], name: "Éclair Flash", damage: 30 }, atk2: { cost: ["Électrique", "Électrique"], name: "Thunderblast", damage: 70 }, type: "common", set: "base" },
-      { id: 11, name: "Sparkwing", hp: 80, element: "Électrique", emoji: "🐝", atk1: { cost: ["Électrique"], name: "Dard Spark", damage: 20 }, atk2: { cost: ["Électrique"], name: "Étincelle", damage: 40 }, type: "common", set: "base" },
-      { id: 12, name: "Volt Tail", hp: 95, element: "Électrique", emoji: "🐿️", atk1: { cost: ["Électrique"], name: "Frottement", damage: 20 }, atk2: { cost: ["Électrique", "Électrique"], name: "Queue Foudre", damage: 55 }, type: "common", set: "base" },
-      { id: 13, name: "Gearyleaf", hp: 110, element: "Plante", emoji: "🍃", atk1: { cost: ["Plante"], name: "Tranch'Herbe", damage: 30 }, atk2: { cost: ["Plante", "Plante"], name: "Blasco Étoile", damage: 60 }, type: "common", set: "base" },
-      { id: 15, name: "Sporekin", hp: 90, element: "Plante", emoji: "🍄", atk1: { cost: ["Plante"], name: "Poussière Spore", damage: 15 }, atk2: { cost: ["Plante", "Plante"], name: "Racine Blesse", damage: 45 }, type: "common", set: "base" },
-      { id: 16, name: "Mossjaw", hp: 130, element: "Plante", emoji: "🐊", atk1: { cost: ["Plante"], name: "Morsure Végétale", damage: 40 }, atk2: { cost: ["Plante", "Plante"], name: "Lianes Étrangleuses", damage: 70 }, type: "common", set: "base" },
-      { id: 18, name: "Specterist", hp: 110, element: "Psy", emoji: "🔮", atk1: { cost: ["Psy"], name: "Onde Psychique", damage: 20 }, atk2: { cost: ["Psy", "Psy"], name: "Nemure Solaire+", damage: 50 }, type: "common", set: "base" },
-      { id: 19, name: "Mindweaver", hp: 85, element: "Psy", emoji: "🕷️", atk1: { cost: ["Psy"], name: "Toile Mentale", damage: 25 }, atk2: { cost: ["Psy", "Psy"], name: "Illusion", damage: 50 }, type: "common", set: "base" },
-      { id: 20, name: "Craggnaw", hp: 150, element: "Roche", emoji: "🗿", atk1: { cost: ["Roche"], name: "Jet de Pierre", damage: 30 }, atk2: { cost: ["Roche", "Roche"], name: "Dragon Fossil", damage: 60 }, type: "common", set: "base" },
-      { id: 22, name: "Boulderhide", hp: 120, element: "Roche", emoji: "🦏", atk1: { cost: ["Roche"], name: "Charge Rocheuse", damage: 35 }, atk2: { cost: ["Roche", "Roche"], name: "Roulade Tek", damage: 65 }, type: "common", set: "base" },
-      { id: 23, name: "Dunehound", hp: 100, element: "Roche", emoji: "🐕", atk1: { cost: ["Roche"], name: "Morsure Sableuse", damage: 25 }, atk2: { cost: ["Roche", "Roche"], name: "Tempête de Sable", damage: 55 }, type: "common", set: "base" },
+    // --- SET 3 : LA VENGEANCE DE PUMPKRUNCH ---
+    const PUMPKRUNCH_SET = [];
 
-      { id: 2, name: "Molten Phoenix", hp: 180, element: "Feu", emoji: "🐦‍🔥", atk1: { cost: ["Feu"], name: "Éruption Divine", damage: 80 }, atk2: { cost: ["Feu", "Feu"], name: "Flamme Éternelle", damage: 140 }, type: "fullart", set: "base" },
-      { id: 6, name: "Aqua Serpent", hp: 170, element: "Eau", emoji: "🐍", atk1: { cost: ["Eau"], name: "Hydro-Canon", damage: 70 }, atk2: { cost: ["Eau", "Eau"], name: "Tsunami Fantôme", damage: 130 }, type: "fullart", set: "base" },
-      { id: 10, name: "Volt Titan", hp: 190, element: "Électrique", emoji: "🤖", atk1: { cost: ["Électrique"], name: "Surcharge Voltaïque", damage: 85 }, atk2: { cost: ["Électrique", "Électrique"], name: "Choc Foudroyant", damage: 150 }, type: "fullart", set: "base" },
-      { id: 14, name: "Forest Warden", hp: 180, element: "Plante", emoji: "🦌", atk1: { cost: ["Plante"], name: "Force de la Nature", damage: 75 }, atk2: { cost: ["Plante", "Plante"], name: "Colère Sylvanienne", damage: 135 }, type: "fullart", set: "base" },
-      { id: 17, name: "Cosmic Entity", hp: 200, element: "Psy", emoji: "🌌", atk1: { cost: ["Psy"], name: "Rayon Astral", damage: 90 }, atk2: { cost: ["Psy", "Psy"], name: "Singularité", damage: 160 }, type: "fullart", set: "base" },
-      { id: 21, name: "Obsidian Golem", hp: 210, element: "Roche", emoji: "🧱", atk1: { cost: ["Roche"], name: "Impact Sismique", damage: 80 }, atk2: { cost: ["Roche", "Roche"], name: "Éboulement Masse", damage: 140 }, type: "fullart", set: "base" },
-      { id: 26, name: "Six Seven", hp: 167, element: "Psy", emoji: "🎲", atk1: { cost: ["Psy"], name: "Roulette Magique", damage: 67 }, atk2: { cost: ["Psy", "Psy"], name: "Double Six", damage: 127 }, type: "fullart", set: "base" },
-
-      { id: 24, name: "Énergie Psy", hp: '-', element: "Psy", emoji: "👁️", type: "energy", set: "base", atk1: {cost:[], name:"Flux Psy", damage:"-"}, atk2: {cost:[], name:"", damage:""} },
-      { id: 25, name: "Énergie Poison", hp: '-', element: "Poison", emoji: "☠️", type: "energy", set: "base", atk1: {cost:[], name:"Flux Toxique", damage:"-"}, atk2: {cost:[], name:"", damage:""} }
+    // 25 Cartes Communes Uniques
+    const PUMP_COMMONS = [
+      { id: 501, name: "Graine de Courge", hp: 70, element: "Plante", emoji: "🌱", atk1: { cost: ["Plante"], name: "Piquant Courge", damage: 20 }, atk2: { cost: ["Plante", "Plante"], name: "Croissance", damage: 35 } },
+      { id: 502, name: "Trousse-Citrouille", hp: 80, element: "Plante", emoji: "🎃", atk1: { cost: ["Plante"], name: "Morsure Automnale", damage: 25 }, atk2: { cost: ["Plante", "Poison"], name: "Rancœur", damage: 45 } },
+      { id: 503, name: "Lanterne Hurlante", hp: 90, element: "Feu", emoji: "🕯", atk1: { cost: ["Feu"], name: "Flamme-Lueur", damage: 20 }, atk2: { cost: ["Feu", "Psy"], name: "Lumière Effrayante", damage: 50 } },
+      { id: 504, name: "Brume d'Halloween", hp: 85, element: "Poison", emoji: "🌫️", atk1: { cost: ["Poison"], name: "Brumier Toxique", damage: 20 }, atk2: { cost: ["Poison", "Psy"], name: "Suffocation", damage: 40 } },
+      { id: 505, name: "Épouvantail Maudit", hp: 100, element: "Plante", emoji: "🌾", atk1: { cost: ["Plante"], name: "Coup de Paille", damage: 30 }, atk2: { cost: ["Plante", "Roche"], name: "Sourd Menteur", damage: 55 } },
+      { id: 506, name: "Potiron Furieux", hp: 110, element: "Plante", emoji: "🎃", atk1: { cost: ["Plante"], name: "Écrasement", damage: 35 }, atk2: { cost: ["Plante", "Feu"], name: "Surchauffe Végétale", damage: 60 } },
+      { id: 507, name: "Corbeau d'Ébène", hp: 75, element: "Psy", emoji: "🦅", atk1: { cost: ["Psy"], name: "Coup de Bec Dark", damage: 25 }, atk2: { cost: ["Psy", "Poison"], name: "Croassement", damage: 45 } },
+      { id: 508, name: "Chauve-Souris Ardent", hp: 80, element: "Feu", emoji: "🦇", atk1: { cost: ["Feu"], name: "Ailes Incandescentes", damage: 30 }, atk2: { cost: ["Feu", "Feu"], name: "Ultrabruit", damage: 50 } },
+      { id: 509, name: "Chapeau de Sorcière", hp: 85, element: "Psy", emoji: "🧙‍♀️", atk1: { cost: ["Psy"], name: "Sortilège Mignon", damage: 20 }, atk2: { cost: ["Psy", "Psy"], name: "Malédiction Votive", damage: 50 } },
+      { id: 510, name: "Chauldron Bouillonnant", hp: 120, element: "Poison", emoji: "🧪", atk1: { cost: ["Poison"], name: "Ebullition", damage: 30 }, atk2: { cost: ["Poison", "Poison"], name: "Bain Acide", damage: 65 } },
+      { id: 511, name: "Ronce Vengeresse", hp: 95, element: "Plante", emoji: "🪴", atk1: { cost: ["Plante"], name: "Fouet de Ronces", damage: 25 }, atk2: { cost: ["Plante", "Plante"], name: "Épinage", damage: 50 } },
+      { id: 512, name: "Squelette Maraudeur", hp: 90, element: "Roche", emoji: "💀", atk1: { cost: ["Roche"], name: "Lancer d'Os", damage: 30 }, atk2: { cost: ["Roche", "Roche"], name: "Fracas Osseux", damage: 55 } },
+      { id: 513, name: "Graine d'Ectoplasme", hp: 70, element: "Psy", emoji: "🔮", atk1: { cost: ["Psy"], name: "Flash Psy", damage: 20 }, atk2: { cost: ["Psy"], name: "Lévitation", damage: 35 } },
+      { id: 514, name: "Lueur de Citrouille", hp: 85, element: "Feu", emoji: "🔥", atk1: { cost: ["Feu"], name: "Étincelle de Nuit", damage: 25 }, atk2: { cost: ["Feu", "Plante"], name: "Feu de Feuilles", damage: 45 } },
+      { id: 515, name: "Manoir Hanté", hp: 130, element: "Roche", emoji: "🏚️", atk1: { cost: ["Roche"], name: "Porte Grincante", damage: 20 }, atk2: { cost: ["Roche", "Psy"], name: "Écroulement", damage: 70 } },
+      { id: 516, name: "Soupe de Potiron", hp: 100, element: "Eau", emoji: "🥣", atk1: { cost: ["Eau"], name: "Eclaboussure Chaude", damage: 30 }, atk2: { cost: ["Eau", "Plante"], name: "Gorgée Toxique", damage: 50 } },
+      { id: 517, name: "Chat Noir Porteur", hp: 85, element: "Psy", emoji: "🐈‍‍⬛", atk1: { cost: ["Psy"], name: "Coup de Patte", damage: 25 }, atk2: { cost: ["Psy", "Poison"], name: "Onde de Poisse", damage: 45 } },
+      { id: 518, name: "Bonbon Piégé", hp: 60, element: "Poison", emoji: "🍬", atk1: { cost: ["Poison"], name: "Farce Sucrée", damage: 30 }, atk2: { cost: ["Poison", "Poison"], name: "Intoxication", damage: 60 } },
+      { id: 519, name: "Sorceleur de Citrouille", hp: 100, element: "Psy", emoji: "🔮", atk1: { cost: ["Psy"], name: "Sort de Potager", damage: 35 }, atk2: { cost: ["Psy", "Plante"], name: "Enchantement", damage: 60 } },
+      { id: 520, name: "Mélange Toxique", hp: 90, element: "Poison", emoji: "☣️", atk1: { cost: ["Poison"], name: "Gaz Vert", damage: 25 }, atk2: { cost: ["Poison", "Feu"], name: "Explosion Gazeuse", damage: 55 } },
+      { id: 521, name: "Racine Obscure", hp: 105, element: "Plante", emoji: "🪵", atk1: { cost: ["Plante"], name: "Saisie Souterraine", damage: 30 }, atk2: { cost: ["Plante", "Psy"], name: "Etranglement", damage: 55 } },
+      { id: 522, name: "Feu Follet Féroce", hp: 80, element: "Feu", emoji: "☄️", atk1: { cost: ["Feu"], name: "Petite Brûlure", damage: 25 }, atk2: { cost: ["Feu", "Psy"], name: "Danse des Esprits", damage: 50 } },
+      { id: 523, name: "Crapaud Miasmique", hp: 115, element: "Poison", emoji: "🐸", atk1: { cost: ["Poison"], name: "Bave Corrosive", damage: 35 }, atk2: { cost: ["Poison", "Eau"], name: "Venin Baveux", damage: 65 } },
+      { id: 524, name: "Zombie Végétal", hp: 120, element: "Plante", emoji: "🧟", atk1: { cost: ["Plante"], name: "Morsure Décomposée", damage: 30 }, atk2: { cost: ["Plante", "Poison"], name: "Infection Potagère", damage: 65 } },
+      { id: 525, name: "Automne Sombre", hp: 95, element: "Plante", emoji: "🍂", atk1: { cost: ["Plante"], name: "Vent de Feuilles", damage: 25 }, atk2: { cost: ["Plante", "Roche"], name: "Pluie de Châtaignes", damage: 50 } }
     ];
+
+    PUMP_COMMONS.forEach(c => PUMPKRUNCH_SET.push({ ...c, type: 'common', set: 'pumpkrunch' }));
+
+    // 10 Cartes Holographiques Uniques
+    const PUMP_HOLOS = [
+      { id: 601, name: "Pumpkrunch Éveillé", hp: 140, element: "Plante", emoji: "🎃", atk1: { cost: ["Plante"], name: "Griffe de Courge", damage: 50 }, atk2: { cost: ["Plante", "Feu"], name: "Lanterne Infernale", damage: 90 } },
+      { id: 602, name: "Roi Épouvantail", hp: 150, element: "Plante", emoji: "👑", atk1: { cost: ["Plante"], name: "Complot des Champs", damage: 55 }, atk2: { cost: ["Plante", "Roche"], name: "Paille D'Acier", damage: 95 } },
+      { id: 603, name: "Sorcière de Pumpkrunch", hp: 135, element: "Psy", emoji: "🧙‍♀", atk1: { cost: ["Psy"], name: "Potion de Potiron", damage: 45 }, atk2: { cost: ["Psy", "Poison"], name: "Sort Suprême", damage: 85 } },
+      { id: 604, name: "Chauve-Souris Titanesque", hp: 130, element: "Feu", emoji: "🦇", atk1: { cost: ["Feu"], name: "Rafale Infernale", damage: 50 }, atk2: { cost: ["Feu", "Feu"], name: "Vague de Chaleur", damage: 90 } },
+      { id: 605, name: "Colosse de Paille", hp: 160, element: "Roche", emoji: "🗿", atk1: { cost: ["Roche"], name: "Frappe Sismique", damage: 60 }, atk2: { cost: ["Roche", "Plante"], name: "Écrasement d'Automne", damage: 100 } },
+      { id: 606, name: "Seigneur du Chauldron", hp: 145, element: "Poison", emoji: "🧪", atk1: { cost: ["Poison"], name: "Miasme Royal", damage: 55 }, atk2: { cost: ["Poison", "Psy"], name: "Acide Suprême", damage: 95 } },
+      { id: 607, name: "Spectre de la Citrouille", hp: 130, element: "Psy", emoji: "👻", atk1: { cost: ["Psy"], name: "Possession Potagère", damage: 50 }, atk2: { cost: ["Psy", "Plante"], name: "Vol d'Âme", damage: 85 } },
+      { id: 608, name: "Grand Corbeau Maudit", hp: 135, element: "Psy", emoji: "🦅", atk1: { cost: ["Psy"], name: "Tornade d'Ébène", damage: 45 }, atk2: { cost: ["Psy", "Poison"], name: "Onde Ténébreuse", damage: 85 } },
+      { id: 609, name: "Golem de Potirons", hp: 165, element: "Plante", emoji: "🧱", atk1: { cost: ["Plante"], name: "Pilonnage", damage: 55 }, atk2: { cost: ["Plante", "Plante"], name: "Onde de Choc Potagère", damage: 105 } },
+      { id: 610, name: "Lanterne Suprême", hp: 140, element: "Feu", emoji: "🕯️", atk1: { cost: ["Feu"], name: "Rayon Solaire Mordu", damage: 50 }, atk2: { cost: ["Feu", "Psy"], name: "Illumination Funeste", damage: 90 } }
+    ];
+
+    PUMP_HOLOS.forEach(c => PUMPKRUNCH_SET.push({ ...c, type: 'holographic', set: 'pumpkrunch' }));
+
+    // 5 Cartes Full Art Uniques
+    const PUMP_FULLARTS = [
+      { id: 701, name: "Pumpkrunch Déchaîné", hp: 190, element: "Plante", emoji: "🎃", atk1: { cost: ["Plante"], name: "Cataclysme de Courge", damage: 85 }, atk2: { cost: ["Plante", "Feu"], name: "Vengeance Ardente", damage: 150 } },
+      { id: 702, name: "Avatar d'Halloween", hp: 200, element: "Psy", emoji: "🌙", atk1: { cost: ["Psy"], name: "Nuit Sans Fin", damage: 90 }, atk2: { cost: ["Psy", "Poison"], name: "Cauchemar Éternel", damage: 160 } },
+      { id: 703, name: "Reine Sorcière Nocturne", hp: 185, element: "Poison", emoji: "👑", atk1: { cost: ["Poison"], name: "Malédiction Absolue", damage: 80 }, atk2: { cost: ["Poison", "Psy"], name: "Rituel Obscur", damage: 145 } },
+      { id: 704, name: "Seigneur Épouvantail Full", hp: 195, element: "Plante", emoji: "🌾", atk1: { cost: ["Plante"], name: "Tempête de Paille", damage: 85 }, atk2: { cost: ["Plante", "Roche"], name: "Empalement Sylvanien", damage: 155 } },
+      { id: 705, name: "Manoir des Malédictions", hp: 210, element: "Roche", emoji: "🏰", atk1: { cost: ["Roche"], name: "Effondrement Fatal", damage: 95 }, atk2: { cost: ["Roche", "Psy"], name: "Domaine des Ombrages", damage: 165 } }
+    ];
+
+    PUMP_FULLARTS.forEach(c => PUMPKRUNCH_SET.push({ ...c, type: 'fullart', set: 'pumpkrunch' }));
+
+    // 1 Carte Chromatique de Pumpkrunch
+    PUMPKRUNCH_SET.push({
+      id: 777,
+      name: "Pumpkrunch Chromatique Supérieur",
+      hp: 250,
+      element: "Plante",
+      emoji: "🎃",
+      atk1: { cost: ["Plante", "Feu"], name: "Légende d'Halloween", damage: 130 },
+      atk2: { cost: ["Plante", "Plante", "Poison"], name: "VENGEANCE TOTALE", damage: 220 },
+      type: "chromatic-fullart",
+      set: "pumpkrunch"
+    });
 
     // --- EXTENSION 2 : FANTÔMES CHROMATIQUES ---
     const FANTOMES_SET = [];
@@ -596,18 +715,18 @@
       set: "fantomes"
     });
 
-    const CARDS_DB = [...BASE_SET, ...FANTOMES_SET];
+    const CARDS_DB = [...PUMPKRUNCH_SET, ...FANTOMES_SET];
 
     const QUESTS_LIST = [
       { id: 'q1', title: 'Déballeur Débutant', target: 3, rewardType: 'coins', rewardAmount: 150, rewardText: '+150 💰' },
-      { id: 'q2', title: 'Collectionneur Averti', target: 10, rewardType: 'booster', rewardPack: 'standard', rewardAmount: 2, rewardText: '+2 📦 Standard' },
+      { id: 'q2', title: 'Chasseur de Citrouilles', target: 10, rewardType: 'booster', rewardPack: 'pumpkrunch', rewardAmount: 2, rewardText: '+2 🎃 Pumpkrunch' },
       { id: 'q3', title: 'Chasseur de Fantômes', target: 20, rewardType: 'booster', rewardPack: 'fantomes', rewardAmount: 2, rewardText: '+2 👻 Fantômes' },
       { id: 'q4', title: 'Maître des Packs', target: 35, rewardType: 'booster', rewardPack: 'legendary', rewardAmount: 1, rewardText: '+1 👑 Légendaire' },
       { id: 'q5', title: 'Fanatic des Ombrages', target: 50, rewardType: 'coins', rewardAmount: 2500, rewardText: '+2500 💰' }
     ];
 
     let state = {
-      coins: 150, boosters: 3, fantomesBoosters: 2, specialBoosters: 1,
+      coins: 150, pumpkrunchBoosters: 3, fantomesBoosters: 2, specialBoosters: 1,
       totalOpened: 0, collection: {}, deck: [], lastDaily: null, redeemedCodes: [],
       claimedQuests: [], adminUnlocked: false, soundEnabled: true, starterPackBought: false
     };
@@ -627,39 +746,24 @@
       };
 
       const grad = ctx.createRadialGradient(w/2, h/2, 10, w/2, h/2, w);
-      if (card.element === 'Poison') { grad.addColorStop(0, '#581c87'); grad.addColorStop(1, '#0f172a'); }
+      if (card.element === 'Poison') { grad.addColorStop(0, '#581c87'); grad.addColorStop(1, '#0d0714'); }
       else if (card.element === 'Psy') { grad.addColorStop(0, '#7e22ce'); grad.addColorStop(1, '#1e1b4b'); }
-      else if (card.element === 'Feu') { grad.addColorStop(0, '#991b1b'); grad.addColorStop(1, '#450a0a'); }
-      else if (card.element === 'Plante') { grad.addColorStop(0, '#14532d'); grad.addColorStop(1, '#022c22'); }
-      else if (card.element === 'Eau') { grad.addColorStop(0, '#1e40af'); grad.addColorStop(1, '#0f172a'); }
+      else if (card.element === 'Feu') { grad.addColorStop(0, '#ea580c'); grad.addColorStop(1, '#431407'); }
+      else if (card.element === 'Plante') { grad.addColorStop(0, '#15803d'); grad.addColorStop(1, '#14532d'); }
+      else if (card.element === 'Eau') { grad.addColorStop(0, '#1e40af'); grad.addColorStop(1, '#0d0714'); }
       else { grad.addColorStop(0, '#78350f'); grad.addColorStop(1, '#1c1917'); }
       
       ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
 
-      if (card.set === 'fantomes') {
-        const particleCount = 15 + Math.floor(pseudoRandom(1) * 25);
+      if (card.set === 'pumpkrunch') {
+        const particleCount = 20;
         for (let i = 0; i < particleCount; i++) {
           const px = pseudoRandom(i * 2) * w;
           const py = pseudoRandom(i * 3) * h;
-          const pr = 2 + pseudoRandom(i * 4) * 8;
-          ctx.fillStyle = `rgba(255, 255, 255, ${0.1 + pseudoRandom(i) * 0.4})`;
+          const pr = 2 + pseudoRandom(i * 4) * 6;
+          ctx.fillStyle = `rgba(249, 115, 22, ${0.2 + pseudoRandom(i) * 0.5})`;
           ctx.beginPath(); ctx.arc(px, py, pr, 0, Math.PI * 2); ctx.fill();
         }
-
-        ctx.strokeStyle = `rgba(255, 255, 255, 0.08)`;
-        ctx.lineWidth = 3;
-        for (let i = 0; i < 6; i++) {
-          ctx.beginPath();
-          ctx.moveTo(pseudoRandom(i + 10) * w, 0);
-          ctx.lineTo(pseudoRandom(i + 20) * w, h);
-          ctx.stroke();
-        }
-
-        const auraGrad = ctx.createRadialGradient(w/2, h/2 + 10, 5, w/2, h/2 + 10, 50);
-        auraGrad.addColorStop(0, 'rgba(255, 255, 255, 0.6)');
-        auraGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
-        ctx.fillStyle = auraGrad;
-        ctx.beginPath(); ctx.arc(w/2, h/2 + 10, 50, 0, Math.PI * 2); ctx.fill();
       }
 
       ctx.fillStyle = 'white';
@@ -677,10 +781,10 @@
       const grad = ctx.createLinearGradient(0, 0, 300, 480);
       if (type === 'legendary') { grad.addColorStop(0, '#831843'); grad.addColorStop(1, '#be185d'); }
       else if (type === 'fantomes') { grad.addColorStop(0, '#3b0764'); grad.addColorStop(1, '#6b21a8'); }
-      else { grad.addColorStop(0, '#0f172a'); grad.addColorStop(1, '#1e293b'); }
+      else { grad.addColorStop(0, '#7c2d12'); grad.addColorStop(1, '#ea580c'); }
       ctx.fillStyle = grad; ctx.fillRect(0, 0, 300, 480);
 
-      ctx.strokeStyle = type === 'fantomes' ? 'rgba(192, 132, 252, 0.2)' : 'rgba(245, 158, 11, 0.2)';
+      ctx.strokeStyle = type === 'pumpkrunch' ? 'rgba(251, 146, 60, 0.3)' : (type === 'fantomes' ? 'rgba(192, 132, 252, 0.2)' : 'rgba(245, 158, 11, 0.2)');
       ctx.lineWidth = 4;
       for (let i = 0; i < 300; i += 20) {
         ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(300 - i, 480); ctx.stroke();
@@ -688,24 +792,24 @@
 
       ctx.fillStyle = 'rgba(0,0,0,0.5)';
       ctx.beginPath(); ctx.arc(150, 220, 70, 0, Math.PI * 2); ctx.fill();
-      ctx.strokeStyle = type === 'fantomes' ? '#a855f7' : (type === 'legendary' ? '#f59e0b' : '#38bdf8');
+      ctx.strokeStyle = type === 'pumpkrunch' ? '#f97316' : (type === 'fantomes' ? '#a855f7' : '#f59e0b');
       ctx.lineWidth = 4; ctx.stroke();
 
       ctx.fillStyle = '#fff'; ctx.font = 'bold 50px sans-serif'; ctx.textAlign = 'center';
-      ctx.fillText(type === 'fantomes' ? '👻' : (type === 'legendary' ? '👑' : '🔥'), 150, 235);
+      ctx.fillText(type === 'pumpkrunch' ? '🎃' : (type === 'fantomes' ? '👻' : '👑'), 150, 235);
 
-      ctx.font = '900 22px sans-serif';
-      ctx.fillStyle = type === 'fantomes' ? '#c084fc' : (type === 'legendary' ? '#fef08a' : '#f59e0b');
-      ctx.fillText(type === 'fantomes' ? 'FANTÔMES' : (type === 'legendary' ? 'LÉGENDAIRE' : 'POCKET CLASH'), 150, 340);
+      ctx.font = '900 20px sans-serif';
+      ctx.fillStyle = type === 'pumpkrunch' ? '#ffedd5' : (type === 'fantomes' ? '#c084fc' : '#fef08a');
+      ctx.fillText(type === 'pumpkrunch' ? 'PUMPKRUNCH' : (type === 'fantomes' ? 'FANTÔMES' : 'LÉGENDAIRE'), 150, 340);
 
       ctx.font = 'bold 12px sans-serif'; ctx.fillStyle = '#94a3b8';
-      ctx.fillText(type === 'fantomes' ? 'CHROMATIQUES' : 'BOOSTER PACK', 150, 360);
+      ctx.fillText(type === 'pumpkrunch' ? 'LA VENGEANCE' : (type === 'fantomes' ? 'CHROMATIQUES' : 'BOOSTER PACK'), 150, 360);
 
       return canvas.toDataURL('image/png');
     }
 
     function loadData() {
-      const saved = localStorage.getItem('pocketclash_v12_data');
+      const saved = localStorage.getItem('pocketclash_v13_data');
       if (saved) state = {...state, ...JSON.parse(saved)};
       if(!state.deck) state.deck = [];
       
@@ -713,14 +817,14 @@
 
       CARDS_DB.forEach(card => { if(!card.imageBase64) card.imageBase64 = generateDynamicArtCanvas(card); });
       
-      document.getElementById('booster-cover-img').src = generateBoosterBase64('standard');
+      document.getElementById('pumpkrunch-booster-cover-img').src = generateBoosterBase64('pumpkrunch');
       document.getElementById('fantomes-booster-cover-img').src = generateBoosterBase64('fantomes');
       document.getElementById('special-booster-cover-img').src = generateBoosterBase64('legendary');
       
       updateUI(); renderCollection(); updateDeckDisplay(); renderBattleCardPicker();
     }
 
-    function saveData() { localStorage.setItem('pocketclash_v12_data', JSON.stringify(state)); updateUI(); }
+    function saveData() { localStorage.setItem('pocketclash_v13_data', JSON.stringify(state)); updateUI(); }
 
     function getDuplicateStats() {
       let totalDupes = 0, totalCoinsValue = 0;
@@ -779,27 +883,32 @@
       }
     }
 
+    /* Rendu optimisé des cartes de sélection pour mobile */
     function renderBattleCardPicker() {
       const container = document.getElementById('battle-card-picker');
       const ownedCards = CARDS_DB.filter(c => (state.collection[c.id] || 0) > 0 && typeof c.hp === 'number');
       if (ownedCards.length === 0) {
-        container.innerHTML = `<p style="color:#94a3b8; font-size:0.8rem; text-align:center; grid-column:1/-1;">Tu ne possèdes aucune carte utilisable en combat. Ouvre des boosters !</p>`;
+        container.innerHTML = `<p style="color:#c084fc; font-size:0.8rem; text-align:center; width:100%;">Tu ne possèdes aucune carte utilisable en combat. Ouvre des boosters !</p>`;
         return;
       }
-      container.innerHTML = ownedCards.map(c => createCardHTML(c, state.collection[c.id], true, 'deck')).join('');
+      container.innerHTML = ownedCards.map(c => `
+        <div class="card-picker-item-wrapper">
+          ${createCardHTML(c, state.collection[c.id], true, 'deck')}
+        </div>
+      `).join('');
     }
 
     function updateUI() {
       document.getElementById('coins-display').innerText = state.coins;
-      document.getElementById('boosters-display').innerText = state.boosters;
+      document.getElementById('pumpkrunch-boosters-display').innerText = state.pumpkrunchBoosters || 0;
       document.getElementById('fantomes-boosters-display').innerText = state.fantomesBoosters || 0;
       document.getElementById('special-boosters-display').innerText = state.specialBoosters || 0;
       
-      document.getElementById('std-count-btn').innerText = state.boosters;
+      document.getElementById('pumpkrunch-count-btn').innerText = state.pumpkrunchBoosters || 0;
       document.getElementById('fantomes-count-btn').innerText = state.fantomesBoosters || 0;
       document.getElementById('special-count-btn').innerText = state.specialBoosters || 0;
       
-      document.getElementById('open-booster-btn').disabled = state.boosters <= 0;
+      document.getElementById('pumpkrunch-booster-btn').disabled = (state.pumpkrunchBoosters || 0) <= 0;
       document.getElementById('fantomes-booster-btn').disabled = (state.fantomesBoosters || 0) <= 0;
       document.getElementById('open-special-booster-btn').disabled = (state.specialBoosters || 0) <= 0;
 
@@ -834,7 +943,7 @@
         state.claimedQuests.push(qId); 
         if (q.rewardType === 'coins') state.coins += q.rewardAmount;
         else if (q.rewardType === 'booster') {
-          if (q.rewardPack === 'standard') state.boosters += q.rewardAmount;
+          if (q.rewardPack === 'pumpkrunch') state.pumpkrunchBoosters = (state.pumpkrunchBoosters || 0) + q.rewardAmount;
           else if (q.rewardPack === 'fantomes') state.fantomesBoosters = (state.fantomesBoosters || 0) + q.rewardAmount;
           else if (q.rewardPack === 'legendary') state.specialBoosters = (state.specialBoosters || 0) + q.rewardAmount;
         }
@@ -847,7 +956,7 @@
     function createCardHTML(card, count = 1, isClickable = true, actionType = 'zoom') {
       const isLocked = count === 0;
       const inDeck = state.deck.includes(card.id);
-      const renderCost = (costArr) => costArr.map(c => ENERGY_ICONS[c] || '⚪').join('');
+      const renderCost = (costArr) => costArr ? costArr.map(c => ENERGY_ICONS[c] || '⚪').join('') : '';
       let extraClasses = '';
       if(card.type === 'fullart') extraClasses += ' full-art';
       if(card.type === 'holographic') extraClasses += ' holographic';
@@ -867,45 +976,45 @@
           <img src="${card.imageBase64}" class="card-image-canvas">
           <div class="card-body">
             <div class="attack-row"><span class="attack-cost">${renderCost(card.atk1.cost)}</span><span class="attack-name">${card.atk1.name}</span><span class="attack-damage">${card.atk1.damage}</span></div>
-            ${card.atk2.name ? `<div class="attack-row"><span class="attack-cost">${renderCost(card.atk2.cost)}</span><span class="attack-name">${card.atk2.name}</span><span class="attack-damage">${card.atk2.damage}</span></div>` : ''}
+            ${card.atk2 && card.atk2.name ? `<div class="attack-row"><span class="attack-cost">${renderCost(card.atk2.cost)}</span><span class="attack-name">${card.atk2.name}</span><span class="attack-damage">${card.atk2.damage}</span></div>` : ''}
           </div>
         </div>
       `;
     }
 
+    /* Classification optimisée des sets UNIQUEMENT par Rareté */
     function renderCollection() {
-      const baseCards = CARDS_DB.filter(c => c.set === 'base').map(c => createCardHTML(c, state.collection[c.id]||0, true, 'zoom')).join('');
-      document.getElementById('collection-grid-base').innerHTML = baseCards;
-      document.getElementById('base-count').innerText = Object.keys(state.collection).filter(id => CARDS_DB.find(c => c.id == id)?.set === 'base').length;
-
-      const fantomesSet = CARDS_DB.filter(c => c.set === 'fantomes');
-      document.getElementById('fantomes-count').innerText = Object.keys(state.collection).filter(id => CARDS_DB.find(c => c.id == id)?.set === 'fantomes').length;
-
-      const rarityOrder = { 'common': 'Communes', 'holographic': 'Holographiques', 'fullart': 'Full Arts', 'chromatic-fullart': 'Chromatique Full Art' };
+      const rarityOrder = { 'common': 'Communes', 'holographic': 'Holographiques', 'fullart': 'Full Arts', 'chromatic-fullart': 'Chromatiques' };
       const rarityRank = { 'common': 1, 'holographic': 2, 'fullart': 3, 'chromatic-fullart': 4 };
 
-      let fantomesHTML = "";
-      MULTI_TYPES.forEach(type => {
-        const cardsOfType = fantomesSet.filter(c => c.element === type);
-        if (cardsOfType.length > 0) {
-          fantomesHTML += `<div class="type-group-title">${ENERGY_ICONS[type] || ''} Type ${type}</div>`;
-          const groupedByRarity = {};
-          cardsOfType.forEach(card => {
-            if (!groupedByRarity[card.type]) groupedByRarity[card.type] = [];
-            groupedByRarity[card.type].push(card);
-          });
+      // Helper pour rendre un set groupé seulement par Rareté
+      function buildSetHTML(setCards) {
+        let html = "";
+        const groupedByRarity = {};
+        setCards.forEach(card => {
+          if (!groupedByRarity[card.type]) groupedByRarity[card.type] = [];
+          groupedByRarity[card.type].push(card);
+        });
 
-          const sortedRarities = Object.keys(groupedByRarity).sort((a, b) => rarityRank[a] - rarityRank[b]);
-          sortedRarities.forEach(rarityKey => {
-            fantomesHTML += `<div class="rarity-subgroup-title">❖ ${rarityOrder[rarityKey] || rarityKey}</div>`;
-            fantomesHTML += `<div class="card-grid">`;
-            fantomesHTML += groupedByRarity[rarityKey].map(c => createCardHTML(c, state.collection[c.id] || 0, true, 'zoom')).join('');
-            fantomesHTML += `</div>`;
-          });
-        }
-      });
+        const sortedRarities = Object.keys(groupedByRarity).sort((a, b) => rarityRank[a] - rarityRank[b]);
+        sortedRarities.forEach(rarityKey => {
+          html += `<div class="rarity-subgroup-title">❖ ${rarityOrder[rarityKey] || rarityKey}</div>`;
+          html += `<div class="card-grid">`;
+          html += groupedByRarity[rarityKey].map(c => createCardHTML(c, state.collection[c.id] || 0, true, 'zoom')).join('');
+          html += `</div>`;
+        });
+        return html;
+      }
 
-      document.getElementById('collection-container-fantomes').innerHTML = fantomesHTML;
+      // Set 3 : Pumpkrunch
+      const pumpkrunchSet = CARDS_DB.filter(c => c.set === 'pumpkrunch');
+      document.getElementById('pumpkrunch-count').innerText = Object.keys(state.collection).filter(id => CARDS_DB.find(c => c.id == id)?.set === 'pumpkrunch').length;
+      document.getElementById('collection-container-pumpkrunch').innerHTML = buildSetHTML(pumpkrunchSet);
+
+      // Set 2 : Fantômes Chromatiques
+      const fantomesSet = CARDS_DB.filter(c => c.set === 'fantomes');
+      document.getElementById('fantomes-count').innerText = Object.keys(state.collection).filter(id => CARDS_DB.find(c => c.id == id)?.set === 'fantomes').length;
+      document.getElementById('collection-container-fantomes').innerHTML = buildSetHTML(fantomesSet);
     }
 
     function zoomCard(id) {
@@ -1049,18 +1158,18 @@
         
         let rewardText = "";
         if (battleState.difficulty === 'easy') {
-          state.boosters += 1;
+          state.pumpkrunchBoosters = (state.pumpkrunchBoosters || 0) + 1;
           state.fantomesBoosters = (state.fantomesBoosters || 0) + 1;
-          rewardText = "1 Booster Standard + 1 Booster Fantômes";
+          rewardText = "1 Booster Pumpkrunch + 1 Booster Fantômes";
         } else if (battleState.difficulty === 'medium') {
-          state.boosters += 2;
+          state.pumpkrunchBoosters = (state.pumpkrunchBoosters || 0) + 2;
           state.fantomesBoosters = (state.fantomesBoosters || 0) + 2;
-          rewardText = "2 Boosters Standard + 2 Boosters Fantômes";
+          rewardText = "2 Boosters Pumpkrunch + 2 Boosters Fantômes";
         } else if (battleState.difficulty === 'hard') {
-          state.boosters += 3;
+          state.pumpkrunchBoosters = (state.pumpkrunchBoosters || 0) + 3;
           state.fantomesBoosters = (state.fantomesBoosters || 0) + 3;
           state.coins += 1500;
-          rewardText = "3 Boosters Standard + 3 Boosters Fantômes + 1 500 💰";
+          rewardText = "3 Boosters Pumpkrunch + 3 Boosters Fantômes + 1 500 💰";
         }
 
         saveData();
@@ -1072,33 +1181,52 @@
       document.getElementById('battle-arena').style.display = 'none';
     }
 
-    let currentPackCards = [], packIdx = 0;
+    let currentPackCards = [], packIdx = 0, packJumpscares = [];
 
     function openBooster(type) {
-      if (type === 'standard' && state.boosters <= 0) return;
+      if (type === 'pumpkrunch' && (state.pumpkrunchBoosters || 0) <= 0) return;
       if (type === 'fantomes' && (state.fantomesBoosters || 0) <= 0) return;
       if (type === 'legendary' && (state.specialBoosters || 0) <= 0) return;
 
       playSound('open');
       if (type === 'legendary') state.specialBoosters--;
       else if (type === 'fantomes') state.fantomesBoosters--;
-      else state.boosters--;
+      else state.pumpkrunchBoosters--;
 
-      state.totalOpened++; saveData(); currentPackCards = [];
-      const targetSet = (type === 'fantomes') ? 'fantomes' : 'base';
+      state.totalOpened++; saveData(); currentPackCards = []; packJumpscares = [];
 
       if (type === 'legendary') {
-        const coms = CARDS_DB.filter(c => c.set === 'base' && c.type === 'common');
-        const fas = CARDS_DB.filter(c => c.set === 'base' && c.type === 'fullart');
-        for (let i = 0; i < 4; i++) currentPackCards.push(coms[Math.floor(Math.random() * coms.length)]);
+        const coms = CARDS_DB.filter(c => c.set === 'pumpkrunch' && c.type === 'common');
+        const fas = CARDS_DB.filter(c => c.type === 'fullart');
+        for (let i = 0; i < 2; i++) currentPackCards.push(coms[Math.floor(Math.random() * coms.length)]);
         for (let i = 0; i < 3; i++) currentPackCards.push(fas[Math.floor(Math.random() * fas.length)]);
-      } else {
-        const coms = CARDS_DB.filter(c => c.set === targetSet && c.type === 'common');
-        const holos = CARDS_DB.filter(c => c.set === targetSet && c.type === 'holographic');
-        const fas = CARDS_DB.filter(c => c.set === targetSet && c.type === 'fullart');
-        const chroms = CARDS_DB.filter(c => c.set === targetSet && c.type === 'chromatic-fullart');
+      } else if (type === 'pumpkrunch') {
+        const coms = CARDS_DB.filter(c => c.set === 'pumpkrunch' && c.type === 'common');
+        const holos = CARDS_DB.filter(c => c.set === 'pumpkrunch' && c.type === 'holographic');
+        const fas = CARDS_DB.filter(c => c.set === 'pumpkrunch' && c.type === 'fullart');
+        const chroms = CARDS_DB.filter(c => c.set === 'pumpkrunch' && c.type === 'chromatic-fullart');
 
-        for (let i = 0; i < 6; i++) currentPackCards.push(coms[Math.floor(Math.random() * coms.length)]);
+        for (let i = 0; i < 4; i++) currentPackCards.push(coms[Math.floor(Math.random() * coms.length)]);
+
+        const roll = Math.random();
+        if (roll < 0.01 && chroms.length > 0) currentPackCards.push(chroms[Math.floor(Math.random() * chroms.length)]);
+        else if (roll < 0.03 && fas.length > 0) currentPackCards.push(fas[Math.floor(Math.random() * fas.length)]);
+        else if (roll < 0.23 && holos.length > 0) currentPackCards.push(holos[Math.floor(Math.random() * holos.length)]);
+        else currentPackCards.push(coms[Math.floor(Math.random() * coms.length)]);
+
+        // 30% de chance de déclencher un effet Jumpscare sur une carte aléatoire du booster
+        if (Math.random() < 0.3) {
+          const randomIdx = Math.floor(Math.random() * currentPackCards.length);
+          packJumpscares.push(randomIdx);
+        }
+
+      } else {
+        const coms = CARDS_DB.filter(c => c.set === 'fantomes' && c.type === 'common');
+        const holos = CARDS_DB.filter(c => c.set === 'fantomes' && c.type === 'holographic');
+        const fas = CARDS_DB.filter(c => c.set === 'fantomes' && c.type === 'fullart');
+        const chroms = CARDS_DB.filter(c => c.set === 'fantomes' && c.type === 'chromatic-fullart');
+
+        for (let i = 0; i < 4; i++) currentPackCards.push(coms[Math.floor(Math.random() * coms.length)]);
 
         const roll = Math.random();
         if (roll < 0.01 && chroms.length > 0) currentPackCards.push(chroms[Math.floor(Math.random() * chroms.length)]);
@@ -1119,7 +1247,10 @@
       container.innerHTML = createCardHTML(card, 1, false);
       const cardEl = container.querySelector('.card');
       
-      if (card.type === 'fullart' || card.type === 'chromatic-fullart' || card.type === 'holographic') {
+      if (packJumpscares.includes(packIdx)) {
+        playSound('jumpscare');
+        cardEl.classList.add('reveal-card', 'jumpscare-anim');
+      } else if (card.type === 'fullart' || card.type === 'chromatic-fullart' || card.type === 'holographic') {
         playSound('reveal-rare');
         cardEl.classList.add('reveal-card', 'full-art-anim');
       } else {
@@ -1146,25 +1277,114 @@
       }
     }
 
-    function adminAddCoins(a) { playSound('click'); state.coins += a; saveData(); }
-    function adminAddPacks(type, count) {
+    // --- BOUTIQUE & ACHATS ---
+    function claimDaily() {
       playSound('click');
-      if (type === 'standard') state.boosters += count;
-      if (type === 'fantomes') state.fantomesBoosters = (state.fantomesBoosters || 0) + count;
-      if (type === 'legendary') state.specialBoosters = (state.specialBoosters || 0) + count;
+      const today = new Date().toDateString();
+      if (state.lastDaily !== today) {
+        state.lastDaily = today;
+        state.coins += 50;
+        state.pumpkrunchBoosters = (state.pumpkrunchBoosters || 0) + 2;
+        state.fantomesBoosters = (state.fantomesBoosters || 0) + 2;
+        saveData();
+        alert("🎁 Bonus quotidien réclamé (+50 💰, +2 🎃 Pumpkrunch, +2 👻 Fantômes) !");
+      }
+    }
+
+    function buyStarterPack() {
+      if (state.starterPackBought) return;
+      if (state.coins >= 450) {
+        playSound('click');
+        state.coins -= 450;
+        state.pumpkrunchBoosters = (state.pumpkrunchBoosters || 0) + 5;
+        state.fantomesBoosters = (state.fantomesBoosters || 0) + 2;
+        state.starterPackBought = true;
+        saveData();
+        alert("🔥 Pack Découverte acheté !");
+      } else {
+        alert("💰 Pas assez de pièces !");
+      }
+    }
+
+    function buyPumpkrunchBooster(cost, qty) {
+      if (state.coins >= cost) {
+        playSound('click');
+        state.coins -= cost;
+        state.pumpkrunchBoosters = (state.pumpkrunchBoosters || 0) + qty;
+        saveData();
+      } else {
+        alert("💰 Pas assez de pièces !");
+      }
+    }
+
+    function buyFantomesBooster(cost, qty) {
+      if (state.coins >= cost) {
+        playSound('click');
+        state.coins -= cost;
+        state.fantomesBoosters = (state.fantomesBoosters || 0) + qty;
+        saveData();
+      } else {
+        alert("💰 Pas assez de pièces !");
+      }
+    }
+
+    function buySpecialBooster(cost, qty) {
+      if (state.coins >= cost) {
+        playSound('click');
+        state.coins -= cost;
+        state.specialBoosters = (state.specialBoosters || 0) + qty;
+        saveData();
+      } else {
+        alert("💰 Pas assez de pièces !");
+      }
+    }
+
+    // --- ACTIONS D'ADMINISTRATION ---
+    function adminAddCoins(amount) {
+      playSound('click');
+      state.coins += amount;
       saveData();
     }
-    function adminUnlockAll() { playSound('click'); CARDS_DB.forEach(c => state.collection[c.id] = 1); saveData(); renderCollection(); renderBattleCardPicker(); }
-    function adminResetCollection() { playSound('click'); if(confirm("Vider entièrement la collection ?")) { state.collection = {}; state.deck = []; saveData(); renderCollection(); updateDeckDisplay(); renderBattleCardPicker(); } }
 
-    function buyStarterPack() { playSound('click'); if (state.coins >= 450 && !state.starterPackBought) { state.coins -= 450; state.boosters += 5; state.fantomesBoosters = (state.fantomesBoosters || 0) + 2; state.starterPackBought = true; saveData(); } }
-    function buyBooster(c, q) { playSound('click'); if (state.coins >= c) { state.coins -= c; state.boosters += q; saveData(); } }
-    function buyFantomesBooster(c, q) { playSound('click'); if (state.coins >= c) { state.coins -= c; state.fantomesBoosters = (state.fantomesBoosters||0) + q; saveData(); } }
-    function buySpecialBooster(c, q) { playSound('click'); if (state.coins >= c) { state.coins -= c; state.specialBoosters = (state.specialBoosters||0) + q; saveData(); } }
-    function claimDaily() { playSound('click'); const t = new Date().toDateString(); if (state.lastDaily === t) return; state.coins += 50; state.boosters += 2; state.fantomesBoosters = (state.fantomesBoosters || 0) + 2; state.lastDaily = t; saveData(); }
-    function resetData() { playSound('click'); if (confirm("Tout réinitialiser ?")) { localStorage.removeItem('pocketclash_v12_data'); location.reload(); } }
+    function adminAddPacks(type, count) {
+      playSound('click');
+      if (type === 'pumpkrunch') state.pumpkrunchBoosters = (state.pumpkrunchBoosters || 0) + count;
+      else if (type === 'fantomes') state.fantomesBoosters = (state.fantomesBoosters || 0) + count;
+      else if (type === 'legendary') state.specialBoosters = (state.specialBoosters || 0) + count;
+      saveData();
+    }
 
-    window.onload = loadData;
+    function adminUnlockAll() {
+      playSound('click');
+      CARDS_DB.forEach(c => { state.collection[c.id] = (state.collection[c.id] || 0) + 1; });
+      saveData();
+      renderCollection();
+      renderBattleCardPicker();
+      alert("⚡ Toutes les cartes ont été débloquées !");
+    }
+
+    function adminResetCollection() {
+      if (confirm("Vider entièrement votre collection ?")) {
+        playSound('click');
+        state.collection = {};
+        state.deck = [];
+        saveData();
+        renderCollection();
+        updateDeckDisplay();
+        renderBattleCardPicker();
+      }
+    }
+
+    function resetData() {
+      if (confirm("ATTENTION : Voulez-vous vraiment réinitialiser toutes vos données de jeu ?")) {
+        playSound('click');
+        localStorage.removeItem('pocketclash_v13_data');
+        location.reload();
+      }
+    }
+
+    // --- INITIALISATION AU CHARGEMENT ---
+    window.addEventListener('DOMContentLoaded', loadData);
   </script>
 </body>
 </html>
