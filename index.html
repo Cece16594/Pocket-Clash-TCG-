@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Pocket Clash - TCG Mobile </title>
+  <title>Pocket Clash - TCG Mobile (Halloween Edition)</title>
   <style>
     :root {
       --bg-color: #0d0714;
@@ -54,31 +54,9 @@
     .start-btn:active { transform: scale(0.95); }
     @keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 25px rgba(249, 115, 22, 0.6), 0 0 15px rgba(168, 85, 247, 0.4); } 50% { box-shadow: 0 0 45px rgba(249, 115, 22, 1), 0 0 25px rgba(168, 85, 247, 0.8); } }
 
-    /* Header Modifié : Intégration du bouton Paramètres au milieu */
-    header { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: rgba(13, 7, 20, 0.95); border-bottom: 1px solid #3b0764; z-index: 10; position: relative; }
+    /* Header */
+    header { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: rgba(13, 7, 20, 0.95); border-bottom: 1px solid #3b0764; z-index: 10; }
     .logo { font-size: 1.1rem; font-weight: 800; color: var(--accent); letter-spacing: 0.5px; cursor: pointer; text-shadow: 0 0 10px rgba(249, 115, 22, 0.5); }
-    
-    .header-center {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-    .header-settings-btn {
-      background: #1e102d;
-      border: 1px solid #581c87;
-      color: #c084fc;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-weight: 800;
-      font-size: 0.8rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      transition: all 0.2s;
-    }
-    .header-settings-btn:active { transform: translateX(-50%) scale(0.95); }
-
     .header-right { display: flex; align-items: center; gap: 12px; }
     .currency { display: flex; gap: 8px; font-weight: bold; font-size: 0.85rem; }
     .badge { background: #1e102d; padding: 5px 12px; border-radius: 20px; display: flex; align-items: center; gap: 6px; border: 1px solid #581c87; }
@@ -167,7 +145,7 @@
     @keyframes legendaryGlow { 0% { box-shadow: 0 0 15px rgba(236, 72, 153, 0.5); } 100% { box-shadow: 0 0 35px rgba(245, 158, 11, 0.9); } }
     .booster-pack-img { width: 100%; height: 100%; object-fit: cover; }
 
-    /* Profil & Voie des Trophées au milieu de la section Pack */
+    /* Profil & Voie des Trophées */
     .profile-banner-card {
       width: 100%; max-width: 500px; background: linear-gradient(135deg, #2e1065 0%, #1e102d 100%);
       border: 2px solid #f97316; border-radius: 16px; padding: 14px 18px;
@@ -248,7 +226,7 @@
     }
     #battle-arena { display: flex; flex-direction: column; gap: 15px; background: rgba(15, 23, 42, 0.9); border-radius: 16px; padding: 16px; border: 2px solid #f97316; box-shadow: 0 0 30px rgba(249, 115, 22, 0.3); position: relative; }
     .battle-score-board { display: flex; justify-content: space-between; align-items: center; background: #1e102d; padding: 10px 16px; border-radius: 8px; font-weight: bold; font-size: 1.1rem; border: 1px solid #581c87; }
-    .battle-field { display: flex; justify-around: space-around; align-items: center; margin: 10px 0; position: relative; min-height: 220px; }
+    .battle-field { display: flex; justify-content: space-around; align-items: center; margin: 10px 0; position: relative; min-height: 220px; }
     .fighter-zone { display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative; z-index: 2; }
     .hp-bar-container { width: 120px; height: 14px; background: #334155; border-radius: 6px; overflow: hidden; border: 1px solid #000; }
     .hp-bar-fill { height: 100%; background: #22c55e; transition: width 0.3s; }
@@ -368,12 +346,6 @@
 
   <header>
     <div class="logo" onclick="openStartMenu()">🎃 POCKET CLASH</div>
-    
-    <!-- Nouveau bouton Paramètres au milieu -->
-    <div class="header-center">
-      <button class="header-settings-btn" onclick="openSettingsFromHeader(this)">⚙️ Paramètres</button>
-    </div>
-
     <div class="header-right">
       <div class="currency">
         <div class="badge">💰 <span id="coins-display">0</span></div>
@@ -389,7 +361,7 @@
     <div id="page-collection" class="page active">
       <div class="recycle-banner">
         <div>
-          <h4 style="font-size: 0.9rem;">♻️ Échanger les cartes en double</h4>
+          <h4 style="font-size: 0.9rem;">♻️️ Échanger les cartes en double</h4>
           <p style="color: #c084fc; font-size: 0.75rem;">Commune: 3💰 | Holo: 5💰 | Full ART: 10💰 | Chromatique: 30💰</p>
         </div>
         <button class="btn" id="recycle-btn" onclick="recycleDuplicates()">Vendre (<span id="duplicates-count">0</span>)</button>
@@ -405,8 +377,8 @@
         <div id="collection-container-fantomes"></div>
       </details>
 
-      <!-- SECTION: PIOCHE MAGIQUE / MIRACLE -->
-      <div class="magic-draw-section" id="magic-draw-anchor">
+      <!-- PIOCHE MAGIQUE -->
+      <div class="magic-draw-section">
         <div class="magic-draw-header">
           <h3 style="color: #c084fc; font-size: 1.1rem; font-weight: 900;">🔮 Pioche Magique</h3>
           <span style="font-size: 0.75rem; color: #f59e0b; font-weight: bold;" id="magic-draw-timer">Disponible !</span>
@@ -419,7 +391,7 @@
       </div>
     </div>
 
-    <!-- SECTION COMBAT RENOVÉE -->
+    <!-- SECTION COMBAT -->
     <div id="page-battle" class="page">
       <h3>⚔️ Préparation au Combat MMR</h3>
       <p style="color: #c084fc; font-size: 0.8rem; margin-bottom: 15px;">Choisissez 1 carte pour combattre dans l'Arène. Victoire = +10🏆 | Défaite = -3🏆</p>
@@ -551,14 +523,13 @@
       </div>
 
       <div class="settings-group">
-        <h4>🎁 Code Promotionnel</h4> 
+        <h4>🎁 Code Promotionnel</h4>
         <div class="code-input-group">
-          <input type="text" id="promo-code-input" class="code-input" placeholder="EX: Code Laetita" />
+          <input type="text" id="promo-code-input" class="code-input" placeholder="Entrez votre code..." />
           <button class="btn" onclick="redeemCode()">Valider</button>
         </div>
         <p id="code-message" style="font-size: 0.8rem; margin-top: 6px; font-weight: bold; display: none;"></p>
       </div>
-      <code>ADMIN</code>
 
       <div class="admin-panel" id="admin-panel">
         <h4>⚡ Panneau Administrateur</h4>
@@ -678,35 +649,17 @@
     <div class="modal-card-container" id="modal-card-slot" onclick="event.stopPropagation()"></div>
   </div>
 
-  <!-- NAV MODIFIÉE : Le bouton "Réglage/Paramètres" a été remplacé par le bouton "Pioche Miracle/Magique" -->
   <nav>
     <button class="active" onclick="showPage('collection', this)">📖 Album</button>
     <button onclick="showPage('battle', this)">⚔️ Combat</button>
     <button onclick="showPage('boosters', this)">📦 Packs</button>
     <button onclick="showPage('shop', this)">🏪 Boutique</button>
-    <button onclick="scrollToMagicDraw(this)">🔮 Pioche</button>
+    <button onclick="showPage('settings', this)">⚙️ Réglage</button>
   </nav>
 
   <canvas id="generator-canvas" width="300" height="480" style="display:none;"></canvas>
 
   <script>
-    // --- FONCTIONS DE NAVIGATION DES BOUTONS DÉPLACÉS ---
-    function openSettingsFromHeader(btnEl) {
-      showPage('settings', null);
-      // Retirer la classe active de la nav
-      document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-    }
-
-    function scrollToMagicDraw(btnEl) {
-      showPage('collection', btnEl);
-      setTimeout(() => {
-        const anchor = document.getElementById('magic-draw-anchor');
-        if (anchor) {
-          anchor.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 100);
-    }
-
     // --- MOTEUR D'EFFETS SONORES ---
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     
@@ -797,7 +750,7 @@
       { id: 517, name: "Chat Noir Porteur", hp: 85, element: "Psy", emoji: "🐈‍‍⬛", atk1: { cost: ["Psy"], name: "Coup de Patte", damage: 25 }, atk2: { cost: ["Psy", "Poison"], name: "Onde de Poisse", damage: 45 } },
       { id: 518, name: "Bonbon Piégé", hp: 60, element: "Poison", emoji: "🍬", atk1: { cost: ["Poison"], name: "Farce Sucrée", damage: 30 }, atk2: { cost: ["Poison", "Poison"], name: "Intoxication", damage: 60 } },
       { id: 519, name: "Sorceleur de Citrouille", hp: 100, element: "Psy", emoji: "🔮", atk1: { cost: ["Psy"], name: "Sort de Potager", damage: 35 }, atk2: { cost: ["Psy", "Plante"], name: "Enchantement", damage: 60 } },
-      { id: 520, name: "Mélange Toxique", hp: 90, element: "Poison", emoji: "☣️️", atk1: { cost: ["Poison"], name: "Gaz Vert", damage: 25 }, atk2: { cost: ["Poison", "Feu"], name: "Explosion Gazeuse", damage: 55 } },
+      { id: 520, name: "Mélange Toxique", hp: 90, element: "Poison", emoji: "☣️", atk1: { cost: ["Poison"], name: "Gaz Vert", damage: 25 }, atk2: { cost: ["Poison", "Feu"], name: "Explosion Gazeuse", damage: 55 } },
       { id: 521, name: "Racine Obscure", hp: 105, element: "Plante", emoji: "🪵", atk1: { cost: ["Plante"], name: "Saisie Souterraine", damage: 30 }, atk2: { cost: ["Plante", "Psy"], name: "Etranglement", damage: 55 } },
       { id: 522, name: "Feu Follet Féroce", hp: 80, element: "Feu", emoji: "☄️", atk1: { cost: ["Feu"], name: "Petite Brûlure", damage: 25 }, atk2: { cost: ["Feu", "Psy"], name: "Danse des Esprits", damage: 50 } },
       { id: 523, name: "Crapaud Miasmique", hp: 115, element: "Poison", emoji: "🐸", atk1: { cost: ["Poison"], name: "Bave Corrosive", damage: 35 }, atk2: { cost: ["Poison", "Eau"], name: "Venin Baveux", damage: 65 } },
@@ -833,3 +786,1084 @@
     PUMP_FULLARTS.forEach(c => PUMPKRUNCH_SET.push({ ...c, type: 'fullart', set: 'pumpkrunch' }));
 
     PUMPKRUNCH_SET.push({
+      id: 777,
+      name: "Pumpking Chromatique Supérieur",
+      hp: 250,
+      element: "Plante",
+      emoji: "🎃",
+      atk1: { cost: ["Plante", "Feu"], name: "Légende d'Halloween", damage: 130 },
+      atk2: { cost: ["Plante", "Plante", "Poison"], name: "VENGEANCE TOTALE", damage: 220 },
+      type: "chromatic-fullart",
+      set: "pumpkrunch"
+    });
+
+    // --- EXTENSION 2 : FANTÔMES CHROMATIQUES ---
+    const FANTOMES_SET = [];
+    const MULTI_TYPES = ["Poison", "Psy", "Feu", "Plante", "Eau", "Roche"];
+    
+    const COMMON_NAMES = [
+      "Banshee Toxique", "Ombre Astraux", "Poltergeist Errant", "Revenant Maudit", "Ectoplasme Céleste",
+      "Wraith Ardent", "Spectre des Glaces", "Ghoulique des Abysses", "Anima Du Néant", "Phantom Sévère",
+      "Lémure Sombre", "Apparition Enchantée", "Esprit Pâle", "Orbe Spectral", "Lurker Funeste",
+      "Scream Illusoire", "Gloom Obsidienne", "Shade Nébuleux", "Vapor Crépusculaire", "Vesper Infernale",
+      "Haunt Vénéneux", "Mist Glaceur", "Soul Sanguin", "Grave Miasmatique", "Dusk Toxique",
+      "Void Astraux", "Nightmare Errant", "Blight Maudit", "Grim Céleste", "Obsidian Ardent",
+      "Eclipse des Glaces", "Phantasm des Abysses", "Abyss Du Néant", "Curse Sévère", "Frostbite Sombre",
+      "Inferno Enchantée", "Venom Pâle", "Hollow Spectral", "Flicker Funeste", "Chill Illusoire",
+      "Bramble Obsidienne", "Crypt Nébuleux", "Corpse Crépusculaire", "Shiver Infernale", "Mirage Vénéneux",
+      "Miasma Glaceur", "Shroud Sanguin", "Lurker Miasmatique", "Wraith Toxique", "Phantom Astraux"
+    ];
+
+    const HOLO_NAMES = [
+      "Archonte Banshee", "Seigneur des Ombres", "Poltergeist Majeur", "Revenant Éternel", "Ectoplasme Primordial",
+      "Wraith Supremo", "Spectre Souverain", "Ghoulique Titanesque", "Anima Suprême", "Phantom Impérial",
+      "Lémure Ancien", "Apparition Mythique", "Esprit Immortel", "Orbe Abyssal", "Lurker Colossal",
+      "Scream Strident", "Gloom Devastateur", "Shade Monolithique", "Vapor Astral", "Vesper Monarchique"
+    ];
+
+    const FULL_ART_NAMES = [
+      "Imperator Cauchemar", "Souverain du Néant", "Lich King Spectral", 
+      "Titan Ectoplasmique", "Monarques des Ombrages", "Avatar de l'Abysse"
+    ];
+
+    const UNIQUE_EMOJIS = ["👻", "🎃", "💀", "👁", "🕸️", "🔮", "🦇", "🌌", "🕯️", "⚡", "🧿", "👺", "👤", "🕯️", "🥀", "🦉", "🔮", "🕷", "🖤", "🧪"];
+
+    for (let i = 1; i <= 50; i++) {
+      const elem = MULTI_TYPES[(i - 1) % MULTI_TYPES.length];
+      const name = COMMON_NAMES[i - 1];
+      const emo = UNIQUE_EMOJIS[(i - 1) % UNIQUE_EMOJIS.length];
+
+      FANTOMES_SET.push({
+        id: 100 + i,
+        name: name,
+        hp: 50 + (i % 6) * 10,
+        element: elem,
+        emoji: emo,
+        atk1: { cost: [elem], name: `Souffle spectral ${i}`, damage: 15 + (i % 5) * 5 },
+        atk2: { cost: [elem, elem], name: `Ecto-Impact`, damage: 35 + (i % 6) * 5 },
+        type: "common",
+        set: "fantomes"
+      });
+    }
+
+    for (let i = 1; i <= 20; i++) {
+      const elem = MULTI_TYPES[(i + 1) % MULTI_TYPES.length];
+      const name = HOLO_NAMES[i - 1];
+      const emo = UNIQUE_EMOJIS[(i + 5) % UNIQUE_EMOJIS.length];
+
+      FANTOMES_SET.push({
+        id: 200 + i,
+        name: name,
+        hp: 110 + (i % 5) * 10,
+        element: elem,
+        emoji: emo,
+        atk1: { cost: [elem], name: `Malédiction H-${i}`, damage: 45 + i },
+        atk2: { cost: [elem, "Poison"], name: `Pacte d'Ombre`, damage: 75 + i },
+        type: "holographic",
+        set: "fantomes"
+      });
+    }
+
+    for (let i = 1; i <= 6; i++) {
+      const elem = MULTI_TYPES[(i + 3) % MULTI_TYPES.length];
+      const name = FULL_ART_NAMES[i - 1];
+      FANTOMES_SET.push({
+        id: 300 + i,
+        name: name,
+        hp: 170 + i * 5,
+        element: elem,
+        emoji: "👑",
+        atk1: { cost: [elem], name: "Extermination", damage: 85 },
+        atk2: { cost: [elem, elem, "Psy"], name: "Cataclysme Nocturne", damage: 145 },
+        type: "fullart",
+        set: "fantomes"
+      });
+    }
+
+    FANTOMES_SET.push({
+      id: 400,
+      name: "Spectre Chromatique Alpha",
+      hp: 230,
+      element: "Psy",
+      emoji: "🌈",
+      atk1: { cost: ["Psy", "Poison"], name: "Onde Rainbow", damage: 110 },
+      atk2: { cost: ["Psy", "Psy", "Poison"], name: "Distorsion Totale", damage: 200 },
+      type: "chromatic-fullart",
+      set: "fantomes"
+    });
+
+    FANTOMES_SET.push({
+      id: 401,
+      name: "Tuile Mème",
+      hp: 999,
+      element: "Roche",
+      emoji: "🧱",
+      atk1: { cost: ["Roche"], name: "Coup de Tuile", damage: 999 },
+      atk2: { cost: [], name:"", damage:"" },
+      type: "common",
+      set: "fantomes"
+    });
+
+    const CARDS_DB = [...PUMPKRUNCH_SET, ...FANTOMES_SET];
+
+    const QUESTS_LIST = [
+      { id: 'q1', title: 'Déballeur Débutant', target: 3, rewardType: 'coins', rewardAmount: 150, rewardText: '+150 💰' },
+      { id: 'q2', title: 'Chasseur de Citrouilles', target: 10, rewardType: 'booster', rewardPack: 'pumpkrunch', rewardAmount: 2, rewardText: '+2 🎃 Pumpking' },
+      { id: 'q3', title: 'Chasseur de Fantômes', target: 20, rewardType: 'booster', rewardPack: 'fantomes', rewardAmount: 2, rewardText: '+2 👻 Fantômes' },
+      { id: 'q4', title: 'Maître des Packs', target: 35, rewardType: 'booster', rewardPack: 'legendary', rewardAmount: 1, rewardText: '+1 👑 Légendaire' },
+      { id: 'q5', title: 'Fanatic des Ombrages', target: 50, rewardType: 'coins', rewardAmount: 2500, rewardText: '+2500 💰' }
+    ];
+
+    const TROPHY_ROAD_REWARDS = [
+      { trophies: 50, title: "Palier 50 🏆", rewardText: "200 💰", rewardType: "coins", amount: 200 },
+      { trophies: 100, title: "Palier 100 🏆", rewardText: "2 🎃 Boosters Pumpking", rewardType: "pumpkrunch", amount: 2 },
+      { trophies: 150, title: "Palier 150 🏆", rewardText: "2 👻 Boosters Fantômes", rewardType: "fantomes", amount: 2 },
+      { trophies: 200, title: "Palier 200 🏆", rewardText: "500 💰", rewardType: "coins", amount: 500 },
+      { trophies: 250, title: "Palier 250 🏆", rewardText: "1 👑 Booster Légendaire", rewardType: "legendary", amount: 1 },
+      { trophies: 300, title: "Palier 300 🏆", rewardText: "1000 💰", rewardType: "coins", amount: 1000 },
+      { trophies: 350, title: "Palier 350 🏆", rewardText: "3 🎃 Boosters Pumpking", rewardType: "pumpkrunch", amount: 3 },
+      { trophies: 400, title: "Palier 400 🏆", rewardText: "3 👻 Boosters Fantômes", rewardType: "fantomes", amount: 3 },
+      { trophies: 450, title: "Palier 450 🏆", rewardText: "1500 💰", rewardType: "coins", amount: 1500 },
+      { trophies: 500, title: "Palier 500 🏆", rewardText: "2 👑 Boosters Légendaires", rewardType: "legendary", amount: 2 }
+    ];
+
+    const AVATARS_LIST = ["🎃", "👻", "🧙‍♀️", "🦇", "💀", "👑", "🧟", "🔮", "🦉", "⚡"];
+
+    // OFFRES PIOCHE MAGIQUE
+    const MAGIC_OFFERS = [
+      { id: 1, title: "Offre Citrouille", icon: "🎃", desc: "Contient des cartes d'Halloween" },
+      { id: 2, title: "Offre Spectrale", icon: "👻", desc: "Cartes des esprits sombres" },
+      { id: 3, title: "Offre Infernale", icon: "🔥", desc: "Cartes de type Feu et Poison" },
+      { id: 4, title: "Offre Mystique", icon: "🔮", desc: "Puissantes cartes Psychiques" },
+      { id: 5, title: "Offre Royale", icon: "👑", desc: "Chance élevée de raretés" }
+    ];
+
+    let state = {
+      coins: 150, pumpkrunchBoosters: 3, fantomesBoosters: 2, specialBoosters: 1,
+      totalOpened: 0, collection: {}, deck: [], lastDaily: null, redeemedCodes: [],
+      claimedQuests: [], adminUnlocked: false, soundEnabled: true, starterPackBought: false,
+      playerName: "Dresseur",
+      playerAvatar: "🎃",
+      trophies: 0,
+      mmr: 1000,
+      claimedTrophyRoad: [],
+      lastMagicDrawTime: 0
+    };
+
+    function startGame() { playSound('click'); document.getElementById('start-screen').style.display = 'none'; }
+    function openStartMenu() { playSound('click'); document.getElementById('start-screen').style.display = 'flex'; }
+
+    function generateDynamicArtCanvas(card) {
+      const canvas = document.getElementById('generator-canvas'); const ctx = canvas.getContext('2d');
+      const isFullArt = card.type === 'fullart' || card.type === 'chromatic-fullart';
+      const w = 240, h = isFullArt ? 360 : 160; canvas.width = w; canvas.height = h;
+
+      const seed = card.id * 1337;
+      const pseudoRandom = (offset) => {
+        const x = Math.sin(seed + offset) * 10000;
+        return x - Math.floor(x);
+      };
+
+      const grad = ctx.createRadialGradient(w/2, h/2, 10, w/2, h/2, w);
+      if (card.element === 'Poison') { grad.addColorStop(0, '#581c87'); grad.addColorStop(1, '#0d0714'); }
+      else if (card.element === 'Psy') { grad.addColorStop(0, '#7e22ce'); grad.addColorStop(1, '#1e1b4b'); }
+      else if (card.element === 'Feu') { grad.addColorStop(0, '#ea580c'); grad.addColorStop(1, '#431407'); }
+      else if (card.element === 'Plante') { grad.addColorStop(0, '#15803d'); grad.addColorStop(1, '#14532d'); }
+      else if (card.element === 'Eau') { grad.addColorStop(0, '#1e40af'); grad.addColorStop(1, '#0d0714'); }
+      else { grad.addColorStop(0, '#78350f'); grad.addColorStop(1, '#1c1917'); }
+      
+      ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
+
+      if (card.set === 'pumpkrunch') {
+        const particleCount = 20;
+        for (let i = 0; i < particleCount; i++) {
+          const px = pseudoRandom(i * 2) * w;
+          const py = pseudoRandom(i * 3) * h;
+          const pr = 2 + pseudoRandom(i * 4) * 6;
+          ctx.fillStyle = `rgba(249, 115, 22, ${0.2 + pseudoRandom(i) * 0.5})`;
+          ctx.beginPath(); ctx.arc(px, py, pr, 0, Math.PI * 2); ctx.fill();
+        }
+      }
+
+      ctx.fillStyle = 'white';
+      ctx.font = isFullArt ? '80px sans-serif' : '55px sans-serif';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(card.emoji, w/2, h/2);
+
+      return canvas.toDataURL('image/png');
+    }
+
+    function generateBoosterBase64(type) {
+      const canvas = document.getElementById('generator-canvas'); const ctx = canvas.getContext('2d');
+      canvas.width = 300; canvas.height = 480;
+
+      const grad = ctx.createLinearGradient(0, 0, 300, 480);
+      if (type === 'legendary') { grad.addColorStop(0, '#831843'); grad.addColorStop(1, '#be185d'); }
+      else if (type === 'fantomes') { grad.addColorStop(0, '#3b0764'); grad.addColorStop(1, '#6b21a8'); }
+      else { grad.addColorStop(0, '#7c2d12'); grad.addColorStop(1, '#ea580c'); }
+      ctx.fillStyle = grad; ctx.fillRect(0, 0, 300, 480);
+
+      ctx.strokeStyle = type === 'pumpkrunch' ? 'rgba(251, 146, 60, 0.3)' : (type === 'fantomes' ? 'rgba(192, 132, 252, 0.2)' : 'rgba(245, 158, 11, 0.2)');
+      ctx.lineWidth = 4;
+      for (let i = 0; i < 300; i += 20) {
+        ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(300 - i, 480); ctx.stroke();
+      }
+
+      ctx.fillStyle = 'rgba(0,0,0,0.5)';
+      ctx.beginPath(); ctx.arc(150, 220, 70, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = type === 'pumpkrunch' ? '#f97316' : (type === 'fantomes' ? '#a855f7' : '#f59e0b');
+      ctx.lineWidth = 4; ctx.stroke();
+
+      ctx.fillStyle = '#fff'; ctx.font = 'bold 50px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText(type === 'pumpkrunch' ? '🎃' : (type === 'fantomes' ? '👻' : '👑'), 150, 235);
+
+      ctx.font = '900 20px sans-serif';
+      ctx.fillStyle = type === 'pumpkrunch' ? '#ffedd5' : (type === 'fantomes' ? '#c084fc' : '#fef08a');
+      ctx.fillText(type === 'pumpkrunch' ? 'PUMPKING' : (type === 'fantomes' ? 'FANTÔMES' : 'LÉGENDAIRE'), 150, 340);
+
+      ctx.font = 'bold 12px sans-serif'; ctx.fillStyle = '#94a3b8';
+      ctx.fillText(type === 'pumpkrunch' ? 'LA VENGEANCE' : (type === 'fantomes' ? 'CHROMATIQUES' : 'BOOSTER PACK'), 150, 360);
+
+      return canvas.toDataURL('image/png');
+    }
+
+    function loadData() {
+      const saved = localStorage.getItem('pocketclash_v14_data');
+      if (saved) state = {...state, ...JSON.parse(saved)};
+      if (!state.deck) state.deck = [];
+      if (!state.claimedTrophyRoad) state.claimedTrophyRoad = [];
+      if (state.mmr === undefined) state.mmr = 1000;
+      if (state.trophies === undefined) state.trophies = 0;
+      if (state.lastMagicDrawTime === undefined) state.lastMagicDrawTime = 0;
+      
+      document.getElementById('sound-toggle').checked = state.soundEnabled;
+
+      CARDS_DB.forEach(card => { if(!card.imageBase64) card.imageBase64 = generateDynamicArtCanvas(card); });
+      
+      document.getElementById('pumpkrunch-booster-cover-img').src = generateBoosterBase64('pumpkrunch');
+      document.getElementById('fantomes-booster-cover-img').src = generateBoosterBase64('fantomes');
+      document.getElementById('special-booster-cover-img').src = generateBoosterBase64('legendary');
+      
+      updateUI(); renderCollection(); updateDeckDisplay(); renderBattleCardPicker(); renderMagicDrawOffers();
+    }
+
+    function saveData() { localStorage.setItem('pocketclash_v14_data', JSON.stringify(state)); updateUI(); }
+
+    function getDuplicateStats() {
+      let totalDupes = 0, totalCoinsValue = 0;
+      CARDS_DB.forEach(card => {
+        const qty = state.collection[card.id] || 0;
+        if (qty > 1) {
+          const dupes = qty - 1;
+          totalDupes += dupes;
+          let cardValue = 3;
+          if (card.type === 'holographic') cardValue = 5;
+          else if (card.type === 'fullart') cardValue = 10;
+          else if (card.type === 'chromatic-fullart') cardValue = 30;
+          totalCoinsValue += dupes * cardValue;
+        }
+      });
+      return { totalDupes, totalCoinsValue };
+    }
+
+    function recycleDuplicates() {
+      playSound('click');
+      const stats = getDuplicateStats(); if (stats.totalDupes <= 0) return;
+      CARDS_DB.forEach(card => { if ((state.collection[card.id] || 0) > 1) state.collection[card.id] = 1; });
+      state.coins += stats.totalCoinsValue; saveData(); renderCollection(); renderBattleCardPicker();
+    }
+
+    function toggleDeckCard(cardId) {
+      playSound('click');
+      state.deck = [cardId];
+      saveData();
+      renderCollection();
+      updateDeckDisplay();
+      renderBattleCardPicker();
+    }
+
+    function updateDeckDisplay() {
+      const container = document.getElementById('deck-slots-container');
+      container.innerHTML = '';
+      
+      if(state.deck[0]) {
+        const card = CARDS_DB.find(c => c.id === state.deck[0]);
+        container.innerHTML = `<div style="width:120px;" onclick="toggleDeckCard(${card.id})">${createCardHTML(card, 1, false)}</div>`;
+      } else {
+        container.innerHTML = `<div class="deck-slot">Sélectionnez 1 carte ci-dessous</div>`;
+      }
+    }
+
+    function renderBattleCardPicker() {
+      const container = document.getElementById('battle-card-picker');
+      const ownedCards = CARDS_DB.filter(c => (state.collection[c.id] || 0) > 0 && typeof c.hp === 'number');
+      if (ownedCards.length === 0) {
+        container.innerHTML = `<p style="color:#c084fc; font-size:0.8rem; text-align:center; width:100%;">Tu ne possèdes aucune carte utilisable en combat. Ouvre des boosters !</p>`;
+        return;
+      }
+      container.innerHTML = ownedCards.map(c => `
+        <div class="card-picker-item-wrapper">
+          ${createCardHTML(c, state.collection[c.id], true, 'deck')}
+        </div>
+      `).join('');
+    }
+
+    function updateUI() {
+      document.getElementById('coins-display').innerText = state.coins;
+      document.getElementById('trophies-display-header').innerText = state.trophies || 0;
+      document.getElementById('pumpkrunch-boosters-display').innerText = state.pumpkrunchBoosters || 0;
+      document.getElementById('fantomes-boosters-display').innerText = state.fantomesBoosters || 0;
+      document.getElementById('special-boosters-display').innerText = state.specialBoosters || 0;
+      
+      document.getElementById('pumpkrunch-count-btn').innerText = state.pumpkrunchBoosters || 0;
+      document.getElementById('fantomes-count-btn').innerText = state.fantomesBoosters || 0;
+      document.getElementById('special-count-btn').innerText = state.specialBoosters || 0;
+      
+      document.getElementById('pumpkrunch-booster-btn').disabled = (state.pumpkrunchBoosters || 0) <= 0;
+      document.getElementById('fantomes-booster-btn').disabled = (state.fantomesBoosters || 0) <= 0;
+      document.getElementById('open-special-booster-btn').disabled = (state.specialBoosters || 0) <= 0;
+
+      document.getElementById('profile-display-name').innerText = state.playerName || "Dresseur";
+      document.getElementById('profile-display-avatar').innerText = state.playerAvatar || "🎃";
+      document.getElementById('profile-display-trophies').innerText = state.trophies || 0;
+      document.getElementById('profile-display-mmr').innerText = state.mmr || 1000;
+
+      const dupStats = getDuplicateStats();
+      document.getElementById('duplicates-count').innerText = `${dupStats.totalDupes} (+${dupStats.totalCoinsValue}💰)`;
+      document.getElementById('recycle-btn').disabled = dupStats.totalDupes <= 0;
+
+      if (state.adminUnlocked) document.getElementById('admin-panel').style.display = 'block';
+      if (state.starterPackBought) document.getElementById('starter-pack-btn').disabled = true;
+
+      const t = new Date().toDateString();
+      const dailyBtn = document.getElementById('daily-btn');
+      if (state.lastDaily === t) {
+        dailyBtn.disabled = true;
+        dailyBtn.innerText = "Déjà réclamé";
+      } else {
+        dailyBtn.disabled = false;
+        dailyBtn.innerText = "Réclamer";
+      }
+
+      document.getElementById('quests-container').innerHTML = QUESTS_LIST.map(q => {
+        const isDone = state.totalOpened >= q.target; const isClaimed = state.claimedQuests.includes(q.id);
+        return `<div class="quest-card"><div><h4>${q.title}</h4><p style="font-size:0.8rem;">Ouvrir ${q.target} boosters (${Math.min(state.totalOpened, q.target)}/${q.target})</p></div>
+        <button class="btn" onclick="claimQuest('${q.id}')" ${(!isDone || isClaimed) ? 'disabled' : ''}>${isClaimed ? 'Reçu' : q.rewardText}</button></div>`;
+      }).join('');
+
+      updateMagicDrawTimerUI();
+    }
+
+    function claimQuest(qId) { 
+      playSound('click'); 
+      const q = QUESTS_LIST.find(x => x.id === qId);
+      if (q && !state.claimedQuests.includes(qId)) { 
+        state.claimedQuests.push(qId); 
+        if (q.rewardType === 'coins') state.coins += q.rewardAmount;
+        else if (q.rewardType === 'booster') {
+          if (q.rewardPack === 'pumpkrunch') state.pumpkrunchBoosters = (state.pumpkrunchBoosters || 0) + q.rewardAmount;
+          else if (q.rewardPack === 'fantomes') state.fantomesBoosters = (state.fantomesBoosters || 0) + q.rewardAmount;
+          else if (q.rewardPack === 'legendary') state.specialBoosters = (state.specialBoosters || 0) + q.rewardAmount;
+        }
+        saveData(); 
+      } 
+    }
+    
+    function showPage(pageId, btnEl) { playSound('click'); document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.querySelectorAll('nav button').forEach(b => b.classList.remove('active')); document.getElementById(`page-${pageId}`).classList.add('active'); if(btnEl) btnEl.classList.add('active'); }
+
+    function createCardHTML(card, count = 1, isClickable = true, actionType = 'zoom') {
+      const isLocked = count === 0;
+      const inDeck = state.deck.includes(card.id);
+      const renderCost = (costArr) => costArr ? costArr.map(c => ENERGY_ICONS[c] || '⚪').join('') : '';
+      let extraClasses = '';
+      if(card.type === 'fullart') extraClasses += ' full-art';
+      if(card.type === 'holographic') extraClasses += ' holographic';
+      if(card.type === 'chromatic-fullart') extraClasses += ' chromatic-fullart';
+      if(inDeck) extraClasses += ' selected-for-deck';
+      
+      let clickAttr = '';
+      if (isClickable && !isLocked) {
+        if (actionType === 'zoom') clickAttr = `onclick="zoomCard(${card.id})"`;
+        else if (actionType === 'deck') clickAttr = `onclick="toggleDeckCard(${card.id})"`;
+      }
+
+      return `
+        <div class="card ${extraClasses} ${isLocked ? 'locked' : ''}" data-type="${card.element}" ${clickAttr}>
+          ${count > 1 ? `<div class="card-count">x${count}</div>` : ''}
+          <div class="card-top-bar"><span class="card-name">${card.name}</span><span class="card-hp"><small>HP</small>${card.hp} <span>${ENERGY_ICONS[card.element]}</span></span></div>
+          <img src="${card.imageBase64}" class="card-image-canvas">
+          <div class="card-body">
+            <div class="attack-row"><span class="attack-cost">${renderCost(card.atk1.cost)}</span><span class="attack-name">${card.atk1.name}</span><span class="attack-damage">${card.atk1.damage}</span></div>
+            ${card.atk2 && card.atk2.name ? `<div class="attack-row"><span class="attack-cost">${renderCost(card.atk2.cost)}</span><span class="attack-name">${card.atk1.name ? card.atk2.name : ''}</span><span class="attack-damage">${card.atk2.damage}</span></div>` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCollection() {
+      const rarityOrder = { 'common': 'Communes', 'holographic': 'Holographiques', 'fullart': 'Full Arts', 'chromatic-fullart': 'Chromatiques' };
+      const rarityRank = { 'common': 1, 'holographic': 2, 'fullart': 3, 'chromatic-fullart': 4 };
+
+      function buildSetHTML(setCards) {
+        let html = "";
+        const groupedByRarity = {};
+        setCards.forEach(card => {
+          if (!groupedByRarity[card.type]) groupedByRarity[card.type] = [];
+          groupedByRarity[card.type].push(card);
+        });
+
+        const sortedRarities = Object.keys(groupedByRarity).sort((a, b) => rarityRank[a] - rarityRank[b]);
+        sortedRarities.forEach(rarityKey => {
+          html += `<div class="rarity-subgroup-title">❖ ${rarityOrder[rarityKey] || rarityKey}</div>`;
+          html += `<div class="card-grid">`;
+          html += groupedByRarity[rarityKey].map(c => createCardHTML(c, state.collection[c.id] || 0, true, 'zoom')).join('');
+          html += `</div>`;
+        });
+        return html;
+      }
+
+      document.getElementById('collection-container-pumpkrunch').innerHTML = buildSetHTML(PUMPKRUNCH_SET);
+      document.getElementById('collection-container-fantomes').innerHTML = buildSetHTML(FANTOMES_SET);
+
+      const pkOwned = PUMPKRUNCH_SET.filter(c => (state.collection[c.id] || 0) > 0).length;
+      document.getElementById('pumpkrunch-count').innerText = pkOwned;
+
+      const ftOwned = FANTOMES_SET.filter(c => (state.collection[c.id] || 0) > 0).length;
+      document.getElementById('fantomes-count').innerText = ftOwned;
+    }
+
+    function zoomCard(cardId) {
+      playSound('click');
+      const card = CARDS_DB.find(c => c.id === cardId); if (!card) return;
+      document.getElementById('modal-card-slot').innerHTML = createCardHTML(card, state.collection[card.id] || 0, false);
+      document.getElementById('modal-overlay').style.display = 'flex';
+    }
+
+    function closeModal() { playSound('click'); document.getElementById('modal-overlay').style.display = 'none'; }
+
+    // --- LOGIQUE DE PIOCHE MAGIQUE ---
+    let currentMagicOfferPool = [];
+
+    function updateMagicDrawTimerUI() {
+      const now = Date.now();
+      const cooldown = 12 * 60 * 60 * 1000;
+      const timerEl = document.getElementById('magic-draw-timer');
+      
+      if (now - state.lastMagicDrawTime >= cooldown) {
+        timerEl.innerText = "Gratuit disponible !";
+        timerEl.style.color = "#22c55e";
+      } else {
+        const remaining = cooldown - (now - state.lastMagicDrawTime);
+        const hours = Math.floor(remaining / (1000 * 60 * 60));
+        const mins = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+        timerEl.innerText = `Recharge: ${hours}h ${mins}m (ou 500💰)`;
+        timerEl.style.color = "#f59e0b";
+      }
+    }
+
+    function renderMagicDrawOffers() {
+      const grid = document.getElementById('magic-offers-grid');
+      grid.innerHTML = MAGIC_OFFERS.map(offer => `
+        <div class="magic-offer-card" onclick="selectMagicOffer(${offer.id})">
+          <div style="font-size: 2rem;">${offer.icon}</div>
+          <div style="font-weight: 800; font-size: 0.85rem; color: #f97316;">${offer.title}</div>
+          <div style="font-size: 0.68rem; color: #cbd5e1;">${offer.desc}</div>
+          <button class="btn btn-pumpkrunch" style="padding: 4px 8px; font-size: 0.7rem; margin-top: 4px;">Choisir</button>
+        </div>
+      `).join('');
+    }
+
+    function selectMagicOffer(offerId) {
+      playSound('click');
+      const now = Date.now();
+      const cooldown = 12 * 60 * 60 * 1000;
+      
+      if (now - state.lastMagicDrawTime < cooldown) {
+        if (state.coins < 500) {
+          alert("Vous devez attendre la fin du délai de 12h ou posséder 500💰 pour relancer la Pioche Magique !");
+          return;
+        }
+        if (!confirm("Voulez-vous dépenser 500💰 pour effectuer une nouvelle Pioche Magique ?")) return;
+        state.coins -= 500;
+      } else {
+        state.lastMagicDrawTime = now;
+      }
+
+      saveData();
+
+      currentMagicOfferPool = [];
+      const rareCount = Math.floor(Math.random() * 2) + 1;
+
+      for (let i = 0; i < 6; i++) {
+        let cardToPick;
+        if (i < rareCount) {
+          const rand = Math.random();
+          if (rand < 0.01) {
+            cardToPick = CARDS_DB.find(c => c.type === 'chromatic-fullart') || CARDS_DB[0];
+          } else if (rand < 0.06) {
+            const fullArts = CARDS_DB.filter(c => c.type === 'fullart');
+            cardToPick = fullArts[Math.floor(Math.random() * fullArts.length)];
+          } else {
+            const holos = CARDS_DB.filter(c => c.type === 'holographic');
+            cardToPick = holos[Math.floor(Math.random() * holos.length)];
+          }
+        } else {
+          cardToPick = CARDS_DB[Math.floor(Math.random() * CARDS_DB.length)];
+        }
+        currentMagicOfferPool.push(cardToPick);
+      }
+
+      currentMagicOfferPool.sort(() => Math.random() - 0.5);
+
+      const content = document.getElementById('magic-draw-content');
+      content.innerHTML = `
+        <p style="text-align: center; color: #a7f3d0; font-weight: bold; font-size: 0.85rem;">Choisissez 1 carte face cachée parmi les 6 !</p>
+        <div class="magic-cards-reveal-grid">
+          ${[0, 1, 2, 3, 4, 5].map(idx => `
+            <div class="magic-card-back" id="magic-card-slot-${idx}" onclick="revealMagicCard(${idx})">🔮</div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function revealMagicCard(selectedIndex) {
+      playSound('reveal-rare');
+      const selectedCard = currentMagicOfferPool[selectedIndex];
+      state.collection[selectedCard.id] = (state.collection[selectedCard.id] || 0) + 1;
+      saveData();
+
+      for (let i = 0; i < 6; i++) {
+        const slot = document.getElementById(`magic-card-slot-${i}`);
+        const card = currentMagicOfferPool[i];
+        if (i === selectedIndex) {
+          slot.outerHTML = `<div style="transform: scale(1.05); border: 2px solid #22c55e; border-radius: 10px; overflow: hidden;">${createCardHTML(card, 1, false)}</div>`;
+        } else {
+          slot.outerHTML = `<div style="opacity: 0.5; filter: grayscale(0.6); transform: scale(0.95); border-radius: 10px; overflow: hidden;">${createCardHTML(card, 1, false)}</div>`;
+        }
+      }
+
+      setTimeout(() => {
+        renderCollection();
+        renderBattleCardPicker();
+        renderMagicDrawOffers();
+      }, 3500);
+    }
+
+    // --- OUVERTURE DE BOOSTERS ---
+    let currentPack = [];
+    let currentPackIndex = 0;
+    let currentBoosterType = '';
+
+    function openBooster(type) {
+      if (type === 'pumpkrunch' && (state.pumpkrunchBoosters || 0) <= 0) return;
+      if (type === 'fantomes' && (state.fantomesBoosters || 0) <= 0) return;
+      if (type === 'legendary' && (state.specialBoosters || 0) <= 0) return;
+
+      playSound('open');
+      currentBoosterType = type;
+
+      if (type === 'pumpkrunch') state.pumpkrunchBoosters--;
+      else if (type === 'fantomes') state.fantomesBoosters--;
+      else if (type === 'legendary') state.specialBoosters--;
+
+      state.totalOpened = (state.totalOpened || 0) + 1;
+
+      let setPool = CARDS_DB;
+      if (type === 'pumpkrunch') setPool = PUMPKRUNCH_SET;
+      else if (type === 'fantomes') setPool = FANTOMES_SET;
+
+      currentPack = [];
+
+      if (type === 'legendary') {
+        const fullArts = CARDS_DB.filter(c => c.type === 'fullart' || c.type === 'chromatic-fullart');
+        for (let i = 0; i < 3; i++) {
+          const picked = fullArts[Math.floor(Math.random() * fullArts.length)];
+          currentPack.push(picked);
+        }
+      } else {
+        const commons = setPool.filter(c => c.type === 'common');
+        const holos = setPool.filter(c => c.type === 'holographic');
+        const fullArts = setPool.filter(c => c.type === 'fullart');
+        const chromas = setPool.filter(c => c.type === 'chromatic-fullart');
+
+        for (let i = 0; i < 4; i++) {
+          currentPack.push(commons[Math.floor(Math.random() * commons.length)]);
+        }
+
+        const rand = Math.random();
+        if (rand < 0.01 && chromas.length > 0) {
+          currentPack.push(chromas[Math.floor(Math.random() * chromas.length)]);
+        } else if (rand < 0.10 && fullArts.length > 0) {
+          currentPack.push(fullArts[Math.floor(Math.random() * fullArts.length)]);
+        } else if (holos.length > 0) {
+          currentPack.push(holos[Math.floor(Math.random() * holos.length)]);
+        } else {
+          currentPack.push(commons[Math.floor(Math.random() * commons.length)]);
+        }
+      }
+
+      currentPackIndex = 0;
+      saveData();
+
+      document.getElementById('opening-overlay').style.display = 'flex';
+      showNextCardInPack();
+    }
+
+    function showNextCardInPack() {
+      if (currentPackIndex >= currentPack.length) {
+        document.getElementById('opening-overlay').style.display = 'none';
+        renderCollection();
+        renderBattleCardPicker();
+        return;
+      }
+
+      const card = currentPack[currentPackIndex];
+      state.collection[card.id] = (state.collection[card.id] || 0) + 1;
+      saveData();
+
+      const revealContainer = document.getElementById('reveal-container');
+      const cardsLeftEl = document.getElementById('cards-left');
+      cardsLeftEl.innerText = currentPack.length - currentPackIndex;
+
+      let isRare = card.type === 'holographic' || card.type === 'fullart' || card.type === 'chromatic-fullart';
+      if (isRare) playSound('reveal-rare');
+      else playSound('click');
+
+      let animClass = 'reveal-card';
+      if (card.type === 'fullart' || card.type === 'chromatic-fullart') animClass += ' full-art-anim';
+      if (currentBoosterType === 'pumpkrunch' && isRare) {
+        animClass += ' jumpscare-anim';
+        playSound('jumpscare');
+      }
+
+      revealContainer.innerHTML = `<div class="${animClass}">${createCardHTML(card, 1, false)}</div>`;
+      currentPackIndex++;
+    }
+
+    // --- MOTEUR DE COMBAT EN ARÈNE ---
+    let battleState = {
+      inMatch: false,
+      playerHP: 0, playerMaxHP: 0, playerCard: null,
+      botHP: 0, botMaxHP: 0, botCard: null,
+      botName: "Bot Dresseur", botMMR: 1000
+    };
+
+    function startMatchmaking() {
+      if (!state.deck[0]) {
+        alert("Sélectionnez d'abord 1 carte de combat dans votre collection !");
+        return;
+      }
+
+      playSound('click');
+      const overlay = document.getElementById('matchmaking-overlay');
+      overlay.style.display = 'flex';
+
+      document.getElementById('mm-status-title').innerText = "RECHERCHE D'ADVERSAIRE...";
+      document.getElementById('mm-status-sub').innerText = `MMR Joueur: ${state.mmr || 1000} PTS`;
+
+      setTimeout(() => {
+        document.getElementById('mm-status-title').innerText = "ADVERSAIRE TROUVÉ !";
+        setTimeout(() => {
+          overlay.style.display = 'none';
+          initArenaBattle();
+        }, 1000);
+      }, 1500);
+    }
+
+    function initArenaBattle() {
+      const playerCard = CARDS_DB.find(c => c.id === state.deck[0]);
+      if (!playerCard) return;
+
+      const botCardPool = CARDS_DB.filter(c => typeof c.hp === 'number');
+      const botCard = botCardPool[Math.floor(Math.random() * botCardPool.length)];
+
+      const botNames = ["Dresseur Obscur", "Maître Citrouille", "Fantôme Ancien", "Rival Octobre", "Spectre Élite"];
+      const botName = botNames[Math.floor(Math.random() * botNames.length)];
+      const botMMR = Math.max(100, (state.mmr || 1000) + Math.floor(Math.random() * 200) - 100);
+
+      battleState = {
+        inMatch: true,
+        playerCard: playerCard, playerHP: playerCard.hp, playerMaxHP: playerCard.hp,
+        botCard: botCard, botHP: botCard.hp, botMaxHP: botCard.hp,
+        botName: botName, botMMR: botMMR
+      };
+
+      document.getElementById('battle-player-name').innerText = state.playerName || "Joueur";
+      document.getElementById('battle-player-mmr').innerText = state.mmr || 1000;
+      document.getElementById('battle-bot-name').innerText = botName;
+      document.getElementById('battle-bot-mmr').innerText = botMMR;
+
+      document.getElementById('slot-player-card').innerHTML = createCardHTML(playerCard, 1, false);
+      document.getElementById('slot-bot-card').innerHTML = createCardHTML(botCard, 1, false);
+
+      document.getElementById('btn-attack').disabled = false;
+      document.getElementById('battle-result-overlay').style.display = 'none';
+
+      updateBattleHPUI();
+      document.getElementById('battle-log-box').innerText = `=== DÉBUT DU COMBAT EN ARÈNE ===\n${playerCard.name} VS ${botCard.name} !`;
+
+      document.getElementById('arena-modal-overlay').style.display = 'flex';
+    }
+
+    function updateBattleHPUI() {
+      const pPercent = Math.max(0, (battleState.playerHP / battleState.playerMaxHP) * 100);
+      const bPercent = Math.max(0, (battleState.botHP / battleState.botMaxHP) * 100);
+
+      document.getElementById('hp-player-fill').style.width = `${pPercent}%`;
+      document.getElementById('hp-player-text').innerText = `PV: ${Math.max(0, battleState.playerHP)}/${battleState.playerMaxHP}`;
+
+      document.getElementById('hp-bot-fill').style.width = `${bPercent}%`;
+      document.getElementById('hp-bot-text').innerText = `PV: ${Math.max(0, battleState.botHP)}/${battleState.botMaxHP}`;
+    }
+
+    function executeTurn() {
+      if (!battleState.inMatch) return;
+
+      playSound('attack');
+      document.getElementById('btn-attack').disabled = true;
+
+      const pAtk = battleState.playerCard.atk2 && battleState.playerCard.atk2.damage ? battleState.playerCard.atk2 : battleState.playerCard.atk1;
+      const pDmg = Number(pAtk.damage) || 20;
+
+      triggerAttackAnimation('player', 'bot', battleState.playerCard.element);
+
+      setTimeout(() => {
+        playSound('hit');
+        battleState.botHP -= pDmg;
+        document.getElementById('bot-fighter-zone').classList.add('shake-target');
+        setTimeout(() => document.getElementById('bot-fighter-zone').classList.remove('shake-target'), 400);
+
+        logBattleMsg(`Vous lancez ${pAtk.name} ! -${pDmg} PV au bot.`);
+        updateBattleHPUI();
+
+        if (battleState.botHP <= 0) {
+          endBattle(true);
+          return;
+        }
+
+        setTimeout(() => {
+          playSound('attack');
+          const bAtk = battleState.botCard.atk2 && battleState.botCard.atk2.damage ? battleState.botCard.atk2 : battleState.botCard.atk1;
+          const bDmg = Number(bAtk.damage) || 20;
+
+          triggerAttackAnimation('bot', 'player', battleState.botCard.element);
+
+          setTimeout(() => {
+            playSound('hit');
+            battleState.playerHP -= bDmg;
+            document.getElementById('player-fighter-zone').classList.add('shake-target');
+            setTimeout(() => document.getElementById('player-fighter-zone').classList.remove('shake-target'), 400);
+
+            logBattleMsg(`${battleState.botName} réplique avec ${bAtk.name} ! -${bDmg} PV.`);
+            updateBattleHPUI();
+
+            if (battleState.playerHP <= 0) {
+              endBattle(false);
+            } else {
+              document.getElementById('btn-attack').disabled = false;
+            }
+          }, 400);
+
+        }, 800);
+
+      }, 400);
+    }
+
+    function triggerAttackAnimation(fromTarget, toTarget, element) {
+      const field = document.getElementById('arena-battle-field');
+      const proj = document.createElement('div');
+      proj.className = 'attack-projectile';
+      proj.innerText = ENERGY_ICONS[element] || '💥';
+
+      const fromZone = document.getElementById(`${fromTarget}-fighter-zone`);
+      const toZone = document.getElementById(`${toTarget}-fighter-zone`);
+
+      const fieldRect = field.getBoundingClientRect();
+      const fromRect = fromZone.getBoundingClientRect();
+      const toRect = toZone.getBoundingClientRect();
+
+      const startX = fromRect.left - fieldRect.left + (fromRect.width / 2);
+      const startY = fromRect.top - fieldRect.top + (fromRect.height / 2);
+      const endX = toRect.left - fieldRect.left + (toRect.width / 2);
+      const endY = toRect.top - fieldRect.top + (toRect.height / 2);
+
+      proj.style.left = `${startX}px`;
+      proj.style.top = `${startY}px`;
+
+      field.appendChild(proj);
+
+      setTimeout(() => {
+        proj.style.left = `${endX}px`;
+        proj.style.top = `${endY}px`;
+      }, 20);
+
+      setTimeout(() => proj.remove(), 420);
+    }
+
+    function logBattleMsg(msg) {
+      const box = document.getElementById('battle-log-box');
+      box.innerText += `\n${msg}`;
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function endBattle(won) {
+      battleState.inMatch = false;
+      const resOverlay = document.getElementById('battle-result-overlay');
+      const titleEl = document.getElementById('result-text-main');
+      const subEl = document.getElementById('result-text-sub');
+
+      if (won) {
+        playSound('reveal-rare');
+        titleEl.innerText = "VICTOIRE !";
+        titleEl.className = "result-title result-victory";
+        state.trophies = (state.trophies || 0) + 10;
+        state.mmr = (state.mmr || 1000) + 15;
+        state.coins += 50;
+        subEl.innerText = "+10 🏆 | +15 MMR | +50 💰";
+      } else {
+        titleEl.innerText = "DÉFAITE...";
+        titleEl.className = "result-title result-defeat";
+        state.trophies = Math.max(0, (state.trophies || 0) - 3);
+        state.mmr = Math.max(100, (state.mmr || 1000) - 10);
+        subEl.innerText = "-3 🏆 | -10 MMR";
+      }
+
+      saveData();
+      resOverlay.style.display = 'flex';
+
+      setTimeout(() => {
+        closeArenaModal();
+      }, 3000);
+    }
+
+    function closeArenaModal() {
+      document.getElementById('arena-modal-overlay').style.display = 'none';
+      battleState.inMatch = false;
+    }
+
+    // --- VOIE DES TROPHÉES ---
+    function openTrophyRoadModal() {
+      playSound('click');
+      document.getElementById('modal-trophies-val').innerText = state.trophies || 0;
+      const list = document.getElementById('trophy-road-list-container');
+
+      list.innerHTML = TROPHY_ROAD_REWARDS.map(step => {
+        const isUnlocked = (state.trophies || 0) >= step.trophies;
+        const isClaimed = state.claimedTrophyRoad.includes(step.trophies);
+
+        return `
+          <div class="trophy-step ${isUnlocked ? 'unlocked' : ''} ${isClaimed ? 'claimed' : ''}">
+            <div class="trophy-step-badge">🏆 ${step.trophies}</div>
+            <div class="trophy-step-reward">${step.rewardText}</div>
+            <button class="btn btn-pumpkrunch" style="padding: 6px 12px; font-size:0.75rem;" onclick="claimTrophyReward(${step.trophies})" ${(!isUnlocked || isClaimed) ? 'disabled' : ''}>
+              ${isClaimed ? 'Réclamé' : 'Obtenir'}
+            </button>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('trophy-road-modal').style.display = 'flex';
+    }
+
+    function closeTrophyRoadModal() {
+      playSound('click');
+      document.getElementById('trophy-road-modal').style.display = 'none';
+    }
+
+    function claimTrophyReward(stepTrophies) {
+      playSound('click');
+      if ((state.trophies || 0) < stepTrophies || state.claimedTrophyRoad.includes(stepTrophies)) return;
+
+      const reward = TROPHY_ROAD_REWARDS.find(r => r.trophies === stepTrophies);
+      if (!reward) return;
+
+      state.claimedTrophyRoad.push(stepTrophies);
+      if (reward.rewardType === 'coins') state.coins += reward.amount;
+      else if (reward.rewardType === 'pumpkrunch') state.pumpkrunchBoosters = (state.pumpkrunchBoosters || 0) + reward.amount;
+      else if (reward.rewardType === 'fantomes') state.fantomesBoosters = (state.fantomesBoosters || 0) + reward.amount;
+      else if (reward.rewardType === 'legendary') state.specialBoosters = (state.specialBoosters || 0) + reward.amount;
+
+      saveData();
+      openTrophyRoadModal();
+    }
+
+    // --- ÉDITION PROFIL ---
+    function openEditProfileModal() {
+      playSound('click');
+      document.getElementById('edit-profile-name-input').value = state.playerName || "Dresseur";
+      
+      const grid = document.getElementById('avatar-picker-grid');
+      grid.innerHTML = AVATARS_LIST.map(av => `
+        <div class="avatar-option ${av === (state.playerAvatar || '🎃') ? 'selected' : ''}" onclick="selectAvatarOption(this, '${av}')">${av}</div>
+      `).join('');
+
+      document.getElementById('edit-profile-modal').style.display = 'flex';
+    }
+
+    function selectAvatarOption(el, avatar) {
+      playSound('click');
+      document.querySelectorAll('.avatar-option').forEach(a => a.classList.remove('selected'));
+      el.classList.add('selected');
+      el.dataset.chosen = avatar;
+    }
+
+    function closeEditProfileModal() {
+      playSound('click');
+      document.getElementById('edit-profile-modal').style.display = 'none';
+    }
+
+    function saveProfileChanges() {
+      playSound('click');
+      const newName = document.getElementById('edit-profile-name-input').value.trim();
+      const selectedEl = document.querySelector('.avatar-option.selected');
+      
+      if (newName) state.playerName = newName;
+      if (selectedEl) state.playerAvatar = selectedEl.innerText;
+
+      saveData();
+      closeEditProfileModal();
+    }
+
+    // --- ACHATS EN BOUTIQUE ---
+    function claimDaily() {
+      playSound('click');
+      const t = new Date().toDateString();
+      if (state.lastDaily === t) return;
+      state.lastDaily = t;
+      state.coins += 50;
+      state.pumpkrunchBoosters = (state.pumpkrunchBoosters || 0) + 2;
+      state.fantomesBoosters = (state.fantomesBoosters || 0) + 2;
+      saveData();
+    }
+
+    function buyStarterPack() {
+      playSound('click');
+      if (state.starterPackBought || state.coins < 450) return;
+      state.coins -= 450;
+      state.starterPackBought = true;
+      state.pumpkrunchBoosters = (state.pumpkrunchBoosters || 0) + 5;
+      state.fantomesBoosters = (state.fantomesBoosters || 0) + 2;
+      saveData();
+    }
+
+    function buyPumpkrunchBooster(price, qty) {
+      playSound('click');
+      if (state.coins < price) return;
+      state.coins -= price;
+      state.pumpkrunchBoosters = (state.pumpkrunchBoosters || 0) + qty;
+      saveData();
+    }
+
+    function buyFantomesBooster(price, qty) {
+      playSound('click');
+      if (state.coins < price) return;
+      state.coins -= price;
+      state.fantomesBoosters = (state.fantomesBoosters || 0) + qty;
+      saveData();
+    }
+
+    function buySpecialBooster(price, qty) {
+      playSound('click');
+      if (state.coins < price) return;
+      state.coins -= price;
+      state.specialBoosters = (state.specialBoosters || 0) + qty;
+      saveData();
+    }
+
+    // --- CODES PROMO & PANNEAU ADMIN ---
+    function redeemCode() {
+      playSound('click');
+      const input = document.getElementById('promo-code-input');
+      const code = input.value.trim().toUpperCase();
+      const msg = document.getElementById('code-message');
+      msg.style.display = 'block';
+
+      if (!code) return;
+
+      if (code === 'ADMIN' || code === 'ADMIN2026') {
+        state.adminUnlocked = true;
+        msg.style.color = '#38bdf8';
+        msg.innerText = "⚡ Mode Administrateur Débloqué !";
+        saveData();
+        input.value = '';
+        return;
+      }
+
+      if (code === 'TUILE') {
+        if (!state.redeemedCodes.includes('TUILE')) {
+          state.redeemedCodes.push('TUILE');
+          state.collection[401] = (state.collection[401] || 0) + 1;
+          msg.style.color = '#22c55e';
+          msg.innerText = "🧱 Carte 'Tuile Mème' ajoutée à votre collection !";
+          saveData();
+          renderCollection();
+          renderBattleCardPicker();
+        } else {
+          msg.style.color = '#ef4444';
+          msg.innerText = "Code déjà utilisé.";
+        }
+        input.value = '';
+        return;
+      }
+
+      if (state.redeemedCodes.includes(code)) {
+        msg.style.color = '#ef4444';
+        msg.innerText = "Code déjà réclamé !";
+        return;
+      }
+
+      if (code === 'PUMPKING') {
+        state.redeemedCodes.push(code);
+        state.coins += 300;
+        state.pumpkrunchBoosters = (state.pumpkrunchBoosters || 0) + 3;
+        msg.style.color = '#22c55e';
+        msg.innerText = "+300 💰 & +3 Boosters Pumpking !";
+      } else if (code === 'FANTOME') {
+        state.redeemedCodes.push(code);
+        state.fantomesBoosters = (state.fantomesBoosters || 0) + 3;
+        msg.style.color = '#22c55e';
+        msg.innerText = "+3 Boosters Fantômes !";
+      } else {
+        msg.style.color = '#ef4444';
+        msg.innerText = "Code invalide.";
+        return;
+      }
+
+      saveData();
+      input.value = '';
+    }
+
+    function adminAddCoins(amount) { playSound('click'); state.coins += amount; saveData(); }
+    function adminAddTrophies(amount) { playSound('click'); state.trophies = (state.trophies || 0) + amount; saveData(); }
+    function adminAddPacks(type, count) {
+      playSound('click');
+      if (type === 'pumpkrunch') state.pumpkrunchBoosters = (state.pumpkrunchBoosters || 0) + count;
+      else if (type === 'fantomes') state.fantomesBoosters = (state.fantomesBoosters || 0) + count;
+      else if (type === 'legendary') state.specialBoosters = (state.specialBoosters || 0) + count;
+      saveData();
+    }
+    function adminUnlockAll() {
+      playSound('click');
+      CARDS_DB.forEach(c => state.collection[c.id] = Math.max(1, state.collection[c.id] || 0));
+      saveData(); renderCollection(); renderBattleCardPicker();
+    }
+    function adminResetCollection() {
+      playSound('click');
+      if (confirm("Réinitialiser entièrement votre collection ?")) {
+        state.collection = {};
+        state.deck = [];
+        saveData(); renderCollection(); updateDeckDisplay(); renderBattleCardPicker();
+      }
+    }
+
+    function resetData() {
+      if (confirm("Voulez-vous vraiment réinitialiser toute votre progression ?")) {
+        localStorage.removeItem('pocketclash_v14_data');
+        location.reload();
+      }
+    }
+
+    window.onload = () => { loadData(); };
+  </script>
+</body>
+</html>
